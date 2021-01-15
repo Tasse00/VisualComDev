@@ -2,23 +2,24 @@ import { Card, Row, Statistic } from 'antd';
 import { ComponentType } from 'react';
 import Container from './Container';
 
+export interface FieldConfig { 
+    field: string;
+    label?: string;
+    type: string;
+    default?: any;
+    params?: any;
+}
 
 export interface WidgetConfig {
     title: string;
     type: string;
     component: ComponentType<any>;
-    properties: {
-        field: string;
-        label?: string;
-        type: string;
-        default?: any;
-        params?: any;
-    }[];
+    properties: FieldConfig[];
 }
 
 
 const RowCfg = {
-    title: 'Antd Row',
+    title: '水平布局',
     type: 'Row',
     component: Row,
     properties: [
@@ -44,7 +45,7 @@ const RowCfg = {
 
 // <Statistic title="Active Users" value={112893} />
 const StatisticCfg: WidgetConfig = {
-    title: 'Antd Statistic',
+    title: '统计数值',
     type: 'Antd Statistic',
     component: Statistic,
     properties: [
@@ -54,7 +55,7 @@ const StatisticCfg: WidgetConfig = {
 }
 
 const AntdCardCfg: WidgetConfig = {
-    title: 'Antd Card',
+    title: '卡片',
     type: 'Card',
     component: Card,
     properties: [

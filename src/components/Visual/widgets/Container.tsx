@@ -10,7 +10,7 @@ const Container: React.FC = props => {
 
 
 export default {
-    title: 'Basic Container',
+    title: '容器',
     type: 'Container',
     component: Container,
     properties: [],

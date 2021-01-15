@@ -24,7 +24,7 @@ const WidgetType: React.FC<{
         style.border = '1px dashed rgba(200,200,200,0.4)';
     }
     const properties: { [field: string]: any } = {};
-    console.log(props.widget)
+
     for (let prop of props.widget.properties) {
       if (prop.default !== undefined) {
         properties[prop.field] = prop.default;

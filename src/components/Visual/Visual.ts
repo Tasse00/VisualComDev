@@ -2,6 +2,7 @@ import React from 'react';
 
 export interface Widget {
   id: string;
+  name: string;
   type: string;
   style: React.CSSProperties;
   properties: {
@@ -30,6 +31,7 @@ export enum ActTypes {
   HOVER_WIDGET = 'hover-widget',
   UPDATE_STYLE = 'update-style',
   UPDATE_PROPERTY = 'update-property',
+  UPDATE_NAME = 'update-name',
 }
 
 const ActionHandlers: {
@@ -56,6 +58,7 @@ ActionHandlers[ActTypes.ADD_WIDGET] = (state, payload: ActAddWidgetPayload) => {
 
   const widget: Widget = {
     id: widgetType + '-' + Math.random().toString(),
+    name: genWidgetName(widgetType, Object.values(state.widgets)),
     type: widgetType,
     style: {},
     properties: {},
@@ -238,6 +241,30 @@ ActionHandlers[ActTypes.UPDATE_PROPERTY] = (
   return { ...state, widgets: state.widgets };
 };
 
+
+interface ActUpdateWidgetNamePayload {
+  widgetId: string;
+  name: string;
+}
+ActionHandlers[ActTypes.UPDATE_NAME] = (state, payload: ActUpdateWidgetNamePayload)=>{
+  const widget = state.widgets[payload.widgetId];
+  if (!widget) {
+    console.log("Invalid Widget Id", payload.widgetId);
+    return state;
+  } 
+
+  const existedNames = Object.values(state.widgets).map(w=>w.name);
+
+  if (existedNames.includes(payload.name)) {
+    console.log("Name Existed!", payload.name);
+    return state;
+  }
+
+  state.widgets[payload.widgetId] = {...widget, name: payload.name};
+  return {
+    ...state, widgets: {...state.widgets}
+  }
+}
 interface ActAddWidget {
   type: ActTypes.ADD_WIDGET;
   payload: ActAddWidgetPayload;
@@ -269,6 +296,11 @@ interface ActUpdateWidgetProperty {
   payload: ActUpdateWidgetPropertyPayload;
 }
 
+interface ActUpdateWidgetName {
+  type: ActTypes.UPDATE_NAME;
+  payload: ActUpdateWidgetNamePayload;
+}
+
 type AvailableActions =
   | ActAddWidget
   | ActMoveWidget
@@ -276,7 +308,8 @@ type AvailableActions =
   | ActSelectWidgets
   | ActHoverWidget
   | ActUpdateWidgetStyle
-  | ActUpdateWidgetProperty;
+  | ActUpdateWidgetProperty
+  | ActUpdateWidgetName;
 export function Reducer(state: State, action: AvailableActions) {
   const handler = ActionHandlers[action.type];
   if (!handler) {
@@ -341,12 +374,31 @@ export function getDefaultState(): State {
     widgets: {
       root: {
         id: 'root',
+        name: 'ROOT',
         type: 'Container',
         style: {},
+        properties: {},
       },
     },
     childrenMap: {
       root: [],
     },
   };
+}
+
+
+const __name_counter:{
+  [type: string]: number;
+} = {};
+function genWidgetName(type: string, existedWidgets: Widget[]) {
+  if(!(type in __name_counter)) {
+    __name_counter[type] = 1;
+  }
+  const existedNames = existedWidgets.map(w=>w.name);
+  let name = '';
+  do {
+    name = `${type}_${__name_counter[type]++}`;
+  }while(existedNames.includes(name));
+
+  return name;
 }

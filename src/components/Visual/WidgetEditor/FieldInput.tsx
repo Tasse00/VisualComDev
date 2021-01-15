@@ -20,10 +20,10 @@ const FieldInputs: {
         />
     ),
     'switch': (value, handler) => (
-        <Switch checked={value} onChange={v => handler(v)}/>
+        <Switch checked={value} onChange={v => handler(v)} />
     ),
-    'select': (value, handler, params: {label: string; value: string}[]) => (
-        <Select options={params} value={value} onChange={handler} style={{width: '100%'}}/>
+    'select': (value, handler, params: { label: string; value: string }[]) => (
+        <Select options={params} value={value} onChange={handler} style={{ width: '100%' }} />
     ),
 }
 

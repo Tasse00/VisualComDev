@@ -6,23 +6,20 @@ import {
   ActTypes,
   getDefaultState,
 } from '@/components/Visual/Visual';
-import { Button, Tree, Tabs } from 'antd';
+import { Button, Tree } from 'antd';
 import React, { useReducer } from 'react';
-import ReactJson from 'react-json-view';
 import ComWrapper from '../components/Visual/ComWrapper';
 import styles from './index.less';
 import Fixed from '@/components/layout/Fixed';
 import Stretch from '@/components/layout/Stretch';
 import widgetSpecs from '@/components/Visual/widgets';
-import WidgetType from '@/components/Visual/WidgetType';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import TreeItem from '@/components/TreeItem';
-import StyleEditor from '@/components/Visual/StyleEditor';
-import PropertyEditor from '@/components/Visual/PropertyEditor';
 import { ContextMenuContext, useContextMenu } from '@/components/ContextMenu';
 import ContextMenu from '@/components/ContextMenu/ContextMenu';
 import WidgetGallery from '@/components/WidgetGallery';
+import WidgetEditor from '@/components/Visual/WidgetEditor';
 
 function Panel(props) {
   return (
@@ -41,7 +38,8 @@ function Panel(props) {
 
 function recursiveTreeNode(n: any) {
   n.key = n.id;
-  n.title = n.id;
+  n.title = n.name || n.id;
+  
   if (n.items) {
     n.children = n.items;
     n.items.map((it: any) => recursiveTreeNode(it));
@@ -185,14 +183,7 @@ export default () => {
                 <Fixed defaultSize={300} position={'top'}>
                   {/* 属性编辑区域 */}
                   <Panel style={{ padding: 8}}>
-                    <Tabs size="small" style={{  }}>
-                      <Tabs.TabPane tab="定位" key="style">
-                        {selected && <StyleEditor widget={state.widgets[selected]} />}
-                      </Tabs.TabPane>
-                      <Tabs.TabPane tab="属性" key="properties">
-                        {selected && <PropertyEditor widget={state.widgets[selected]} />}
-                      </Tabs.TabPane> 
-                    </Tabs>
+                    {selected && <WidgetEditor widget={state.widgets[selected]} />}
                   </Panel>
                 </Fixed>
               </Fixed>
