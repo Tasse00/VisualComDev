@@ -175,7 +175,7 @@ ActionHandlers[ActTypes.SELECT_WIDGETS] = (
 ) => {
   return {
     ...state,
-    selectedIds: payload.widgetIds,
+    selectedIds: payload.widgetIds.filter(id=>!state.selectedIds.includes(id)),
   };
 };
 

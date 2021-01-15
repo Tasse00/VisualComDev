@@ -32,7 +32,7 @@ const PropertyEditor: React.FC<{
 
     return (
         <Table size='small' pagination={false} dataSource={dataSource} showHeader={false}>
-            <Table.Column title="field" dataIndex="field" key="field" />
+            <Table.Column title="field" dataIndex="label" key="label" render={(v,rcd)=>(<div style={{wordBreak: 'keep-all'}}>{v||rcd.field}</div>)}/>
             <Table.Column title="value" dataIndex="value" key="value" render={valueRenderFunc} />
         </Table>
 

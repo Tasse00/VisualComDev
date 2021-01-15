@@ -16,7 +16,7 @@ const WidgetGallery: React.FC<{
 
     return (
         <div className={styles['widget-gallery']} style={props.style || {}}>
-            <Input placeholder='Search...' allowClear value={keyword} onChange={e=>setKeyword(e.target.value)}/>
+            <Input placeholder='过滤...' allowClear value={keyword} onChange={e=>setKeyword(e.target.value)}/>
             {wts.map(wt => (<WidgetType widget={wt} key={wt.type} />))}
         </div>
     )

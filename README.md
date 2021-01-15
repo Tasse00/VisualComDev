@@ -4,4 +4,5 @@
 - [x] Widget默认参数
 - [ ] Widget实例名
 - [ ] 区分容器: 从配置，到操作
-- [ ] 增加style属性: margin
+- [x] 增加style属性: margin
+- [x] Editor显示字段Label

@@ -184,47 +184,14 @@ export default () => {
                 </Stretch>
                 <Fixed defaultSize={300} position={'top'}>
                   {/* 属性编辑区域 */}
-                  <Panel style={{ padding: 0 }}>
-                    <Tabs size="small" style={{ margin: 0 }}>
-                      {/* 
-                    
-                    1. Wdiget Wrapper Style
-                    2. Widget Inner Style
-                    
-                    */}
-                      <Tabs.TabPane tab="style" key="style">
+                  <Panel style={{ padding: 8}}>
+                    <Tabs size="small" style={{  }}>
+                      <Tabs.TabPane tab="定位" key="style">
                         {selected && <StyleEditor widget={state.widgets[selected]} />}
                       </Tabs.TabPane>
-                      <Tabs.TabPane tab="properties" key="properties">
+                      <Tabs.TabPane tab="属性" key="properties">
                         {selected && <PropertyEditor widget={state.widgets[selected]} />}
-                      </Tabs.TabPane>
-                      <Tabs.TabPane tab="dev" key="dev">
-                        <div>selected: {selected}</div>
-                        <div>hovered: {state.hoverId}</div>
-                        <Button
-                          onClick={() => {
-                            dispatch({
-                              type: ActTypes.DEL_WIDGET,
-                              payload: { widgetId: selected },
-                            });
-                          }}
-                        >
-                          删除该层级
-                      </Button>
-                        <Button
-                          onClick={() => {
-                            dispatch({
-                              type: ActTypes.ADD_WIDGET,
-                              payload: {
-                                containerId: selected,
-                                widgetType: 'Card',
-                              },
-                            });
-                          }}
-                        >
-                          在该层级下添加
-                      </Button>
-                      </Tabs.TabPane>
+                      </Tabs.TabPane> 
                     </Tabs>
                   </Panel>
                 </Fixed>

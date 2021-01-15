@@ -1,59 +1,50 @@
 import { Input, InputNumber, Table } from 'antd';
 import React, { useCallback, useContext } from 'react';
+import FieldInputs from './FieldInput';
 import { ActTypes, VisualDispatcherContext, Widget } from './Visual';
 import widgetSpecs from './widgets';
+
+
+const styles: { field: keyof React.CSSProperties; label: string; type: string; default?: string; params?: any }[] = [
+    { field: 'flex', label: '弹性', type: 'string' },
+    { field: 'width',label: '宽度', type: 'string' },
+    { field: 'height',label: '高度', type: 'string' },
+    { field: 'marginLeft',label: '左边距', type: 'string' },
+    { field: 'marginTop',label: '上边距', type: 'string' },
+    { field: 'marginRight',label: '右边距', type: 'string' },
+    { field: 'marginBottom',label: '下边距', type: 'string' },
+]
 
 const StyleEditor: React.FC<{
     widget: Widget;
 }> = props => {
 
+
     const dispatch = useContext(VisualDispatcherContext);
 
     const valueRenderFunc = useCallback((v, item) => {
-        if (['flex'].includes(item.field)) {
-            return (<InputNumber
-                placeholder='default'
-                min={0}
-                style={{width: '100%'}}
-                value={v}
-                onChange={(v) => {
-                    dispatch({
-                        type: ActTypes.UPDATE_STYLE,
-                        payload: {
-                            widgetId: props.widget.id,
-                            field: item.field,
-                            value: v ? v.toString() : '',
-                        }
-                    });
-                }}
-            />)
-        } else {
-            return (
-                <Input placeholder='default' value={v}
-                    onChange={(v) => {
-                        const value = v.target.value;
-                        dispatch({
-                            type: ActTypes.UPDATE_STYLE,
-                            payload: {
-                                widgetId: props.widget.id,
-                                field: item.field,
-                                value: value,
-                            }
-                        });
-                    }}
-                />)
-        }
-
+        const currValue = v === undefined ? (styles.find(p => p.field === item.field)?.default) : v;
+        return FieldInputs[item.type](currValue, v => {
+            dispatch({
+                type: ActTypes.UPDATE_STYLE,
+                payload: {
+                    widgetId: props.widget.id,
+                    field: item.field,
+                    value: v,
+                }
+            })
+        }, item.params)
     }, [props.widget]);
 
+    const dataSource = styles.map(s => ({
+        ...s,
+        key: s.field,
+        value: props.widget.style[s.field],
+    }))
 
     return (
-        <Table size='small' pagination={false} dataSource={[
-            { key: 'flex', field: 'flex', value: props.widget.style.flex },
-            { key: 'width', field: 'width', value: props.widget.style.width },
-            { key: 'height', field: 'height', value: props.widget.style.height },
-        ]} showHeader={false}>
-            <Table.Column title="field" dataIndex="field" key="field" />
+        <Table size='small' pagination={false} dataSource={dataSource} showHeader={false}>
+            <Table.Column title="field" dataIndex="label" key="label" render={v=>(<div style={{wordBreak: 'keep-all'}}>{v}</div>)}/>
             <Table.Column title="value" dataIndex="value" key="value" render={valueRenderFunc} />
         </Table>
 
