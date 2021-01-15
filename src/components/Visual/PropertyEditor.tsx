@@ -12,8 +12,8 @@ const PropertyEditor: React.FC<{
 
     const dispatch = useContext(VisualDispatcherContext);
     const valueRenderFunc = useCallback((v, item) => {
-
-        return FieldInputs[item.type](v, v=>{
+        const currValue = v===undefined? (properties.find(p=>p.field===item.field)?.default) :v;
+        return FieldInputs[item.type](currValue, v=>{
             dispatch({
                 type: ActTypes.UPDATE_PROPERTY,
                 payload: {

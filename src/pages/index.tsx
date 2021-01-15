@@ -55,6 +55,16 @@ export default () => {
 
   function renderNode(node: WidgetTreeNode, level: number) {
     const WidgetCom = widgetSpecs[node.type].component;
+
+    const properties: { [field: string]: any } = {};
+    for (let prop of widgetSpecs[node.type].properties) {
+      if (prop.default !== undefined) {
+        properties[prop.field] = prop.default;
+      }
+    }
+    Object.assign(properties, node.properties);
+
+
     return (
       <ComWrapper
         level={level}
@@ -68,14 +78,14 @@ export default () => {
             payload: { widgetIds: [node.id] },
           })
         }
-        hovered={state.hoverId ===node.id}
+        hovered={state.hoverId === node.id}
       >
         {node.items ? (
-          <WidgetCom {...node.properties}>
+          <WidgetCom {...properties}>
             {node.items.map((it) => renderNode(it, level + 1))}
           </WidgetCom>
         ) : (
-            <WidgetCom {...node.properties} />
+            <WidgetCom {...properties} />
           )}
       </ComWrapper>
     );
