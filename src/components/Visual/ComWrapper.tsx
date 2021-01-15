@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useState } from 'react';
 import { useDrop } from 'react-dnd';
+import { useContextMenuTrigger } from '../ContextMenu';
 import styles from './ComWrapper.less';
 import { DragItems } from './Constants';
 import { ActTypes, VisualDispatcherContext, Widget } from './Visual';
@@ -74,6 +75,21 @@ const ComWrapper: React.FC<ComWrapperProps> = (props) => {
     maskStyle.backgroundColor = MaskHoverBackgroundColor;
   }
 
+  const [openContextMenu] = useContextMenuTrigger();
+
+  const onContextMenu = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    openContextMenu({
+      pos: {
+        x: e.clientX,
+        y: e.clientY,
+      },
+      menu: [
+        {text: 'Delete Widget', handler: ()=>{dispatch({type: ActTypes.DEL_WIDGET, payload: {widgetId: props.nodeId}})}},
+      ]
+    });
+    e.stopPropagation();
+  }, [openContextMenu, props.nodeId])
+
   return (
     <div ref={drop} className={styles['com-wrapper']} style={props.style}>
       {props.children}
@@ -83,6 +99,7 @@ const ComWrapper: React.FC<ComWrapperProps> = (props) => {
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         onClick={props.onClick}
+        onContextMenu={onContextMenu}
       ></div>
     </div>
   );
