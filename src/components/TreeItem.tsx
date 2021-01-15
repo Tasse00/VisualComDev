@@ -1,5 +1,5 @@
-import React, { useCallback, useContext } from 'react';
-import { useDrop } from 'react-dnd';
+import React, { useCallback, useContext, useRef } from 'react';
+import { useDrag, useDrop } from 'react-dnd';
 import { DragItems } from './Visual/Constants';
 import { ActTypes, VisualDispatcherContext, Widget } from './Visual/Visual';
 
@@ -30,20 +30,35 @@ const TreeItem: React.FC<Props> = (props) => {
   const dispatch = useContext(VisualDispatcherContext);
 
   const [{ isOver }, drop] = useDrop<
-    { type: string; data: Widget },
+    { type: string; data: Widget&{widgetId: string;} },
     void,
     { isOver: boolean }
   >({
-    accept: DragItems.WidgetType,
+    accept: [DragItems.WidgetType, DragItems.WidgetInstance],
     drop(item, monitor) {
-      dispatch({
-        type: ActTypes.ADD_WIDGET,
-        payload: { containerId: props.nodeId, widgetType: item.data.type },
-      });
+      if (item.type === DragItems.WidgetType) {
+        dispatch({
+          type: ActTypes.ADD_WIDGET,
+          payload: { containerId: props.nodeId, widgetType: item.data.type },
+        });
+      }else if(item.type === DragItems.WidgetInstance && (item.data.widgetId !== props.nodeId)){
+        dispatch({
+          type: ActTypes.MOVE_WIDGET,
+          payload: { containerId: props.nodeId, widgetId: item.data.widgetId },
+        });
+      }
+    },
+    canDrop: (item, monitor)=>{
+      if (item.type === DragItems.WidgetType) {
+        return true;
+      }else if (item.type ===DragItems.WidgetInstance){
+        return item.data.widgetId !== props.nodeId;
+      }else{
+        return false;
+      }
     },
     collect: (monitor) => ({
-      isOver: monitor.isOver(),
-      isOverCurrent: monitor.isOver({ shallow: true }),
+      isOver: monitor.isOver() && monitor.canDrop(),
     }),
   });
 
@@ -56,9 +71,41 @@ const TreeItem: React.FC<Props> = (props) => {
       type: ActTypes.SELECT_WIDGETS,
       payload: { widgetIds: [props.nodeId] },
     });
-  }, [props.nodeId])
+  }, [props.nodeId]);
+
+  const [{ isDragging }, drag] = useDrag({
+    item: {
+      type: DragItems.WidgetInstance,
+      data: { widgetId: props.nodeId }
+    },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging()
+    }),
+  });
+
+  const ref = useRef<HTMLDivElement>(null);
+  drag(drop(ref))
+  const onMouseEnter = useCallback(
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      dispatch({
+        type: ActTypes.HOVER_WIDGET,
+        payload: { hoverId: props.nodeId },
+      });
+    },
+    [props.nodeId],
+  );
+
+  const onMouseLeave = useCallback(
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { 
+        dispatch({ type: ActTypes.HOVER_WIDGET, payload: { hoverId: '' } });
+    },
+    [],
+  );
   return (
-    <div ref={drop} style={style} onClick={onClick}>
+    <div ref={ref} style={style} onClick={onClick} 
+    onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        >
       {props.title}
     </div>
   );

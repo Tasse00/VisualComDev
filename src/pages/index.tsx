@@ -67,6 +67,7 @@ export default () => {
             payload: { widgetIds: [node.id] },
           })
         }
+        hovered={state.hoverId ===node.id}
       >
         {node.items ? (
           <WidgetCom {...node.properties}>

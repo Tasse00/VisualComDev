@@ -1,5 +1,5 @@
-import React, { useCallback, useContext, useState } from 'react';
-import { useDrop } from 'react-dnd';
+import React, { useCallback, useContext, useRef, useState } from 'react';
+import { useDrag, useDrop } from 'react-dnd';
 import { useContextMenuTrigger } from '../ContextMenu';
 import styles from './ComWrapper.less';
 import { DragItems } from './Constants';
@@ -8,6 +8,7 @@ import { ActTypes, VisualDispatcherContext, Widget } from './Visual';
 interface ComWrapperProps {
   style?: React.CSSProperties;
   selected?: boolean;
+  hovered: boolean;
   level: number;
   nodeId: string;
   onClick: () => any;
@@ -19,11 +20,8 @@ const MaskHoverBackgroundColor = 'rgba(0,150,0,0.2)';
 const ComWrapper: React.FC<ComWrapperProps> = (props) => {
   const dispatch = useContext(VisualDispatcherContext);
 
-  const [isHover, setIsHover] = useState(false);
-
   const onMouseEnter = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      setIsHover(true);
       dispatch({
         type: ActTypes.HOVER_WIDGET,
         payload: { hoverId: props.nodeId },
@@ -34,7 +32,6 @@ const ComWrapper: React.FC<ComWrapperProps> = (props) => {
 
   const onMouseLeave = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      setIsHover(false);
       if (props.level === 1) {
         dispatch({ type: ActTypes.HOVER_WIDGET, payload: { hoverId: '' } });
       }
@@ -43,27 +40,34 @@ const ComWrapper: React.FC<ComWrapperProps> = (props) => {
   );
 
   const maskStyle: React.CSSProperties = {
-    backgroundColor: isHover ? MaskBackgroundColor : undefined,
+    backgroundColor: props.hovered ? MaskBackgroundColor : undefined,
     borderWidth: props.selected ? 1 : 0,
     zIndex: props.level,
   };
 
   const [{ isOver, isOverCurrent }, drop] = useDrop<
-    { type: string; data: Widget },
+    { type: string; data: (Widget & {widgetId: string}) },
     void,
     { isOver: boolean; isOverCurrent: boolean }
   >({
-    accept: DragItems.WidgetType,
+    accept: [DragItems.WidgetType, DragItems.WidgetInstance],
     drop(item, monitor) {
       const didDrop = monitor.didDrop();
       if (didDrop) {
         return;
       }
 
-      dispatch({
-        type: ActTypes.ADD_WIDGET,
-        payload: { containerId: props.nodeId, widgetType: item.data.type },
-      });
+      if (item.type === DragItems.WidgetType) {
+        dispatch({
+          type: ActTypes.ADD_WIDGET,
+          payload: { containerId: props.nodeId, widgetType: item.data.type },
+        });
+      }else if(item.type === DragItems.WidgetInstance && (item.data.widgetId !== props.nodeId)){
+        dispatch({
+          type: ActTypes.MOVE_WIDGET,
+          payload: { containerId: props.nodeId, widgetId: item.data.widgetId },
+        });
+      }
     },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
@@ -75,6 +79,23 @@ const ComWrapper: React.FC<ComWrapperProps> = (props) => {
     maskStyle.backgroundColor = MaskHoverBackgroundColor;
   }
 
+  const [{ isDragging }, drag] = useDrag({
+    item: {
+      type: DragItems.WidgetInstance,
+      data: { widgetId: props.nodeId }
+    },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging()
+    }),
+  });
+
+  if (isDragging) {
+    maskStyle.backgroundColor = MaskBackgroundColor;
+  }
+
+  const ref = useRef<HTMLDivElement>(null);
+  drag(drop(ref))
+
   const [openContextMenu] = useContextMenuTrigger();
 
   const onContextMenu = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -84,14 +105,17 @@ const ComWrapper: React.FC<ComWrapperProps> = (props) => {
         y: e.clientY,
       },
       menu: [
-        {text: 'Delete Widget', handler: ()=>{dispatch({type: ActTypes.DEL_WIDGET, payload: {widgetId: props.nodeId}})}},
+        { text: 'Delete Widget', handler: () => { dispatch({ type: ActTypes.DEL_WIDGET, payload: { widgetId: props.nodeId } }) } },
       ]
     });
     e.stopPropagation();
   }, [openContextMenu, props.nodeId])
 
+
+
+
   return (
-    <div ref={drop} className={styles['com-wrapper']} style={props.style}>
+    <div ref={ref} className={styles['com-wrapper']} style={props.style}>
       {props.children}
       <div
         className={styles['com-wrapper-mask']}

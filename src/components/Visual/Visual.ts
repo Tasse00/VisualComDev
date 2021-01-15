@@ -24,6 +24,7 @@ export interface State {
 
 export enum ActTypes {
   ADD_WIDGET = 'add-widget',
+  MOVE_WIDGET = 'move-widget',
   DEL_WIDGET = 'del-widget',
   SELECT_WIDGETS = 'select-widgets',
   HOVER_WIDGET = 'hover-widget',
@@ -68,6 +69,50 @@ ActionHandlers[ActTypes.ADD_WIDGET] = (state, payload: ActAddWidgetPayload) => {
     widgets: { ...state.widgets },
   };
 };
+
+// 移动widget
+interface ActMoveWidgetPayload {
+  containerId: string;
+  widgetId: string;
+}
+ActionHandlers[ActTypes.MOVE_WIDGET] = (state, payload: ActMoveWidgetPayload) => {
+  const { containerId, widgetId } = payload;
+  const container = state.widgets[containerId];
+  if (!container) {
+    console.log('Invalid containerId', containerId);
+    return state;
+  }
+  if (!state.childrenMap[containerId]) {
+    state.childrenMap[containerId] = [];
+  }
+
+  // TODO valid type
+
+  const widget: Widget = state.widgets[widgetId];
+
+  if (!widget) {
+    console.warn('Invalid containerId', widgetId);
+    return state;
+  }
+
+  // 从原父亲中移除自己
+  for (let id of Object.keys(state.childrenMap)) {
+    const idx = state.childrenMap[id].findIndex((cid) => cid === widgetId);
+    if (idx !== -1) {
+      state.childrenMap[id].splice(idx, 1);
+      state.childrenMap[id] = [...state.childrenMap[id]];
+    }
+  }
+
+  // 在新父亲中加入自己
+  state.childrenMap[containerId].push(widget.id);
+  
+  return {
+    ...state,
+    childrenMap: { ...state.childrenMap },
+  };
+};
+
 
 // 删除widget
 interface ActDelWidgetPayload {
@@ -193,6 +238,10 @@ interface ActAddWidget {
   type: ActTypes.ADD_WIDGET;
   payload: ActAddWidgetPayload;
 }
+interface ActMoveWidget {
+  type: ActTypes.MOVE_WIDGET;
+  payload: ActMoveWidgetPayload;
+}
 interface ActDelWidget {
   type: ActTypes.DEL_WIDGET;
   payload: ActDelWidgetPayload;
@@ -218,6 +267,7 @@ interface ActUpdateWidgetProperty {
 
 type AvailableActions =
   | ActAddWidget
+  | ActMoveWidget
   | ActDelWidget
   | ActSelectWidgets
   | ActHoverWidget
