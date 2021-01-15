@@ -13,4 +13,5 @@ export default {
     title: 'Basic Container',
     type: 'Container',
     component: Container,
+    properties: [],
 }

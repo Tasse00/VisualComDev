@@ -6,7 +6,7 @@ import {
   ActTypes,
   getDefaultState,
 } from '@/components/Visual/Visual';
-import { Button, Card, Tree, Tabs } from 'antd';
+import { Button, Tree, Tabs } from 'antd';
 import React, { useReducer } from 'react';
 import ReactJson from 'react-json-view';
 import ComWrapper from '../components/Visual/ComWrapper';
@@ -18,6 +18,8 @@ import WidgetType from '@/components/Visual/WidgetType';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import TreeItem from '@/components/TreeItem';
+import StyleEditor from '@/components/Visual/StyleEditor';
+import PropertyEditor from '@/components/Visual/PropertyEditor';
 
 function Panel(props) {
   return (
@@ -41,6 +43,7 @@ function recursiveTreeNode(n: any) {
     n.children = n.items;
     n.items.map((it: any) => recursiveTreeNode(it));
   }
+  delete n.style;
   return n;
 }
 
@@ -55,6 +58,7 @@ export default () => {
         key={node.id}
         nodeId={node.id}
         selected={state.selectedIds.includes(node.id)}
+        style={node.style}
         onClick={() =>
           dispatch({
             type: ActTypes.SELECT_WIDGETS,
@@ -63,12 +67,12 @@ export default () => {
         }
       >
         {node.items ? (
-          <WidgetCom>
+          <WidgetCom {...node.properties}>
             {node.items.map((it) => renderNode(it, level + 1))}
           </WidgetCom>
         ) : (
-          <WidgetCom />
-        )}
+            <WidgetCom {...node.properties} />
+          )}
       </ComWrapper>
     );
   }
@@ -153,7 +157,7 @@ export default () => {
                   <Tree
                     // draggable
                     blockNode
-                    treeData={[recursiveTreeNode(tree)]}
+                    treeData={[recursiveTreeNode(convertTree(state))]}
                     // selectedKeys={state.selectedIds}
                     defaultExpandAll
                     titleRender={(node) => (
@@ -167,20 +171,26 @@ export default () => {
                         hovered={state.hoverId === node.key.toString()}
                       />
                     )}
-                    onSelect={(keys) => {
-                      dispatch({
-                        type: ActTypes.SELECT_WIDGETS,
-                        payload: { widgetIds: keys.map((k) => k.toString()) },
-                      });
-                    }}
+                    selectable={false}
                   />
                 </Panel>
               </Stretch>
               <Fixed defaultSize={300} position={'top'}>
                 {/* 属性编辑区域 */}
-                <Panel style={{ padding: 8 }}>
-                  <Tabs size="small">
-                    <Tabs.TabPane tab="style" key="style"></Tabs.TabPane>
+                <Panel style={{ padding: 0 }}>
+                  <Tabs size="small" style={{ margin: 0 }}>
+                    {/* 
+                    
+                    1. Wdiget Wrapper Style
+                    2. Widget Inner Style
+                    
+                    */}
+                    <Tabs.TabPane tab="style" key="style">
+                      {selected && <StyleEditor widget={state.widgets[selected]} />}
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="properties" key="properties">
+                      {selected && <PropertyEditor widget={state.widgets[selected]} />}
+                    </Tabs.TabPane>
                     <Tabs.TabPane tab="dev" key="dev">
                       <div>selected: {selected}</div>
                       <div>hovered: {state.hoverId}</div>

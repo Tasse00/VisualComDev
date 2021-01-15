@@ -4,6 +4,9 @@ export interface Widget {
   id: string;
   type: string;
   style: React.CSSProperties;
+  properties: {
+    [field: string]: any;
+  };
 }
 
 export interface State {
@@ -25,6 +28,7 @@ export enum ActTypes {
   SELECT_WIDGETS = 'select-widgets',
   HOVER_WIDGET = 'hover-widget',
   UPDATE_STYLE = 'update-style',
+  UPDATE_PROPERTY = 'update-property',
 }
 
 const ActionHandlers: {
@@ -53,6 +57,7 @@ ActionHandlers[ActTypes.ADD_WIDGET] = (state, payload: ActAddWidgetPayload) => {
     id: widgetType + '-' + Math.random().toString(),
     type: widgetType,
     style: {},
+    properties: {},
   };
 
   state.childrenMap[containerId].push(widget.id);
@@ -142,7 +147,7 @@ ActionHandlers[ActTypes.HOVER_WIDGET] = (
 // 设置Widget style属性
 interface ActUpdateWidgetStylePayload {
   widgetId: string;
-  field: string;
+  field: keyof React.CSSProperties;
   value: string;
 }
 ActionHandlers[ActTypes.UPDATE_STYLE] = (
@@ -151,7 +156,35 @@ ActionHandlers[ActTypes.UPDATE_STYLE] = (
 ) => {
   const { widgetId, field, value } = payload;
   const widget = state.widgets[widgetId];
-  widget.style = { ...widget.style, [field]: value };
+  
+  if (value !== undefined) {
+    widget.style = { ...widget.style, [field]: value };
+  }else{
+    delete widget.style[field]
+  }
+  
+  state.widgets[widget.id] = { ...widget };
+  return { ...state, widgets: state.widgets };
+};
+
+
+// 设置 Widget Property 属性
+interface ActUpdateWidgetPropertyPayload {
+  widgetId: string;
+  field: string;
+  value: string;
+}
+ActionHandlers[ActTypes.UPDATE_PROPERTY] = (
+  state,
+  payload: ActUpdateWidgetPropertyPayload,
+) => {
+  const { widgetId, field, value } = payload;
+  const widget = state.widgets[widgetId];
+  if (value !== undefined) {
+    widget.properties = { ...widget.properties, [field]: value };
+  }else{
+    delete widget.properties[field]
+  }
   state.widgets[widget.id] = { ...widget };
   return { ...state, widgets: state.widgets };
 };
@@ -177,12 +210,19 @@ interface ActUpdateWidgetStyle {
   type: ActTypes.UPDATE_STYLE;
   payload: ActUpdateWidgetStylePayload;
 }
+
+interface ActUpdateWidgetProperty {
+  type: ActTypes.UPDATE_PROPERTY;
+  payload: ActUpdateWidgetPropertyPayload;
+}
+
 type AvailableActions =
   | ActAddWidget
   | ActDelWidget
   | ActSelectWidgets
   | ActHoverWidget
-  | ActUpdateWidgetStyle;
+  | ActUpdateWidgetStyle
+  | ActUpdateWidgetProperty;
 export function Reducer(state: State, action: AvailableActions) {
   const handler = ActionHandlers[action.type];
   if (!handler) {
@@ -193,7 +233,7 @@ export function Reducer(state: State, action: AvailableActions) {
 }
 
 export const VisualDispatcherContext = React.createContext<
-  React.Dispatch<ActAddWidget>
+  React.Dispatch<AvailableActions>
 >(() => {});
 
 export interface WidgetTreeNode extends Widget {

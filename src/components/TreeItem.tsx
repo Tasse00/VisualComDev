@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { useDrop } from 'react-dnd';
 import { DragItems } from './Visual/Constants';
 import { ActTypes, VisualDispatcherContext, Widget } from './Visual/Visual';
@@ -51,9 +51,15 @@ const TreeItem: React.FC<Props> = (props) => {
     style.backgroundColor = MaskHoverBackgroundColor;
   }
 
+  const onClick = useCallback(() => {
+    dispatch({
+      type: ActTypes.SELECT_WIDGETS,
+      payload: { widgetIds: [props.nodeId] },
+    });
+  }, [props.nodeId])
   return (
-    <div ref={drop} style={style}>
-      [{props.title}]
+    <div ref={drop} style={style} onClick={onClick}>
+      {props.title}
     </div>
   );
 };
