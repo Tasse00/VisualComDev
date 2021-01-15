@@ -4,8 +4,9 @@ import {
   WidgetTreeNode,
   VisualDispatcherContext,
   ActTypes,
+  getDefaultState,
 } from '@/components/Visual/Visual';
-import { Button, Card, Tree } from 'antd';
+import { Button, Card, Tree, Tabs } from 'antd';
 import React, { useReducer } from 'react';
 import ReactJson from 'react-json-view';
 import ComWrapper from '../components/Visual/ComWrapper';
@@ -44,20 +45,7 @@ function recursiveTreeNode(n: any) {
 }
 
 export default () => {
-  const [state, dispatch] = useReducer(Reducer, {
-    rootId: 'root',
-    hoverId: '',
-    selectedIds: ['root'],
-    widgets: {
-      root: {
-        id: 'root',
-        type: 'Container',
-      },
-    },
-    childrenMap: {
-      root: [],
-    },
-  });
+  const [state, dispatch] = useReducer(Reducer, {}, getDefaultState);
 
   function renderNode(node: WidgetTreeNode, level: number) {
     const WidgetCom = widgetSpecs[node.type].component;
@@ -172,7 +160,7 @@ export default () => {
                       <TreeItem
                         key={node.key}
                         nodeId={node.key.toString()}
-                        title={node.title}
+                        title={(node.title || '').toString()}
                         selected={state.selectedIds.includes(
                           node.key.toString(),
                         )}
@@ -190,29 +178,37 @@ export default () => {
               </Stretch>
               <Fixed defaultSize={300} position={'top'}>
                 {/* 属性编辑区域 */}
-                <Panel>
-                  <div>selected: {selected}</div>
-                  <div>hovered: {state.hoverId}</div>
-                  <Button
-                    onClick={() => {
-                      dispatch({
-                        type: ActTypes.DEL_WIDGET,
-                        payload: { widgetId: selected },
-                      });
-                    }}
-                  >
-                    删除该层级
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      dispatch({
-                        type: ActTypes.ADD_WIDGET,
-                        payload: { containerId: selected, widgetType: 'Card' },
-                      });
-                    }}
-                  >
-                    在该层级下添加
-                  </Button>
+                <Panel style={{ padding: 8 }}>
+                  <Tabs size="small">
+                    <Tabs.TabPane tab="style" key="style"></Tabs.TabPane>
+                    <Tabs.TabPane tab="dev" key="dev">
+                      <div>selected: {selected}</div>
+                      <div>hovered: {state.hoverId}</div>
+                      <Button
+                        onClick={() => {
+                          dispatch({
+                            type: ActTypes.DEL_WIDGET,
+                            payload: { widgetId: selected },
+                          });
+                        }}
+                      >
+                        删除该层级
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          dispatch({
+                            type: ActTypes.ADD_WIDGET,
+                            payload: {
+                              containerId: selected,
+                              widgetType: 'Card',
+                            },
+                          });
+                        }}
+                      >
+                        在该层级下添加
+                      </Button>
+                    </Tabs.TabPane>
+                  </Tabs>
                 </Panel>
               </Fixed>
             </Fixed>

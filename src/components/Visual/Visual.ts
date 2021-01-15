@@ -3,6 +3,7 @@ import React from 'react';
 export interface Widget {
   id: string;
   type: string;
+  style: React.CSSProperties;
 }
 
 export interface State {
@@ -23,6 +24,7 @@ export enum ActTypes {
   DEL_WIDGET = 'del-widget',
   SELECT_WIDGETS = 'select-widgets',
   HOVER_WIDGET = 'hover-widget',
+  UPDATE_STYLE = 'update-style',
 }
 
 const ActionHandlers: {
@@ -50,6 +52,7 @@ ActionHandlers[ActTypes.ADD_WIDGET] = (state, payload: ActAddWidgetPayload) => {
   const widget: Widget = {
     id: widgetType + '-' + Math.random().toString(),
     type: widgetType,
+    style: {},
   };
 
   state.childrenMap[containerId].push(widget.id);
@@ -122,6 +125,7 @@ ActionHandlers[ActTypes.SELECT_WIDGETS] = (
   };
 };
 
+// 悬浮状态设置
 interface ActHoverWidgetPayload {
   hoverId: string;
 }
@@ -133,6 +137,23 @@ ActionHandlers[ActTypes.HOVER_WIDGET] = (
     ...state,
     hoverId: payload.hoverId,
   };
+};
+
+// 设置Widget style属性
+interface ActUpdateWidgetStylePayload {
+  widgetId: string;
+  field: string;
+  value: string;
+}
+ActionHandlers[ActTypes.UPDATE_STYLE] = (
+  state,
+  payload: ActUpdateWidgetStylePayload,
+) => {
+  const { widgetId, field, value } = payload;
+  const widget = state.widgets[widgetId];
+  widget.style = { ...widget.style, [field]: value };
+  state.widgets[widget.id] = { ...widget };
+  return { ...state, widgets: state.widgets };
 };
 
 interface ActAddWidget {
@@ -147,17 +168,21 @@ interface ActSelectWidgets {
   type: ActTypes.SELECT_WIDGETS;
   payload: ActSelectWidgetsPayload;
 }
-
 interface ActHoverWidget {
   type: ActTypes.HOVER_WIDGET;
   payload: ActHoverWidgetPayload;
 }
 
+interface ActUpdateWidgetStyle {
+  type: ActTypes.UPDATE_STYLE;
+  payload: ActUpdateWidgetStylePayload;
+}
 type AvailableActions =
   | ActAddWidget
   | ActDelWidget
   | ActSelectWidgets
-  | ActHoverWidget;
+  | ActHoverWidget
+  | ActUpdateWidgetStyle;
 export function Reducer(state: State, action: AvailableActions) {
   const handler = ActionHandlers[action.type];
   if (!handler) {
@@ -212,4 +237,22 @@ export function convertTree(state: State): WidgetTreeNode {
     });
   }
   return root;
+}
+
+export function getDefaultState(): State {
+  return {
+    rootId: 'root',
+    hoverId: '',
+    selectedIds: ['root'],
+    widgets: {
+      root: {
+        id: 'root',
+        type: 'Container',
+        style: {},
+      },
+    },
+    childrenMap: {
+      root: [],
+    },
+  };
 }
