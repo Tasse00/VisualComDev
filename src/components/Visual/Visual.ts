@@ -135,7 +135,6 @@ ActionHandlers[ActTypes.DEL_WIDGET] = (state, payload: ActDelWidgetPayload) => {
     if (idx !== -1) {
       state.childrenMap[id].splice(idx, 1);
       state.childrenMap[id] = [...state.childrenMap[id]];
-      console.log(state.childrenMap[id]);
     }
   }
 
@@ -154,8 +153,13 @@ ActionHandlers[ActTypes.DEL_WIDGET] = (state, payload: ActDelWidgetPayload) => {
     }
     delete state.widgets[w.id];
   }
+
+  
+  const currentWidgetIds = Object.keys(state.widgets);
   return {
     ...state,
+    hoverId: currentWidgetIds.includes(state.hoverId) ? state.hoverId : '',
+    selectedIds: state.selectedIds.filter(id=>currentWidgetIds.includes(id)),
     childrenMap: { ...state.childrenMap },
     widgets: { ...state.widgets },
   };

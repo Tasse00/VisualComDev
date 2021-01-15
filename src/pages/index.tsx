@@ -143,7 +143,7 @@ export default () => {
                 </Stretch>
                 <Fixed defaultSize={200} position={'top'}>
                   <Panel>
-                    <ReactJson src={state} />
+                    {/* <ReactJson src={state} /> */}
                   </Panel>
                 </Fixed>
               </Stretch>

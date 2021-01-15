@@ -26,8 +26,6 @@ const ContextMenu: React.FC<Props> = props => {
         top: pos.y,
     }
 
-    console.log(style);
-
     document.oncontextmenu = function (e) {/*屏蔽浏览器默认右键事件*/
         e = e || window.event;
         return false;

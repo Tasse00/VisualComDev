@@ -1,5 +1,6 @@
 import { Input, InputNumber, Table } from 'antd';
 import React, { useCallback, useContext } from 'react';
+import FieldInputs from './FieldInput';
 import { ActTypes, VisualDispatcherContext, Widget } from './Visual';
 import widgetSpecs from './widgets';
 
@@ -10,41 +11,18 @@ const PropertyEditor: React.FC<{
     const {properties} = widgetSpecs[props.widget.type];
 
     const dispatch = useContext(VisualDispatcherContext);
-
     const valueRenderFunc = useCallback((v, item) => {
-        if (item.type === 'number') {
-            return (<InputNumber
-                placeholder='default'
-                min={0}
-                style={{width: '100%'}}
-                value={v}
-                onChange={(v) => {
-                    dispatch({
-                        type: ActTypes.UPDATE_PROPERTY,
-                        payload: {
-                            widgetId: props.widget.id,
-                            field: item.field,
-                            value: v ? v.toString() : '',
-                        }
-                    });
-                }}
-            />)
-        } else {
-            return (
-                <Input placeholder='default' value={v}
-                    onChange={(v) => {
-                        const value = v.target.value;
-                        dispatch({
-                            type: ActTypes.UPDATE_PROPERTY,
-                            payload: {
-                                widgetId: props.widget.id,
-                                field: item.field,
-                                value: value,
-                            }
-                        });
-                    }}
-                />)
-        }
+
+        return FieldInputs[item.type](v, v=>{
+            dispatch({
+                type: ActTypes.UPDATE_PROPERTY,
+                payload: {
+                    widgetId: props.widget.id,
+                    field: item.field,
+                    value: v,
+                }
+            })
+        }, item.params)
 
     }, [props.widget]);
 
