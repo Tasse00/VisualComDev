@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { useContextMenuTrigger } from './ContextMenu';
-import { DragItems } from './Visual/Constants';
+import { DragItems } from './Constants';
 import { ActTypes, VisualDispatcherContext, Widget } from './Visual/Visual';
 
 const MaskBackgroundColor = 'rgba(199, 199, 11, 0.2)';

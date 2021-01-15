@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { useContextMenuTrigger } from '../ContextMenu';
 import styles from './ComWrapper.less';
-import { DragItems } from './Constants';
+import { DragItems } from '../Constants';
 import { ActTypes, VisualDispatcherContext, Widget } from './Visual';
 
 interface ComWrapperProps {

@@ -1,6 +1,8 @@
 import React from "react";
 import { useDrag } from 'react-dnd';
-import { DragItems } from './Constants';
+import { DragItems } from '../Constants';
+import styles from "./index.less";
+
 
 const WidgetType: React.FC<{
     widget: {
@@ -21,15 +23,14 @@ const WidgetType: React.FC<{
         }),
     });
 
-    const style: React.CSSProperties = {
-        width: 120, height: 80, boxSizing: 'border-box', border: '1px solid white', display: 'flex', flexDirection: 'column', alignItems: 'center' 
-    };
+    const style: React.CSSProperties = {};
+
     if (isDragging) {
         style.border = '1px dashed rgba(200,200,200,0.4)';
     }
 
     return (
-        <div ref={drag} style={style}>
+        <div ref={drag} className={styles['widget-type']} style={style}>
             <div style={{ flex: 1, overflow: 'hidden' }}>
                 <props.widget.component />
             </div>

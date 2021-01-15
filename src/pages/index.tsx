@@ -22,6 +22,7 @@ import StyleEditor from '@/components/Visual/StyleEditor';
 import PropertyEditor from '@/components/Visual/PropertyEditor';
 import { ContextMenuContext, useContextMenu } from '@/components/ContextMenu';
 import ContextMenu from '@/components/ContextMenu/ContextMenu';
+import WidgetGallery from '@/components/WidgetGallery';
 
 function Panel(props) {
   return (
@@ -110,18 +111,7 @@ export default () => {
             </Fixed>
             <Stretch style={{ display: 'flex' }}>
               <Fixed defaultSize={200} position={'right'}>
-                <Panel
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-around',
-                    alignItems: 'flex-start',
-                    flexWrap: 'wrap',
-                  }}
-                >
-                  {Object.values(widgetSpecs).map((ws) => (
-                    <WidgetType widget={ws} key={ws.type} />
-                  ))}
-                </Panel>
+                <WidgetGallery />
               </Fixed>
 
               <Stretch
