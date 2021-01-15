@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
+import { useContextMenuTrigger } from './ContextMenu';
 import { DragItems } from './Visual/Constants';
 import { ActTypes, VisualDispatcherContext, Widget } from './Visual/Visual';
 
@@ -101,8 +102,25 @@ const TreeItem: React.FC<Props> = (props) => {
     },
     [],
   );
+
+  const [openContextMenu] = useContextMenuTrigger();
+
+  const onContextMenu = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    openContextMenu({
+      pos: {
+        x: e.clientX,
+        y: e.clientY,
+      },
+      menu: [
+        { text: 'Delete Widget', handler: () => { dispatch({ type: ActTypes.DEL_WIDGET, payload: { widgetId: props.nodeId } }) } },
+      ]
+    });
+    e.stopPropagation();
+  }, [openContextMenu, props.nodeId])
+
+
   return (
-    <div ref={ref} style={style} onClick={onClick} 
+    <div ref={ref} style={style} onClick={onClick} onContextMenu={onContextMenu}
     onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         >
