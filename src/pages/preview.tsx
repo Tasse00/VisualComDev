@@ -1,5 +1,5 @@
 import React from 'react';
-import { WidgetTreeNode } from '@/components/Visual/Visual';
+import { WidgetTreeNode } from '@/components/Visual';
 import styles from './index.less';
 import WidgetVisualNode from '@/components/WidgetVisualNode';
 import WidgetPreviewWrapper from '@/components/WidgetVisualNode/WidgetPreviewWrapper';
