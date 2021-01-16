@@ -1,4 +1,4 @@
-import { Card, Row, Statistic } from 'antd';
+import { Card, Row, Statistic, Col } from 'antd';
 import { ComponentType } from 'react';
 
 import React from 'react';
@@ -67,9 +67,23 @@ const RowCfg: WidgetConfig = {
     {
       field: 'gutter',
       label: '间距',
-      type: 'switch',
+      type: 'number',
       desc: '仅对内部的"Col"组件生效',
     },
+  ],
+};
+
+const ColCfg: WidgetConfig = {
+  title: 'Col',
+  type: 'Col',
+  container: true,
+  component: Col,
+  properties: [
+    // { field: 'flex', label: 'flex', type: 'number' },
+    // { field: 'offset', label: 'offset', type: 'number' },
+    // { field: 'pull', label: 'pull', type: 'number' },
+    // { field: 'push', label: 'push', type: 'number' },
+    // { field: 'span', label: 'span', type: 'number' },
   ],
 };
 
@@ -98,6 +112,7 @@ const widgetConfigArray: WidgetConfig[] = [
   ContainerCfg,
   AntdCardCfg,
   RowCfg,
+  ColCfg,
   StatisticCfg,
   AntdCardCfg,
 ];
