@@ -1,14 +1,16 @@
 import React, { useMemo, useState } from 'react';
 import styles from './index.less';
-import { Button, Input, Modal, message } from 'antd';
+import { Button, Input, Modal, message, Row, Col } from 'antd';
 import {
   ExportOutlined,
   CopyOutlined,
   FileDoneOutlined,
+  EyeOutlined,
 } from '@ant-design/icons';
 import { Widget, convertTree } from '../Visual/Visual';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import ReactJsonView from 'react-json-view';
+import { history } from 'umi';
 const Toolbar: React.FC<{
   rootId: string;
   widgets: { [id: string]: Widget };
@@ -27,17 +29,31 @@ const Toolbar: React.FC<{
   return (
     <div className={styles['toolbar']}>
       <div className={styles['logo']}>VCD</div>
+      <Row gutter={8}>
+        <Col>
+          <Button
+            icon={<ExportOutlined />}
+            onClick={() => {
+              setExportVisible(true);
+              setCopied(false);
+            }}
+          >
+            导出
+          </Button>
+        </Col>
 
-      <Button
-        icon={<ExportOutlined />}
-        onClick={() => {
-          setExportVisible(true);
-          setCopied(false);
-        }}
-      >
-        导出
-      </Button>
-
+        <Col>
+          <Button
+            icon={<EyeOutlined />}
+            onClick={() => {
+              window.localStorage.setItem('preview-json', treeStr);
+              window.open(`${location.protocol}//${location.host}/preview`);
+            }}
+          >
+            预览
+          </Button>
+        </Col>
+      </Row>
       <Modal
         visible={exportVisible}
         maskClosable

@@ -1,18 +1,12 @@
 import {
   convertTree,
-  Reducer,
-  WidgetTreeNode,
   VisualDispatcherContext,
-  ActTypes,
-  getDefaultState,
+  useVisual,
 } from '@/components/Visual/Visual';
-import { Button, Tree } from 'antd';
-import React, { useReducer } from 'react';
-import ComWrapper from '../components/Visual/ComWrapper';
+import React, { useReducer, useMemo } from 'react';
 import styles from './index.less';
 import Fixed from '@/components/layout/Fixed';
 import Stretch from '@/components/layout/Stretch';
-import widgetSpecs from '@/components/Visual/widgets';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ContextMenuContext, useContextMenu } from '@/components/ContextMenu';
@@ -21,66 +15,17 @@ import WidgetGallery from '@/components/WidgetGallery';
 import WidgetEditor from '@/components/Visual/WidgetEditor';
 import WidgetTree from '@/components/WidgetTree';
 import Toolbar from '@/components/Toobar';
-
-function Panel(props) {
-  return (
-    <div
-      style={{
-        width: '100%',
-        boxSizing: 'border-box',
-        padding: 16,
-        ...(props.style || {}),
-      }}
-    >
-      {props.children}
-    </div>
-  );
-}
+import WidgetVisualNode from '@/components/Visual/WidgetVisualNode';
+import Panel from '@/components/Panel';
 
 export default () => {
-  const [state, dispatch] = useReducer(Reducer, {}, getDefaultState);
+  const [state, dispatch] = useVisual();
 
-  function renderNode(node: WidgetTreeNode, level: number) {
-    const WidgetCom = widgetSpecs[node.type].component;
-
-    const properties: { [field: string]: any } = {};
-    for (let prop of widgetSpecs[node.type].properties) {
-      if (prop.default !== undefined) {
-        properties[prop.field] = prop.default;
-      }
-    }
-    Object.assign(properties, node.properties);
-
-    return (
-      <ComWrapper
-        level={level}
-        key={node.id}
-        nodeId={node.id}
-        container={widgetSpecs[node.type].container}
-        selected={state.selectedIds.includes(node.id)}
-        style={node.style}
-        onClick={() =>
-          dispatch({
-            type: ActTypes.SELECT_WIDGETS,
-            payload: { widgetIds: [node.id] },
-          })
-        }
-        hovered={state.hoverId === node.id}
-      >
-        {node.items ? (
-          <WidgetCom {...properties}>
-            {node.items.map((it) => renderNode(it, level + 1))}
-          </WidgetCom>
-        ) : (
-          <WidgetCom {...properties} />
-        )}
-      </ComWrapper>
-    );
-  }
-
-  const tree = convertTree(state);
-
-  const selected = state.selectedIds.length > 0 ? state.selectedIds[0] : '';
+  const tree = useMemo(() => convertTree(state), [
+    state.widgets,
+    state.childrenMap,
+    state.rootId,
+  ]);
 
   const [ctxMenuState, ctxMenuControl] = useContextMenu();
 
@@ -106,7 +51,7 @@ export default () => {
 
             <Stretch style={{ display: 'flex' }}>
               {/* 组件画廊 */}
-              <Fixed defaultSize={200} position={'right'}>
+              <Fixed defaultSize={160} position={'right'}>
                 <WidgetGallery />
               </Fixed>
 
@@ -126,7 +71,12 @@ export default () => {
                     backgroundColor: 'rgba(200,200,200,0.2)',
                   }}
                 >
-                  {renderNode(tree, 1)}
+                  {/* {renderNode(tree, 1)} */}
+                  <WidgetVisualNode
+                    node={tree}
+                    hoverId={state.hoverId}
+                    selectedIds={state.selectedIds}
+                  />
                 </Stretch>
                 {/* 底部信息 */}
                 <Fixed defaultSize={200} position={'top'}>
@@ -159,8 +109,10 @@ export default () => {
                 {/* 组件编辑 */}
                 <Fixed defaultSize={300} position={'top'}>
                   <Panel style={{ padding: 8 }}>
-                    {selected && (
-                      <WidgetEditor widget={state.widgets[selected]} />
+                    {state.selectedIds.length === 1 && (
+                      <WidgetEditor
+                        widget={state.widgets[state.selectedIds[0]]}
+                      />
                     )}
                   </Panel>
                 </Fixed>

@@ -5,6 +5,7 @@ export default defineConfig({
     type: 'none',
   },
   routes: [
-    { path: '/', component: '@/pages/index' },
+    { path: '/', component: '@/pages/index', exact: true },
+    { path: '/preview', component: '@/pages/preview', exact: true },
   ],
 });

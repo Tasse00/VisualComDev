@@ -1,24 +1,17 @@
 import React, { useCallback, useContext, useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import { useContextMenuTrigger } from '../ContextMenu';
-import styles from './ComWrapper.less';
-import { DragItems } from '../Constants';
-import { ActTypes, VisualDispatcherContext, Widget } from './Visual';
+import { useContextMenuTrigger } from '../../ContextMenu';
+import styles from './WidgetVisualWrapper.less';
+import { DragItems } from '../../Constants';
+import { ActTypes, VisualDispatcherContext, Widget } from '../Visual';
+import { WrapperComponentProps } from '.';
 
-interface ComWrapperProps {
-  style?: React.CSSProperties;
-  selected?: boolean;
-  hovered: boolean;
-  level: number;
-  nodeId: string;
-  onClick: () => any;
-  container?: boolean;
-}
+export const ROOT_WIDGET_NODE_LEVEL = 1;
 
 const MaskBackgroundColor = 'rgba(199, 199, 11, 0.2)';
 const MaskHoverBackgroundColor = 'rgba(0,150,0,0.2)';
 
-const ComWrapper: React.FC<ComWrapperProps> = (props) => {
+const WidgetWrapper: React.FC<WrapperComponentProps> = (props) => {
   const dispatch = useContext(VisualDispatcherContext);
 
   const onMouseEnter = useCallback(
@@ -33,11 +26,20 @@ const ComWrapper: React.FC<ComWrapperProps> = (props) => {
 
   const onMouseLeave = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      if (props.level === 1) {
+      if (props.level === ROOT_WIDGET_NODE_LEVEL) {
         dispatch({ type: ActTypes.HOVER_WIDGET, payload: { hoverId: '' } });
       }
     },
     [props.level],
+  );
+
+  const onClick = useCallback(
+    () =>
+      dispatch({
+        type: ActTypes.SELECT_WIDGETS,
+        payload: { widgetIds: [props.nodeId] },
+      }),
+    [props.nodeId],
   );
 
   const maskStyle: React.CSSProperties = {
@@ -139,11 +141,11 @@ const ComWrapper: React.FC<ComWrapperProps> = (props) => {
         style={maskStyle}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-        onClick={props.onClick}
+        onClick={onClick}
         onContextMenu={onContextMenu}
       ></div>
     </div>
   );
 };
 
-export default ComWrapper;
+export default WidgetWrapper;

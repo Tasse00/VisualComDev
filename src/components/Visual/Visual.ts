@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 
 export interface Widget {
   id: string;
@@ -317,7 +317,7 @@ type AvailableActions =
   | ActUpdateWidgetStyle
   | ActUpdateWidgetProperty
   | ActUpdateWidgetName;
-export function Reducer(state: State, action: AvailableActions) {
+function Reducer(state: State, action: AvailableActions) {
   const handler = ActionHandlers[action.type];
   if (!handler) {
     console.error('invalid action!', action);
@@ -385,8 +385,24 @@ export function convertTree({
   return root;
 }
 
-export function getDefaultState(): State {
-  return {
+const __name_counter: {
+  [type: string]: number;
+} = {};
+function genWidgetName(type: string, existedWidgets: Widget[]) {
+  if (!(type in __name_counter)) {
+    __name_counter[type] = 1;
+  }
+  const existedNames = existedWidgets.map((w) => w.name);
+  let name = '';
+  do {
+    name = `${type}_${__name_counter[type]++}`;
+  } while (existedNames.includes(name));
+
+  return name;
+}
+
+export function useVisual() {
+  return useReducer(Reducer, {
     rootId: 'root',
     hoverId: '',
     selectedIds: ['root'],
@@ -402,21 +418,5 @@ export function getDefaultState(): State {
     childrenMap: {
       root: [],
     },
-  };
-}
-
-const __name_counter: {
-  [type: string]: number;
-} = {};
-function genWidgetName(type: string, existedWidgets: Widget[]) {
-  if (!(type in __name_counter)) {
-    __name_counter[type] = 1;
-  }
-  const existedNames = existedWidgets.map((w) => w.name);
-  let name = '';
-  do {
-    name = `${type}_${__name_counter[type]++}`;
-  } while (existedNames.includes(name));
-
-  return name;
+  });
 }
