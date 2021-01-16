@@ -2,7 +2,7 @@ import { Table, Tooltip } from 'antd';
 import React, { useCallback, useContext } from 'react';
 import FieldInputs from './FieldInput';
 import { ActTypes, VisualDispatcherContext, Widget } from '../Visual';
-import { FieldConfig } from '../widgets';
+import { FieldConfig } from '../WidgetConfigs';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 
 const styles: FieldConfig[] = [

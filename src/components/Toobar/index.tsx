@@ -7,7 +7,7 @@ import {
   FileDoneOutlined,
   EyeOutlined,
 } from '@ant-design/icons';
-import { Widget, convertTree } from '../Visual/Visual';
+import { Widget, convertTree } from '../Visual';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import ReactJsonView from 'react-json-view';
 import { history } from 'umi';

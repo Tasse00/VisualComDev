@@ -1,8 +1,8 @@
 import React, { useCallback, useContext, useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import { useContextMenuTrigger } from '../../ContextMenu';
+import { useContextMenuTrigger } from '../ContextMenu';
 import styles from './WidgetVisualWrapper.less';
-import { DragItems } from '../../Constants';
+import { DragItems } from '../Constants';
 import { ActTypes, VisualDispatcherContext, Widget } from '../Visual';
 import { WrapperComponentProps } from '.';
 

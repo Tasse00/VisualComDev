@@ -105,6 +105,7 @@ const AntdCardCfg: WidgetConfig = {
   component: Card,
   properties: [
     { field: 'title', label: '标题', type: 'string', default: '卡片' },
+    { field: 'bodyStyle', label: 'BodyStyle', type: 'style' },
   ],
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { WidgetTreeNode } from '../Visual';
-import widgetConfigMap from '../widgets';
+import widgetConfigMap from '../WidgetConfigs';
 import WidgetNodeWrapper, {
   ROOT_WIDGET_NODE_LEVEL,
 } from './WidgetVisualWrapper';

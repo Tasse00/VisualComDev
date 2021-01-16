@@ -1,6 +1,6 @@
 import { Tree } from 'antd';
 import React from 'react';
-import { convertTree, Widget } from '../Visual/Visual';
+import { convertTree, Widget } from '../Visual';
 import TreeItem from './TreeItem';
 
 function recursiveTreeNode(n: any) {

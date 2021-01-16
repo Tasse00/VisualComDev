@@ -2,7 +2,7 @@ import { Table, Tooltip } from 'antd';
 import React, { useCallback, useContext } from 'react';
 import FieldInputs from './FieldInput';
 import { ActTypes, VisualDispatcherContext, Widget } from '../Visual';
-import widgetSpecs, { FieldConfig } from '../widgets';
+import widgetSpecs, { FieldConfig } from '../WidgetConfigs';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 
 type DataSourceItem = FieldConfig & { key: string; value: any };

@@ -2,8 +2,8 @@ import React, { useCallback, useContext, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { useContextMenuTrigger } from '../ContextMenu';
 import { DragItems } from '../Constants';
-import { ActTypes, VisualDispatcherContext, Widget } from '../Visual/Visual';
-import widgetConfigMap from '../Visual/widgets';
+import { ActTypes, VisualDispatcherContext, Widget } from '../Visual';
+import widgetConfigMap from '../WidgetConfigs';
 
 const MaskBackgroundColor = 'rgba(199, 199, 11, 0.2)';
 const MaskHoverBackgroundColor = 'rgba(0,150,0,0.2)';

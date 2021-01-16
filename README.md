@@ -10,9 +10,9 @@
 - [x] 全屏预览：独立一个route
 - [ ] FieldInput扩展style输入，用于各Widget style属性设置
 - 组件开发
-    - [ ] 水平布局（含gutter）
-    - [ ] 垂直布局
-    - [ ] Antd Col，配合Row使用
+    - ~~水平布局（含gutter）~~
+    - ~~垂直布局~~
+    - [x] Antd Col，配合Row使用
 - [ ] 操作信息
 - [ ] 历史记录
 - [x] 组件属性扩展“说明”项

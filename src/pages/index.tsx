@@ -2,7 +2,7 @@ import {
   convertTree,
   VisualDispatcherContext,
   useVisual,
-} from '@/components/Visual/Visual';
+} from '@/components/Visual';
 import React, { useReducer, useMemo } from 'react';
 import styles from './index.less';
 import Fixed from '@/components/layout/Fixed';
@@ -12,10 +12,10 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ContextMenuContext, useContextMenu } from '@/components/ContextMenu';
 import ContextMenu from '@/components/ContextMenu/ContextMenu';
 import WidgetGallery from '@/components/WidgetGallery';
-import WidgetEditor from '@/components/Visual/WidgetEditor';
+import WidgetEditor from '@/components/WidgetEditor';
 import WidgetTree from '@/components/WidgetTree';
 import Toolbar from '@/components/Toobar';
-import WidgetVisualNode from '@/components/Visual/WidgetVisualNode';
+import WidgetVisualNode from '@/components/WidgetVisualNode';
 import Panel from '@/components/Panel';
 
 export default () => {
