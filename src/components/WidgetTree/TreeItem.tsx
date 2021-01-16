@@ -1,8 +1,8 @@
 import React, { useCallback, useContext, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import { useContextMenuTrigger } from './ContextMenu';
-import { DragItems } from './Constants';
-import { ActTypes, VisualDispatcherContext, Widget } from './Visual/Visual';
+import { useContextMenuTrigger } from '../ContextMenu';
+import { DragItems } from '../Constants';
+import { ActTypes, VisualDispatcherContext, Widget } from '../Visual/Visual';
 
 const MaskBackgroundColor = 'rgba(199, 199, 11, 0.2)';
 const MaskHoverBackgroundColor = 'rgba(0,150,0,0.2)';
@@ -31,7 +31,7 @@ const TreeItem: React.FC<Props> = (props) => {
   const dispatch = useContext(VisualDispatcherContext);
 
   const [{ isOver }, drop] = useDrop<
-    { type: string; data: Widget&{widgetId: string;} },
+    { type: string; data: Widget & { widgetId: string } },
     void,
     { isOver: boolean }
   >({
@@ -42,19 +42,22 @@ const TreeItem: React.FC<Props> = (props) => {
           type: ActTypes.ADD_WIDGET,
           payload: { containerId: props.nodeId, widgetType: item.data.type },
         });
-      }else if(item.type === DragItems.WidgetInstance && (item.data.widgetId !== props.nodeId)){
+      } else if (
+        item.type === DragItems.WidgetInstance &&
+        item.data.widgetId !== props.nodeId
+      ) {
         dispatch({
           type: ActTypes.MOVE_WIDGET,
           payload: { containerId: props.nodeId, widgetId: item.data.widgetId },
         });
       }
     },
-    canDrop: (item, monitor)=>{
+    canDrop: (item, monitor) => {
       if (item.type === DragItems.WidgetType) {
         return true;
-      }else if (item.type ===DragItems.WidgetInstance){
+      } else if (item.type === DragItems.WidgetInstance) {
         return item.data.widgetId !== props.nodeId;
-      }else{
+      } else {
         return false;
       }
     },
@@ -77,15 +80,15 @@ const TreeItem: React.FC<Props> = (props) => {
   const [{ isDragging }, drag] = useDrag({
     item: {
       type: DragItems.WidgetInstance,
-      data: { widgetId: props.nodeId }
+      data: { widgetId: props.nodeId },
     },
     collect: (monitor) => ({
-      isDragging: !!monitor.isDragging()
+      isDragging: !!monitor.isDragging(),
     }),
   });
 
   const ref = useRef<HTMLDivElement>(null);
-  drag(drop(ref))
+  drag(drop(ref));
   const onMouseEnter = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       dispatch({
@@ -97,33 +100,47 @@ const TreeItem: React.FC<Props> = (props) => {
   );
 
   const onMouseLeave = useCallback(
-    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => { 
-        dispatch({ type: ActTypes.HOVER_WIDGET, payload: { hoverId: '' } });
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      dispatch({ type: ActTypes.HOVER_WIDGET, payload: { hoverId: '' } });
     },
     [],
   );
 
   const [openContextMenu] = useContextMenuTrigger();
 
-  const onContextMenu = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    openContextMenu({
-      pos: {
-        x: e.clientX,
-        y: e.clientY,
-      },
-      menu: [
-        { text: 'Delete Widget', handler: () => { dispatch({ type: ActTypes.DEL_WIDGET, payload: { widgetId: props.nodeId } }) } },
-      ]
-    });
-    e.stopPropagation();
-  }, [openContextMenu, props.nodeId])
-
+  const onContextMenu = useCallback(
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      openContextMenu({
+        pos: {
+          x: e.clientX,
+          y: e.clientY,
+        },
+        menu: [
+          {
+            text: 'Delete Widget',
+            handler: () => {
+              dispatch({
+                type: ActTypes.DEL_WIDGET,
+                payload: { widgetId: props.nodeId },
+              });
+            },
+          },
+        ],
+      });
+      e.stopPropagation();
+    },
+    [openContextMenu, props.nodeId],
+  );
 
   return (
-    <div ref={ref} style={style} onClick={onClick} onContextMenu={onContextMenu}
-    onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-        >
+    <div
+      ref={ref}
+      style={style}
+      onClick={onClick}
+      onContextMenu={onContextMenu}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       {props.title}
     </div>
   );

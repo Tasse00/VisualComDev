@@ -15,11 +15,11 @@ import Stretch from '@/components/layout/Stretch';
 import widgetSpecs from '@/components/Visual/widgets';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import TreeItem from '@/components/TreeItem';
 import { ContextMenuContext, useContextMenu } from '@/components/ContextMenu';
 import ContextMenu from '@/components/ContextMenu/ContextMenu';
 import WidgetGallery from '@/components/WidgetGallery';
 import WidgetEditor from '@/components/Visual/WidgetEditor';
+import WidgetTree from '@/components/WidgetTree';
 
 function Panel(props) {
   return (
@@ -36,18 +36,6 @@ function Panel(props) {
   );
 }
 
-function recursiveTreeNode(n: any) {
-  n.key = n.id;
-  n.title = n.name || n.id;
-  
-  if (n.items) {
-    n.children = n.items;
-    n.items.map((it: any) => recursiveTreeNode(it));
-  }
-  delete n.style;
-  return n;
-}
-
 export default () => {
   const [state, dispatch] = useReducer(Reducer, {}, getDefaultState);
 
@@ -61,7 +49,6 @@ export default () => {
       }
     }
     Object.assign(properties, node.properties);
-
 
     return (
       <ComWrapper
@@ -83,8 +70,8 @@ export default () => {
             {node.items.map((it) => renderNode(it, level + 1))}
           </WidgetCom>
         ) : (
-            <WidgetCom {...properties} />
-          )}
+          <WidgetCom {...properties} />
+        )}
       </ComWrapper>
     );
   }
@@ -92,7 +79,6 @@ export default () => {
   const tree = convertTree(state);
 
   const selected = state.selectedIds.length > 0 ? state.selectedIds[0] : '';
-
 
   const [ctxMenuState, ctxMenuControl] = useContextMenu();
 
@@ -140,9 +126,7 @@ export default () => {
                   {renderNode(tree, 1)}
                 </Stretch>
                 <Fixed defaultSize={200} position={'top'}>
-                  <Panel>
-                    {/* <ReactJson src={state} /> */}
-                  </Panel>
+                  <Panel>{/* <ReactJson src={state} /> */}</Panel>
                 </Fixed>
               </Stretch>
 
@@ -159,31 +143,21 @@ export default () => {
                 <Stretch>
                   {/* 节点树区域 */}
                   <Panel>
-                    <Tree
-                      // draggable
-                      blockNode
-                      treeData={[recursiveTreeNode(convertTree(state))]}
-                      // selectedKeys={state.selectedIds}
-                      defaultExpandAll
-                      titleRender={(node) => (
-                        <TreeItem
-                          key={node.key}
-                          nodeId={node.key.toString()}
-                          title={(node.title || '').toString()}
-                          selected={state.selectedIds.includes(
-                            node.key.toString(),
-                          )}
-                          hovered={state.hoverId === node.key.toString()}
-                        />
-                      )}
-                      selectable={false}
+                    <WidgetTree
+                      widgets={state.widgets}
+                      childrenMap={state.childrenMap}
+                      hoverId={state.hoverId}
+                      rootId={state.rootId}
+                      selectedIds={state.selectedIds}
                     />
                   </Panel>
                 </Stretch>
                 <Fixed defaultSize={300} position={'top'}>
                   {/* 属性编辑区域 */}
-                  <Panel style={{ padding: 8}}>
-                    {selected && <WidgetEditor widget={state.widgets[selected]} />}
+                  <Panel style={{ padding: 8 }}>
+                    {selected && (
+                      <WidgetEditor widget={state.widgets[selected]} />
+                    )}
                   </Panel>
                 </Fixed>
               </Fixed>

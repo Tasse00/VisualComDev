@@ -78,7 +78,10 @@ interface ActMoveWidgetPayload {
   containerId: string;
   widgetId: string;
 }
-ActionHandlers[ActTypes.MOVE_WIDGET] = (state, payload: ActMoveWidgetPayload) => {
+ActionHandlers[ActTypes.MOVE_WIDGET] = (
+  state,
+  payload: ActMoveWidgetPayload,
+) => {
   const { containerId, widgetId } = payload;
   const container = state.widgets[containerId];
   if (!container) {
@@ -109,13 +112,12 @@ ActionHandlers[ActTypes.MOVE_WIDGET] = (state, payload: ActMoveWidgetPayload) =>
 
   // 在新父亲中加入自己
   state.childrenMap[containerId].push(widget.id);
-  
+
   return {
     ...state,
     childrenMap: { ...state.childrenMap },
   };
 };
-
 
 // 删除widget
 interface ActDelWidgetPayload {
@@ -157,12 +159,13 @@ ActionHandlers[ActTypes.DEL_WIDGET] = (state, payload: ActDelWidgetPayload) => {
     delete state.widgets[w.id];
   }
 
-  
   const currentWidgetIds = Object.keys(state.widgets);
   return {
     ...state,
     hoverId: currentWidgetIds.includes(state.hoverId) ? state.hoverId : '',
-    selectedIds: state.selectedIds.filter(id=>currentWidgetIds.includes(id)),
+    selectedIds: state.selectedIds.filter((id) =>
+      currentWidgetIds.includes(id),
+    ),
     childrenMap: { ...state.childrenMap },
     widgets: { ...state.widgets },
   };
@@ -178,7 +181,9 @@ ActionHandlers[ActTypes.SELECT_WIDGETS] = (
 ) => {
   return {
     ...state,
-    selectedIds: payload.widgetIds.filter(id=>!state.selectedIds.includes(id)),
+    selectedIds: payload.widgetIds.filter(
+      (id) => !state.selectedIds.includes(id),
+    ),
   };
 };
 
@@ -208,17 +213,16 @@ ActionHandlers[ActTypes.UPDATE_STYLE] = (
 ) => {
   const { widgetId, field, value } = payload;
   const widget = state.widgets[widgetId];
-  
+
   if (value !== undefined) {
     widget.style = { ...widget.style, [field]: value };
-  }else{
-    delete widget.style[field]
+  } else {
+    delete widget.style[field];
   }
-  
+
   state.widgets[widget.id] = { ...widget };
   return { ...state, widgets: state.widgets };
 };
-
 
 // 设置 Widget Property 属性
 interface ActUpdateWidgetPropertyPayload {
@@ -234,37 +238,40 @@ ActionHandlers[ActTypes.UPDATE_PROPERTY] = (
   const widget = state.widgets[widgetId];
   if (value !== undefined) {
     widget.properties = { ...widget.properties, [field]: value };
-  }else{
-    delete widget.properties[field]
+  } else {
+    delete widget.properties[field];
   }
   state.widgets[widget.id] = { ...widget };
   return { ...state, widgets: state.widgets };
 };
 
-
 interface ActUpdateWidgetNamePayload {
   widgetId: string;
   name: string;
 }
-ActionHandlers[ActTypes.UPDATE_NAME] = (state, payload: ActUpdateWidgetNamePayload)=>{
+ActionHandlers[ActTypes.UPDATE_NAME] = (
+  state,
+  payload: ActUpdateWidgetNamePayload,
+) => {
   const widget = state.widgets[payload.widgetId];
   if (!widget) {
-    console.log("Invalid Widget Id", payload.widgetId);
+    console.log('Invalid Widget Id', payload.widgetId);
     return state;
-  } 
+  }
 
-  const existedNames = Object.values(state.widgets).map(w=>w.name);
+  const existedNames = Object.values(state.widgets).map((w) => w.name);
 
   if (existedNames.includes(payload.name)) {
-    console.log("Name Existed!", payload.name);
+    console.log('Name Existed!', payload.name);
     return state;
   }
 
-  state.widgets[payload.widgetId] = {...widget, name: payload.name};
+  state.widgets[payload.widgetId] = { ...widget, name: payload.name };
   return {
-    ...state, widgets: {...state.widgets}
-  }
-}
+    ...state,
+    widgets: { ...state.widgets },
+  };
+};
 interface ActAddWidget {
   type: ActTypes.ADD_WIDGET;
   payload: ActAddWidgetPayload;
@@ -327,13 +334,27 @@ export interface WidgetTreeNode extends Widget {
   items?: WidgetTreeNode[];
 }
 
-export function convertTree(state: State): WidgetTreeNode {
-  const root: WidgetTreeNode = { ...state.widgets[state.rootId], items: [] };
+export function convertTree({
+  widgets,
+  childrenMap,
+  rootId,
+}: {
+  rootId: string; // 根widgetId
+
+  widgets: {
+    [id: string]: Widget;
+  };
+
+  childrenMap: {
+    [id: string]: string[];
+  };
+}): WidgetTreeNode {
+  const root: WidgetTreeNode = { ...widgets[rootId], items: [] };
 
   const processList = [
     {
       parent: root,
-      children: state.childrenMap[root.id].map((id) => state.widgets[id]),
+      children: childrenMap[root.id].map((id) => widgets[id]),
     },
   ];
 
@@ -352,13 +373,11 @@ export function convertTree(state: State): WidgetTreeNode {
       }
       parent.items.push(treeNodeWidget);
 
-      const nextChildIds = state.childrenMap[child.id];
+      const nextChildIds = childrenMap[child.id];
       if (nextChildIds) {
         processList.push({
           parent: treeNodeWidget,
-          children: state.childrenMap[treeNodeWidget.id].map(
-            (id) => state.widgets[id],
-          ),
+          children: childrenMap[treeNodeWidget.id].map((id) => widgets[id]),
         });
       }
     });
@@ -386,19 +405,18 @@ export function getDefaultState(): State {
   };
 }
 
-
-const __name_counter:{
+const __name_counter: {
   [type: string]: number;
 } = {};
 function genWidgetName(type: string, existedWidgets: Widget[]) {
-  if(!(type in __name_counter)) {
+  if (!(type in __name_counter)) {
     __name_counter[type] = 1;
   }
-  const existedNames = existedWidgets.map(w=>w.name);
+  const existedNames = existedWidgets.map((w) => w.name);
   let name = '';
   do {
     name = `${type}_${__name_counter[type]++}`;
-  }while(existedNames.includes(name));
+  } while (existedNames.includes(name));
 
   return name;
 }
