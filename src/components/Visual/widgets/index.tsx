@@ -17,6 +17,7 @@ export interface FieldConfig {
   type: string;
   default?: any;
   params?: any;
+  desc?: string; // 属性说明
 }
 
 export interface WidgetConfig {
@@ -35,7 +36,7 @@ const ContainerCfg: WidgetConfig = {
   properties: [],
 };
 const RowCfg: WidgetConfig = {
-  title: '水平布局',
+  title: 'Row',
   type: 'Row',
   container: true,
   component: Row,
@@ -63,6 +64,12 @@ const RowCfg: WidgetConfig = {
       ],
     },
     { field: 'wrap', label: '换行', type: 'switch' },
+    {
+      field: 'gutter',
+      label: '间距',
+      type: 'switch',
+      desc: '仅对内部的"Col"组件生效',
+    },
   ],
 };
 
