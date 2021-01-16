@@ -19,7 +19,6 @@ const MaskBackgroundColor = 'rgba(199, 199, 11, 0.2)';
 const MaskHoverBackgroundColor = 'rgba(0,150,0,0.2)';
 
 const ComWrapper: React.FC<ComWrapperProps> = (props) => {
-  console.log(props.container, props);
   const dispatch = useContext(VisualDispatcherContext);
 
   const onMouseEnter = useCallback(

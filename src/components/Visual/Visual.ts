@@ -221,7 +221,7 @@ ActionHandlers[ActTypes.UPDATE_STYLE] = (
   }
 
   state.widgets[widget.id] = { ...widget };
-  return { ...state, widgets: state.widgets };
+  return { ...state, widgets: { ...state.widgets } };
 };
 
 // 设置 Widget Property 属性
@@ -242,7 +242,7 @@ ActionHandlers[ActTypes.UPDATE_PROPERTY] = (
     delete widget.properties[field];
   }
   state.widgets[widget.id] = { ...widget };
-  return { ...state, widgets: state.widgets };
+  return { ...state, widgets: { ...state.widgets } };
 };
 
 interface ActUpdateWidgetNamePayload {

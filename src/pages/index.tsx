@@ -20,6 +20,7 @@ import ContextMenu from '@/components/ContextMenu/ContextMenu';
 import WidgetGallery from '@/components/WidgetGallery';
 import WidgetEditor from '@/components/Visual/WidgetEditor';
 import WidgetTree from '@/components/WidgetTree';
+import Toolbar from '@/components/Toobar';
 
 function Panel(props) {
   return (
@@ -87,24 +88,24 @@ export default () => {
     <VisualDispatcherContext.Provider value={dispatch}>
       <DndProvider backend={HTML5Backend}>
         <ContextMenuContext.Provider value={ctxMenuControl}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: '100vw',
-              height: '100vh',
-            }}
-          >
+          <div className={styles['app']}>
+            {/* 顶部菜单 */}
             <Fixed
               defaultSize={48}
               position={'bottom'}
               style={{ display: 'flex', alignItems: 'center' }}
             >
-              <div style={{ padding: '0 16px' }}>
-                <Button>导出配置</Button>
-              </div>
+              <Panel style={{ padding: 8 }}>
+                <Toolbar
+                  rootId={state.rootId}
+                  widgets={state.widgets}
+                  childrenMap={state.childrenMap}
+                />
+              </Panel>
             </Fixed>
+
             <Stretch style={{ display: 'flex' }}>
+              {/* 组件画廊 */}
               <Fixed defaultSize={200} position={'right'}>
                 <WidgetGallery />
               </Fixed>
@@ -117,6 +118,7 @@ export default () => {
                   alignItems: 'stretch',
                 }}
               >
+                {/* 可视编辑 */}
                 <Stretch
                   style={{
                     position: 'relative',
@@ -126,6 +128,7 @@ export default () => {
                 >
                   {renderNode(tree, 1)}
                 </Stretch>
+                {/* 底部信息 */}
                 <Fixed defaultSize={200} position={'top'}>
                   <Panel>{/* <ReactJson src={state} /> */}</Panel>
                 </Fixed>
@@ -141,8 +144,8 @@ export default () => {
                   alignItems: 'stretch',
                 }}
               >
+                {/* 组件树 */}
                 <Stretch>
-                  {/* 节点树区域 */}
                   <Panel>
                     <WidgetTree
                       widgets={state.widgets}
@@ -153,8 +156,8 @@ export default () => {
                     />
                   </Panel>
                 </Stretch>
+                {/* 组件编辑 */}
                 <Fixed defaultSize={300} position={'top'}>
-                  {/* 属性编辑区域 */}
                   <Panel style={{ padding: 8 }}>
                     {selected && (
                       <WidgetEditor widget={state.widgets[selected]} />
@@ -164,6 +167,7 @@ export default () => {
               </Fixed>
             </Stretch>
           </div>
+          {/* 右键菜单 */}
           <ContextMenu state={ctxMenuState} control={ctxMenuControl} />
         </ContextMenuContext.Provider>
       </DndProvider>
