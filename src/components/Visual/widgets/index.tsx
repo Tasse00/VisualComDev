@@ -1,6 +1,15 @@
 import { Card, Row, Statistic } from 'antd';
 import { ComponentType } from 'react';
-import Container from './Container';
+
+import React from 'react';
+
+const Container: React.FC = (props) => {
+  return (
+    <div style={{ padding: 16, backgroundColor: 'white' }}>
+      {props.children}
+    </div>
+  );
+};
 
 export interface FieldConfig {
   field: string;
@@ -13,13 +22,22 @@ export interface FieldConfig {
 export interface WidgetConfig {
   title: string;
   type: string;
+  container?: boolean;
   component: ComponentType<any>;
   properties: FieldConfig[];
 }
 
-const RowCfg = {
+const ContainerCfg: WidgetConfig = {
+  title: '容器',
+  type: 'Container',
+  container: true,
+  component: Container,
+  properties: [],
+};
+const RowCfg: WidgetConfig = {
   title: '水平布局',
   type: 'Row',
+  container: true,
   component: Row,
   properties: [
     {
@@ -62,21 +80,23 @@ const StatisticCfg: WidgetConfig = {
 const AntdCardCfg: WidgetConfig = {
   title: '卡片',
   type: 'Card',
+  container: true,
   component: Card,
   properties: [
     { field: 'title', label: '标题', type: 'string', default: '卡片' },
   ],
 };
 
-const widgetSpecs: {
-  [type: string]: WidgetConfig;
-} = {
-  [AntdCardCfg.type]: AntdCardCfg,
-  [Container.type]: Container,
+const widgetConfigArray: WidgetConfig[] = [
+  ContainerCfg,
+  AntdCardCfg,
+  RowCfg,
+  StatisticCfg,
+  AntdCardCfg,
+];
 
-  [RowCfg.type]: RowCfg,
-  [StatisticCfg.type]: StatisticCfg,
-  [AntdCardCfg.type]: AntdCardCfg,
-};
+const widgetConfigMap = Object.fromEntries(
+  widgetConfigArray.map((conf) => [conf.type, conf]),
+);
 
-export default widgetSpecs;
+export default widgetConfigMap;

@@ -55,6 +55,7 @@ export default () => {
         level={level}
         key={node.id}
         nodeId={node.id}
+        container={widgetSpecs[node.type].container}
         selected={state.selectedIds.includes(node.id)}
         style={node.style}
         onClick={() =>

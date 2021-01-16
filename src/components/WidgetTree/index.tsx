@@ -35,6 +35,7 @@ const WidgetTree: React.FC<{
       titleRender={(node) => (
         <TreeItem
           key={node.key}
+          type={node.type}
           nodeId={node.key.toString()}
           title={(node.title || '').toString()}
           selected={props.selectedIds.includes(node.key.toString())}

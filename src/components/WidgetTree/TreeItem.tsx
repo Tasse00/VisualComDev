@@ -3,6 +3,7 @@ import { useDrag, useDrop } from 'react-dnd';
 import { useContextMenuTrigger } from '../ContextMenu';
 import { DragItems } from '../Constants';
 import { ActTypes, VisualDispatcherContext, Widget } from '../Visual/Visual';
+import widgetConfigMap from '../Visual/widgets';
 
 const MaskBackgroundColor = 'rgba(199, 199, 11, 0.2)';
 const MaskHoverBackgroundColor = 'rgba(0,150,0,0.2)';
@@ -15,9 +16,11 @@ interface Props {
   nodeId: string;
   selected: boolean;
   hovered: boolean;
+  type: string;
 }
 
 const TreeItem: React.FC<Props> = (props) => {
+  const { container } = widgetConfigMap[props.type];
   const style: React.CSSProperties = {
     border: '1px solid white',
   };
@@ -53,9 +56,9 @@ const TreeItem: React.FC<Props> = (props) => {
       }
     },
     canDrop: (item, monitor) => {
-      if (item.type === DragItems.WidgetType) {
+      if (container && item.type === DragItems.WidgetType) {
         return true;
-      } else if (item.type === DragItems.WidgetInstance) {
+      } else if (container && item.type === DragItems.WidgetInstance) {
         return item.data.widgetId !== props.nodeId;
       } else {
         return false;
@@ -66,7 +69,7 @@ const TreeItem: React.FC<Props> = (props) => {
     }),
   });
 
-  if (isOver) {
+  if (isOver && container) {
     style.backgroundColor = MaskHoverBackgroundColor;
   }
 
