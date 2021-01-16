@@ -6,7 +6,7 @@
 - [x] 区分容器: 从配置，到操作
 - [x] 增加style属性: margin
 - [x] Editor显示字段Label
-- [ ] 导出配置：显示JSON
+- [x] 导出配置：显示JSON
 - [ ] 全屏预览：独立一个route
 - 组件开发
     - [ ] 水平布局（含gutter）
