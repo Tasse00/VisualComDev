@@ -46,7 +46,7 @@ const WidgetEditor: React.FC<{
         <Tabs.TabPane tab="定位" key="style">
           <StyleEditor widget={widget} />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="属性" key="properties">
+        <Tabs.TabPane tab="组件" key="properties">
           <PropertyEditor widget={widget} />
         </Tabs.TabPane>
       </Tabs>

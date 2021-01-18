@@ -27,19 +27,22 @@ const StyleEditor: React.FC<{
         v === undefined
           ? styles.find((p) => p.field === item.field)?.default
           : v;
-      return FieldInputs[item.type](
-        currValue,
-        (v) => {
-          dispatch({
-            type: ActTypes.UPDATE_STYLE,
-            payload: {
-              widgetId: props.widget.id,
-              field: item.field,
-              value: v,
-            },
-          });
-        },
-        item.params,
+      const Com = FieldInputs[item.type];
+      return (
+        <Com
+          value={currValue}
+          handler={(v) =>
+            dispatch({
+              type: ActTypes.UPDATE_PROPERTY,
+              payload: {
+                widgetId: props.widget.id,
+                field: item.field,
+                value: v,
+              },
+            })
+          }
+          params={item.params}
+        />
       );
     },
     [props.widget],

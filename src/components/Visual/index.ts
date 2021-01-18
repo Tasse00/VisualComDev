@@ -308,7 +308,7 @@ interface ActUpdateWidgetName {
   payload: ActUpdateWidgetNamePayload;
 }
 
-type AvailableActions =
+export type AvailableActions =
   | ActAddWidget
   | ActMoveWidget
   | ActDelWidget
