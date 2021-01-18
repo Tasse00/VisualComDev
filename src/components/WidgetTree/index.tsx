@@ -1,5 +1,5 @@
 import { Tree } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { convertTree, Widget } from '../Visual';
 import TreeItem from './TreeItem';
 
@@ -27,11 +27,43 @@ const WidgetTree: React.FC<{
   selectedIds: string[];
   hoverId: string;
 }> = (props) => {
+
+  const [expanded, setExpanded] = useState<{[key:string]: boolean}>({});
+
+  useEffect(()=>{
+    
+    const newExpanded:string[] = [];
+    Object.entries(props.widgets).map(
+      ([key, wid])=>{
+        if (!(key in expanded)) {
+          newExpanded.push(key);
+        }
+      }
+    )
+    const newKeys = Object.keys(props.widgets);
+    const deleteKeys = Object.keys(expanded).filter(k=>!newKeys.includes(k));
+
+    if (deleteKeys.length || newExpanded.length){
+      for (let k of deleteKeys) {
+        delete expanded[k];
+      }
+      for (let k of newExpanded) {
+        expanded[k] = true;
+      }
+      setExpanded({...expanded});
+    }
+    
+  }, [props.widgets, expanded]);
+  const expandedKeys = Object.entries(expanded).filter(([k,v])=>v).map(([k,v])=>k);
   return (
     <Tree
       blockNode
       treeData={[recursiveTreeNode(convertTree(props))]}
-      defaultExpandAll
+      onExpand = {(expandedKeys, {expanded:isExpanded, node})=>{
+        expanded[node.key] = isExpanded
+        setExpanded({...expanded});
+      }}
+      expandedKeys={expandedKeys}
       titleRender={(node) => (
         <TreeItem
           key={node.key}
