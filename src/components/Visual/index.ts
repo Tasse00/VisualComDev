@@ -36,6 +36,7 @@ export enum ActTypes {
   UPDATE_STYLE = 'update-style',
   UPDATE_PROPERTY = 'update-property',
   UPDATE_NAME = 'update-name',
+  LOAD_TREE = 'load-tree', 
 }
 
 const ActionHandlers: {
@@ -301,6 +302,45 @@ ActionHandlers[ActTypes.UPDATE_NAME] = (
     widgets: { ...state.widgets },
   };
 };
+
+
+interface ActLoadTreePayload {
+  tree: WidgetTreeNode;
+}
+ActionHandlers[ActTypes.LOAD_TREE] = (state, payload: ActLoadTreePayload) => {
+  const {tree} = payload;
+  const rootId = tree.id;
+  const widgets: {
+    [id: string]: Widget;
+  } = {};
+  const childrenMap: {
+    [id: string]: string[]
+  } = {};
+  
+  const restNodes = [tree];
+  while (restNodes.length) {
+    const node = restNodes.shift();
+    if (!node) break;
+    widgets[node.id] = {
+      id: node.id,
+      name: node.name,
+      type: node.type,
+      style: node.style,
+      properties: node.properties,
+    };
+    
+    childrenMap[node.id] = (node.items||[]).map(it=>it.id);
+    restNodes.push(...(node.items||[]));
+  }
+  logger.info("load tree", Object.keys(widgets).length, 'widgets');
+  return {
+    ...state,
+    widgets, childrenMap, rootId,
+    hoverId: rootId, selectedIds: [rootId],
+  }
+}
+
+
 interface ActAddWidget {
   type: ActTypes.ADD_WIDGET;
   payload: ActAddWidgetPayload;
@@ -337,6 +377,11 @@ interface ActUpdateWidgetName {
   payload: ActUpdateWidgetNamePayload;
 }
 
+interface ActLoadTree {
+  type: ActTypes.LOAD_TREE;
+  payload: ActLoadTreePayload;
+}
+
 export type AvailableActions =
   | ActAddWidget
   | ActMoveWidget
@@ -345,7 +390,9 @@ export type AvailableActions =
   | ActHoverWidget
   | ActUpdateWidgetStyle
   | ActUpdateWidgetProperty
-  | ActUpdateWidgetName;
+  | ActUpdateWidgetName
+  | ActLoadTree;
+
 function Reducer(state: State, action: AvailableActions) {
   const handler = ActionHandlers[action.type];
   if (!handler) {
