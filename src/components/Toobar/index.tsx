@@ -132,8 +132,16 @@ const Toolbar: React.FC<{
               tree: tree,
               timestamp: new Date().getTime(),
             };
-            window.localStorage.setItem(`${STORE_PREFIX}` + store.name, JSON.stringify(store, undefined, 2));
-            setStores([...stores, store]);
+
+            Modal.confirm({
+              title:'将会删除同名存储，是否继续？',
+              onOk: ()=>{
+                window.localStorage.setItem(`${STORE_PREFIX}` + store.name, JSON.stringify(store, undefined, 2));
+                setStores([...stores.filter(s=>s.name!==store.name), store]);
+                setSaveName("");
+              },
+            });
+            
           }}>保存</Button>
         </div>
         <List
@@ -161,7 +169,7 @@ const Toolbar: React.FC<{
             ]}
               extra={<span>{dayjs(store.timestamp).format('YYYY-MM-DD HH:mm:ss')}</span>}>
               {store.name}
-            </List.Item>
+            </List.Item> 
           )}
         />
       </Modal>
