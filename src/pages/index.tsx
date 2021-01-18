@@ -17,6 +17,8 @@ import WidgetTree from '@/components/WidgetTree';
 import Toolbar from '@/components/Toobar';
 import WidgetVisualNode from '@/components/WidgetVisualNode';
 import Panel from '@/components/Panel';
+import LogsView from '@/components/Logger/LogsView';
+import { globalLoggerStore } from '@/components/Globals';
 
 export default () => {
   const [state, dispatch] = useVisual();
@@ -80,7 +82,7 @@ export default () => {
                 </Stretch>
                 {/* 底部信息 */}
                 <Fixed defaultSize={200} position={'top'}>
-                  <Panel>{/* <ReactJson src={state} /> */}</Panel>
+                    <LogsView store={globalLoggerStore} />
                 </Fixed>
               </Stretch>
 

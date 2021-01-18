@@ -1,0 +1,61 @@
+.logs-view{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+.record {
+
+    width: 100%;
+    height: 24px;
+    line-height: 24px;
+    overflow-x: auto;
+
+    border-radius: 4px;
+
+    &:hover {
+        background-color: rgba(200,200,200,0.2);
+    }
+
+    &>span {
+        margin-left: 4px;
+        &>:first-child {
+            margin-left: 0px;
+        }
+    }
+
+    &>.timestamp {
+
+    }
+
+    &>.level {
+    }
+
+    &>.logger {
+        color: blue;
+    }
+
+    &>.message {
+        color: black;
+    }
+
+    &>.level-debug {
+        .level;
+        color: grey;
+    }
+    &>.level-info {
+        .level;
+        color: green;
+    }
+    &>.level-warning {
+        .level;
+        color: orange;
+    }
+    &>.level-error {
+        .level;
+        color: red;
+    }
+    
+
+   
+}

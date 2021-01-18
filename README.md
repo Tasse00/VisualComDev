@@ -1,3 +1,10 @@
+## Usage
+
+- page dev aids (Output Page Code)
+- Info Page Build (Output Preview)
+  - Custom Datasource
+  - Widgets Lib
+
 ## TODO
 
 - [x] 组件列表增加搜索功能
@@ -13,6 +20,6 @@
     - ~~水平布局（含gutter）~~
     - ~~垂直布局~~
     - [x] Antd Col，配合Row使用
-- [ ] 操作信息
+- [x] 操作信息
 - [ ] 历史记录
 - [x] 组件属性扩展“说明”项

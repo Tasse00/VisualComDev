@@ -1,4 +1,8 @@
 import React, { useReducer } from 'react';
+import { globalLoggerStore } from '../Globals';
+
+
+const logger = globalLoggerStore.createLogger('visual');
 
 export interface Widget {
   id: string;
@@ -47,7 +51,7 @@ ActionHandlers[ActTypes.ADD_WIDGET] = (state, payload: ActAddWidgetPayload) => {
   const { containerId, widgetType } = payload;
   const container = state.widgets[containerId];
   if (!container) {
-    console.log('Invalid containerId', containerId);
+    logger.warning('Invalid containerId', containerId)
     return state;
   }
   if (!state.childrenMap[containerId]) {
@@ -66,6 +70,7 @@ ActionHandlers[ActTypes.ADD_WIDGET] = (state, payload: ActAddWidgetPayload) => {
 
   state.childrenMap[containerId].push(widget.id);
   state.widgets[widget.id] = widget;
+  logger.info('added', widget.name, 'in', container.name);
   return {
     ...state,
     childrenMap: { ...state.childrenMap },
@@ -85,7 +90,7 @@ ActionHandlers[ActTypes.MOVE_WIDGET] = (
   const { containerId, widgetId } = payload;
   const container = state.widgets[containerId];
   if (!container) {
-    console.log('Invalid containerId', containerId);
+    logger.warning('Invalid containerId', containerId);
     return state;
   }
   if (!state.childrenMap[containerId]) {
@@ -97,14 +102,31 @@ ActionHandlers[ActTypes.MOVE_WIDGET] = (
   const widget: Widget = state.widgets[widgetId];
 
   if (!widget) {
-    console.warn('Invalid containerId', widgetId);
+    logger.warning('Invalid containerId', widgetId);
     return state;
   }
 
+  // 校验新父亲不是自己的子孙
+
+  const nodes = [widgetId];
+  while (nodes.length > 0) {
+    const node = nodes.shift();
+    if (!node) break;
+    const widget_ = state.widgets[node];
+    const widgetChildren = state.childrenMap[widget_.id] || [];
+    if (widgetChildren.includes(containerId)) {
+      logger.warning(widget.name, "不可以移动到自己的子节点中", container.name);
+      return state;
+    }
+  }
+
+
   // 从原父亲中移除自己
+  let originParentIdx = '';
   for (let id of Object.keys(state.childrenMap)) {
     const idx = state.childrenMap[id].findIndex((cid) => cid === widgetId);
     if (idx !== -1) {
+      originParentIdx = id;
       state.childrenMap[id].splice(idx, 1);
       state.childrenMap[id] = [...state.childrenMap[id]];
     }
@@ -112,6 +134,8 @@ ActionHandlers[ActTypes.MOVE_WIDGET] = (
 
   // 在新父亲中加入自己
   state.childrenMap[containerId].push(widget.id);
+
+  logger.info("moved", widget.name, 'from', state.widgets[originParentIdx].name, 'to', container.name);
 
   return {
     ...state,
@@ -125,7 +149,7 @@ interface ActDelWidgetPayload {
 }
 ActionHandlers[ActTypes.DEL_WIDGET] = (state, payload: ActDelWidgetPayload) => {
   if (payload.widgetId === state.rootId) {
-    console.warn('不允许删除根节点');
+    logger.warning('不允许删除根节点');
     return state;
   }
   const { widgetId } = payload;
@@ -160,6 +184,7 @@ ActionHandlers[ActTypes.DEL_WIDGET] = (state, payload: ActDelWidgetPayload) => {
   }
 
   const currentWidgetIds = Object.keys(state.widgets);
+  logger.info("deleted", widget.name);
   return {
     ...state,
     hoverId: currentWidgetIds.includes(state.hoverId) ? state.hoverId : '',
@@ -221,6 +246,8 @@ ActionHandlers[ActTypes.UPDATE_STYLE] = (
   }
 
   state.widgets[widget.id] = { ...widget };
+
+  logger.debug("updated", widget.name, 'style', field, '=', value);
   return { ...state, widgets: { ...state.widgets } };
 };
 
@@ -242,6 +269,7 @@ ActionHandlers[ActTypes.UPDATE_PROPERTY] = (
     delete widget.properties[field];
   }
   state.widgets[widget.id] = { ...widget };
+  logger.debug("updated", widget.name, 'property', field, '=', value);
   return { ...state, widgets: { ...state.widgets } };
 };
 
@@ -255,18 +283,19 @@ ActionHandlers[ActTypes.UPDATE_NAME] = (
 ) => {
   const widget = state.widgets[payload.widgetId];
   if (!widget) {
-    console.log('Invalid Widget Id', payload.widgetId);
+    logger.warning('Invalid Widget Id', payload.widgetId);
     return state;
   }
 
   const existedNames = Object.values(state.widgets).map((w) => w.name);
 
   if (existedNames.includes(payload.name)) {
-    console.log('Name Existed!', payload.name);
+    logger.warning('Name Existed!', payload.name);
     return state;
   }
 
   state.widgets[payload.widgetId] = { ...widget, name: payload.name };
+  logger.debug("rename", widget.name, 'to', payload.name);
   return {
     ...state,
     widgets: { ...state.widgets },
@@ -320,7 +349,7 @@ export type AvailableActions =
 function Reducer(state: State, action: AvailableActions) {
   const handler = ActionHandlers[action.type];
   if (!handler) {
-    console.error('invalid action!', action);
+    logger.error('invalid action!', action);
     return state;
   }
   return handler(state, action.payload);

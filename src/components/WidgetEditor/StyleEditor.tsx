@@ -33,7 +33,7 @@ const StyleEditor: React.FC<{
           value={currValue}
           handler={(v) =>
             dispatch({
-              type: ActTypes.UPDATE_PROPERTY,
+              type: ActTypes.UPDATE_STYLE,
               payload: {
                 widgetId: props.widget.id,
                 field: item.field,
