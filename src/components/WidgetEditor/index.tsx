@@ -43,12 +43,14 @@ const WidgetEditor: React.FC<{
         onBlur={updateName}
       />
       <Tabs size="small" style={{}}>
-        <Tabs.TabPane tab="定位" key="style">
-          <StyleEditor widget={widget} />
-        </Tabs.TabPane>
         <Tabs.TabPane tab="组件" key="properties">
           <PropertyEditor widget={widget} />
         </Tabs.TabPane>
+
+        <Tabs.TabPane tab="定位" key="style">
+          <StyleEditor widget={widget} />
+        </Tabs.TabPane>
+
       </Tabs>
     </div>
   );

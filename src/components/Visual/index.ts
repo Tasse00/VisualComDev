@@ -486,7 +486,7 @@ export function useVisual() {
       root: {
         id: 'root',
         name: 'ROOT',
-        type: 'Container',
+        type: 'container',
         style: {},
         properties: {},
       },
