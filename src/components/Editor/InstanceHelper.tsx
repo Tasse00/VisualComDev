@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import { useDrop } from 'react-dnd';
+import { useDrag, useDrop } from 'react-dnd';
 import ReactDOM from 'react-dom';
 
 import { ComponentLibContext } from '../ComponentLib/context';
@@ -102,11 +102,26 @@ const InstanceHelper: React.FC<{
     }),
   });
 
-  drop(ref);
+  const [{ isDragging }, drag] = useDrag<
+    InstanceDragItem,
+    void,
+    { isDragging: boolean }
+  >({
+    item: {
+      type: DragItems.Instance,
+      data: node,
+    },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  });
 
+  drag(drop(ref));
+
+  // hover mask
   const style: React.CSSProperties = {};
 
-  if (ref.current && isOverCurrent) {
+  if (ref.current && isOverCurrent && !isDragging) {
     const rect = ref.current.getBoundingClientRect();
     style.left = rect.left;
     style.top = rect.top;
@@ -114,14 +129,23 @@ const InstanceHelper: React.FC<{
     style.height = rect.height;
   }
 
+  // properties
+  const comProps: { [field: string]: any } = {};
+  // default value
+  (com.properties || [])
+    .filter((propConf) => propConf.default)
+    .map((propConf) => (comProps[propConf.field] = propConf.default));
+  // custom value
+  Object.assign(comProps, node.properties);
+
   return (
     <>
-      <Com ref={ref}>
+      <Com ref={ref} {...comProps}>
         {(node.children || []).map((child) => (
           <InstanceHelper key={child.guid} node={child} />
         ))}
       </Com>
-      {isOverCurrent && (
+      {isOverCurrent && !isDragging && (
         <div
           style={{
             pointerEvents: 'none',
