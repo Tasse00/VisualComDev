@@ -27,6 +27,7 @@ import { useEditor } from '@/components/Editor/hooks';
 import { convertTree } from '@/components/Editor/utils';
 import ReactJson from 'react-json-view';
 import { EditorDispatcherContext } from '@/components/Editor/context';
+import InstanceTree from '@/components/InstanceTree';
 export default () => {
   // const [state, dispatch] = useVisual();
 
@@ -96,7 +97,12 @@ export default () => {
                     hoverId={state.hoverId}
                     selectedIds={state.selectedIds}
                   /> */}
-                      <Editor tree={tree} hoverId={state.hoverId} selectId={state.selectId} domMap={state.domMap}/>
+                      <Editor
+                        tree={tree}
+                        hoverId={state.hoverId}
+                        selectId={state.selectId}
+                        domMap={state.domMap}
+                      />
                     </Stretch>
                     {/* 底部信息 */}
                     <Fixed defaultSize={200} position={'top'}>
@@ -126,6 +132,13 @@ export default () => {
                       rootId={state.rootId}
                       selectedIds={state.selectedIds}
                     /> */}
+                        <InstanceTree
+                          instancesMap={state.instancesMap}
+                          childrenMap={state.childrenMap}
+                          hoverId={state.hoverId}
+                          rootId={state.rootId}
+                          selectId={state.selectId}
+                        />
                       </Panel>
                     </Stretch>
                     {/* 组件编辑 */}
