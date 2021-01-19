@@ -100,6 +100,7 @@ export function useLogs(store: LogStore) {
     const [records, setRecords] = useState<LogRecord[]>([]);
 
     useEffect(() => {
+        setRecords(store.getRecords());
         const cb = () => setRecords(store.getRecords());
         store.addCallback(cb);
         return () => store.removeCallback(cb);
