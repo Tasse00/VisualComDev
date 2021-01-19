@@ -8,26 +8,28 @@ const ContainerComponent: React.FC<{
     padding?: string;
     overflow?: string;
     style?: React.CSSProperties;
-}> = props => {
+}> = React.forwardRef((props, ref) => {
     const {
         flexDirection, justifyContent, alignItems,
         children,backgroundColor, padding, overflow
     } = props;
     return (
-        <div style={{
+        // @ts-ignore
+        <div ref={ref} style={{
 
             display: 'flex', boxSizing: 'border-box',
             flexDirection, justifyContent, alignItems,
             overflow,
             // @ts-ignore
             backgroundColor, padding,
-
+            
+            
             ...(props.style||{})
         }}>
             {children}
         </div>
     )
-}
+});
 
 const ContainerConfig: VCD.Component = {
     title: '布局容器',

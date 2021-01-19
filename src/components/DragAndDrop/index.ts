@@ -1,12 +1,17 @@
 export enum DragItems {
-  WidgetType = 'widget-type',
-  WidgetInstance = 'widget-instance',
+  Component = 'component',
+  Instance = 'instance'
 }
 
 
 // drag 组件
 export interface ComponentDragItem {
-  type: 'component',
+  type: DragItems.Component,
   data: VCD.Component,
 };
 
+// drag 实例
+export interface InstanceDragItem {
+  type: DragItems.Instance,
+  data: VCD.ComponentInstance,
+};

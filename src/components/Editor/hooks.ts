@@ -3,7 +3,7 @@ import { reducer } from './reducer';
 
 
 /****** UTILS */
-export function useVisual() {
+export function useEditor() {
   return useReducer(reducer, {
     rootId: 'root',
     hoverId: '',
@@ -12,7 +12,7 @@ export function useVisual() {
       root: {
         guid: 'root',
         name: 'ROOT',
-        comId: 'container',
+        comId: 'Card',
         properties: {},
         listeners: [],
       },
@@ -20,5 +20,6 @@ export function useVisual() {
     childrenMap: {
       root: [],
     },
+    domMap: {},
   });
 }

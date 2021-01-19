@@ -57,6 +57,14 @@ interface ActLoadTree {
   };
 }
 
+interface ActStoreInstanceDom {
+  type: 'store-instance-dom';
+  payload: {
+    instanceId: string;
+    dom: Element;
+  }
+}
+
 export type AvailableActions =
   | ActCreateInstance
   | ActMoveInstnce
@@ -65,4 +73,5 @@ export type AvailableActions =
   | ActHoverIntance
   | ActUpdateInstanceProperty
   | ActUpdateInstanceName
-  | ActLoadTree;
+  | ActLoadTree
+  | ActStoreInstanceDom;

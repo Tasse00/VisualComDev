@@ -26,6 +26,10 @@ export interface EditorState {
     [id: string]: string[];
   };
 
+  // instance的dom节点
+  domMap: {
+    [id: string]: Element;
+  }
 }
 
 
@@ -171,7 +175,7 @@ export function reducer(state: EditorState, action: AvailableActions) {
       {
         return {
           ...state,
-          selectId: action.payload.instanceId,
+          selectId: action.payload.instanceId===state.selectId?'':action.payload.instanceId,
         };
       }
     case 'hover-instance':
@@ -250,8 +254,17 @@ export function reducer(state: EditorState, action: AvailableActions) {
           hoverId: rootId, selectId: rootId,
         }
       }
+    
+    case 'store-instance-dom':
+      const { instanceId, dom } = action.payload;
+      state.domMap[instanceId] = dom;
+      return {
+        ...state,
+        domMap: {...state.domMap},
+      }
     default:
       logger.warning("unknow action:", action.type);
       return state;
   }
+  
 }
