@@ -1,9 +1,4 @@
-// import {
-//   convertTree,
-//   VisualDispatcherContext,
-//   useVisual,
-// } from '@/components/Visual';
-import React, { useReducer, useMemo, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import styles from './index.less';
 import Fixed from '@/components/layout/Fixed';
 import Stretch from '@/components/layout/Stretch';
@@ -11,11 +6,6 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ContextMenuContext, useContextMenu } from '@/components/ContextMenu';
 import ContextMenu from '@/components/ContextMenu/ContextMenu';
-import WidgetGallery from '@/components/WidgetGallery';
-import WidgetEditor from '@/components/WidgetEditor';
-import WidgetTree from '@/components/WidgetTree';
-import Toolbar from '@/components/Toobar';
-import WidgetVisualNode from '@/components/WidgetVisualNode';
 import Panel from '@/components/Panel';
 import LogsView from '@/components/Logger/LogsView';
 import { globalLoggerStore } from '@/components/Globals';
@@ -25,17 +15,10 @@ import PropertyEditorLibProvider from '@/components/PropertyEditorLib/PropertyEd
 import Editor from '@/components/Editor/Editor';
 import { useEditor } from '@/components/Editor/hooks';
 import { convertTree } from '@/components/Editor/utils';
-import ReactJson from 'react-json-view';
 import { EditorDispatcherContext } from '@/components/Editor/context';
 import InstanceTree from '@/components/InstanceTree';
-export default () => {
-  // const [state, dispatch] = useVisual();
 
-  // const tree = useMemo(() => convertTree(state), [
-  //   state.widgets,
-  //   state.childrenMap,
-  //   state.rootId,
-  // ]);
+export default () => {
   const [state, dispatch] = useEditor();
   const tree = useMemo(() => convertTree(state), [
     state.instancesMap,
@@ -45,10 +28,7 @@ export default () => {
 
   const [ctxMenuState, ctxMenuControl] = useContextMenu();
 
-  // Property Editor Lib
-
   return (
-    // <VisualDispatcherContext.Provider value={dispatch}>
     <ComponentLibProvider>
       <PropertyEditorLibProvider>
         <EditorDispatcherContext.Provider value={dispatch}>
@@ -92,11 +72,6 @@ export default () => {
                         backgroundColor: 'rgba(200,200,200,0.2)',
                       }}
                     >
-                      {/* <WidgetVisualNode
-                    node={tree}
-                    hoverId={state.hoverId}
-                    selectedIds={state.selectedIds}
-                  /> */}
                       <Editor
                         tree={tree}
                         hoverId={state.hoverId}
@@ -107,8 +82,6 @@ export default () => {
                     {/* 底部信息 */}
                     <Fixed defaultSize={200} position={'top'}>
                       <LogsView store={globalLoggerStore} />
-
-                      {/* <ReactJson src={state} /> */}
                     </Fixed>
                   </Stretch>
 
@@ -125,13 +98,6 @@ export default () => {
                     {/* 组件树 */}
                     <Stretch>
                       <Panel>
-                        {/* <WidgetTree
-                      widgets={state.widgets}
-                      childrenMap={state.childrenMap}
-                      hoverId={state.hoverId}
-                      rootId={state.rootId}
-                      selectedIds={state.selectedIds}
-                    /> */}
                         <InstanceTree
                           instancesMap={state.instancesMap}
                           childrenMap={state.childrenMap}
@@ -161,6 +127,5 @@ export default () => {
         </EditorDispatcherContext.Provider>
       </PropertyEditorLibProvider>
     </ComponentLibProvider>
-    // {/* </VisualDispatcherContext.Provider> */}
   );
 };
