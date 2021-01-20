@@ -33,7 +33,7 @@ const SelectInput: VCD.PropertyEditorComponent<string | undefined, { label: stri
     options={params}
     value={value}
     onChange={update}
-    style={{ width: '100%' }}
+    style={{ minWidth: 100 }}
   />
 );
 

@@ -58,9 +58,9 @@ const ContainerConfig: VCD.Component = {
             field: 'justifyContent',
             type: 'select',
             params: [
-                { label: '开始对齐', value: 'flex-start' },
+                { label: '头部对齐', value: 'flex-start' },
                 { label: '中间对齐', value: 'center' },
-                { label: '开始对齐', value: 'flex-start' },
+                { label: '尾端对齐', value: 'flex-end' },
                 { label: '两端对齐', value: 'space-between' },
                 { label: '均匀分布', value: 'space-around' },
             ],
@@ -71,9 +71,9 @@ const ContainerConfig: VCD.Component = {
             field: 'alignItems',
             type: 'select',
             params: [
-                { label: '开始对齐', value: 'flex-start' },
+                { label: '头部对齐', value: 'flex-start' },
                 { label: '中间对齐', value: 'center' },
-                { label: '开始对齐', value: 'flex-start' },
+                { label: '尾端对齐', value: 'flex-end' },
                 { label: '字底对齐', value: 'baseline' },
                 { label: '拉伸对齐', value: 'stretch' },
             ],

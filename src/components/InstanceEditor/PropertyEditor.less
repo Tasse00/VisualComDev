@@ -1,0 +1,48 @@
+.property-editor{
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  height: 100%;
+  overflow: auto;
+
+  .filter {
+    background-color: rgba(200, 200, 200, 0.2);
+    padding: 8px;
+  }
+  
+  .fields {
+    flex: 1;
+    padding: 8px;
+
+    overflow: auto;
+
+    .field-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    
+      margin: 4px 0;
+      padding: 8px;
+      border-radius: 4px;
+    
+      &:hover {
+        background-color: rgba(200, 200, 200, 0.15 );
+      }
+
+      &>div:first-child {
+        font-weight: 500;
+      }
+    
+    }
+
+  }
+  
+
+  :global {
+    .ant-collapse-content-box {
+      padding: 0;
+    }
+  }
+}

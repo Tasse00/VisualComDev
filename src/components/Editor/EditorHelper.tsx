@@ -25,7 +25,7 @@ const EditorHelper: React.FC<{
   }
 
   const { component: Com } = com;
-
+  const isContainer = !!componentsMap[node.comId].isContainer;
   
   const dispatch = useContext(EditorDispatcherContext);
   
@@ -126,8 +126,7 @@ const EditorHelper: React.FC<{
     },
     canDrop: (item, monitor) => {
       return (
-        !!componentsMap[node.comId].isContainer &&
-        monitor.isOver({ shallow: true })
+        isContainer && monitor.isOver({ shallow: true })
       );
     },
     collect: (monitor) => ({
@@ -171,6 +170,7 @@ const EditorHelper: React.FC<{
   // custom value
   Object.assign(comProps, node.properties);
 
+
   return (
     <>
       <Com ref={ref} {...comProps}>
@@ -178,7 +178,7 @@ const EditorHelper: React.FC<{
           <EditorHelper key={child.guid} node={child} />
         ))}
       </Com>
-      {isOverCurrent && !isDragging && (
+      {isOverCurrent && !isDragging && isContainer && (
         <div
           style={{
             pointerEvents: 'none',

@@ -7,7 +7,6 @@ const Preview: React.FC = (props) => {
   const config: VCD.ComponentInstanceTree = JSON.parse(
     window.localStorage.getItem('preview-json') || '',
   );
-  console.log(config)
   return (
     <ComponentLibProvider>
       <div className={styles['app']}>

@@ -18,6 +18,8 @@ import { convertTree } from '@/components/Editor/utils';
 import { EditorDispatcherContext } from '@/components/Editor/context';
 import InstanceTree from '@/components/InstanceTree';
 import Toolbar from '@/components/Toobar';
+import InstanceEditor from '@/components/InstanceEditor/InstanceEditor';
+import { Collapse } from 'antd';
 
 export default () => {
   const [state, dispatch] = useEditor();
@@ -96,28 +98,23 @@ export default () => {
                       alignItems: 'stretch',
                     }}
                   >
-                    {/* 组件树 */}
-                    <Stretch>
-                      <Panel>
-                        <InstanceTree
-                          instancesMap={state.instancesMap}
-                          childrenMap={state.childrenMap}
-                          hoverId={state.hoverId}
-                          rootId={state.rootId}
-                          selectId={state.selectId}
-                        />
-                      </Panel>
-                    </Stretch>
-                    {/* 组件编辑 */}
-                    <Fixed defaultSize={300} position={'top'}>
-                      <Panel style={{ padding: 8 }}>
-                        {/* {state.selectedIds.length === 1 && (
-                      <WidgetEditor
-                        widget={state.widgets[state.selectedIds[0]]}
-                      />
-                    )} */}
-                      </Panel>
-                    </Fixed>
+                    <Collapse defaultActiveKey={['instance']}>
+                      <Collapse.Panel header="Tree" key="tree" className={styles['side-panel']}>
+                        <Panel>
+                          <InstanceTree
+                            instancesMap={state.instancesMap}
+                            childrenMap={state.childrenMap}
+                            hoverId={state.hoverId}
+                            rootId={state.rootId}
+                            selectId={state.selectId}
+                          />
+                        </Panel>
+                      </Collapse.Panel>
+                      <Collapse.Panel header="Instance" key="instance" className={styles['side-panel']}>
+                        {state.instancesMap[state.selectId] && <InstanceEditor instance={state.instancesMap[state.selectId]} />}
+                      </Collapse.Panel>
+
+                    </Collapse>
                   </Fixed>
                 </Stretch>
               </div>

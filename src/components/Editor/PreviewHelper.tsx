@@ -13,7 +13,6 @@ const PreviewHelper: React.FC<{
     } = useContext(ComponentLibContext);
 
     const com = componentsMap[node.comId];
-    console.log(com)
 
     if (!com) {
         logger.error('invalid componentId:', node.comId);
@@ -30,8 +29,6 @@ const PreviewHelper: React.FC<{
     // custom value
     Object.assign(comProps, node.properties);
 
-    console.log(Com)
-    console.log(comProps)
     return (
         <Com {...comProps}>
             {(node.children || []).map((child) => (

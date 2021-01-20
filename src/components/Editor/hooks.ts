@@ -12,7 +12,7 @@ export function useEditor() {
       root: {
         guid: 'root',
         name: 'ROOT',
-        comId: 'Card',
+        comId: 'container',
         properties: {},
         listeners: [],
       },

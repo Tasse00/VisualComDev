@@ -38,7 +38,7 @@ const Editor: React.FC<{
       }} style={{ position: 'relative' }}>
         {Object.keys(componentsMap).length ? <Helper node={tree} /> : null}
         
-        {!preview && <InstanceGuid targetId={hoverId} domMap={domMap} border='1px dashed blue'/>}
+        {!preview && <InstanceGuid targetId={hoverId} domMap={domMap} border='1px dashed blue' animation/>}
         {!preview && <InstanceGuid targetId={selectId} domMap={domMap} border='1px solid blue'/>}
         
       </div>
