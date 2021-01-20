@@ -13,8 +13,9 @@ const Editor: React.FC<{
     [id: string]: Element;
   }
   preview?: boolean;
+  style?: React.CSSProperties;
 }> = props => {
-  const { tree, hoverId, selectId, domMap, preview } = props;
+  const { tree, hoverId, selectId, domMap, preview, style } = props;
   const { state: { componentsMap } } = useContext(ComponentLibContext);
 
   const dispatch = useContext(EditorDispatcherContext);
@@ -30,7 +31,7 @@ const Editor: React.FC<{
           left: rect.left, top: rect.top, height: rect.height, width: rect.width,
           scrollLeft: ref.current.scrollLeft,
           scrollTop: ref.current.scrollTop,
-        });  
+        });
       }
       onScroll();
       ref.current.addEventListener("scroll", onScroll);
@@ -53,13 +54,14 @@ const Editor: React.FC<{
           padding: 32,
           backgroundColor: 'rgba(200,200,200,0.2)',
           height: '100%',
-          overflow: 'auto'
+          overflow: 'auto',
+          ...style
         }}>
         {Object.keys(componentsMap).length ? <Helper node={tree} /> : null}
-        
+
         {!preview && <InstanceGuid targetId={hoverId} domMap={domMap} border='1px dashed blue' animation/>}
         {!preview && <InstanceGuid targetId={selectId} domMap={domMap} border='1px solid blue'/>}
-        
+
       </div>
     </EditorContainerContext.Provider>
   )

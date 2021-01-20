@@ -16,6 +16,7 @@ const Preview: React.FC = (props) => {
           selectId=''
           preview={true}
           domMap={{}}
+          style={{padding: 0}}
         />
       </div>
     </ComponentLibProvider>
