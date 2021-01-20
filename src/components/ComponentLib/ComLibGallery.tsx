@@ -11,19 +11,9 @@ const ComponentLib: React.FC<{
   style?: React.CSSProperties;
 }> = (props) => {
 
-
-  useEffect(() => {
-    
-      dispatch({
-        type: 'add-components',
-        payload: {components: [... Base, ...Antd]},
-      })
-  
-  }, [])
-
   const [keyword, setKeyword] = useState('');
 
-  const { dispatch, state: {componentsMap} } = useContext(ComponentLibContext);
+  const { state: {componentsMap} } = useContext(ComponentLibContext);
 
   const components = Object.values(componentsMap);
 

@@ -123,7 +123,7 @@ const TreeItem: React.FC<Props> = (props) => {
         },
         menu: [
           {
-            text: 'Delete Widget',
+            text: 'Delete Instance',
             handler: () => {
               dispatch({
                 type: 'delete-instance',

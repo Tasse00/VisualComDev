@@ -1,22 +1,25 @@
+import Editor from '@/components/Editor/Editor';
 import React from 'react';
-import { WidgetTreeNode } from '@/components/Visual';
 import styles from './index.less';
-import WidgetVisualNode from '@/components/WidgetVisualNode';
-import WidgetPreviewWrapper from '@/components/WidgetVisualNode/WidgetPreviewWrapper';
+import ComponentLibProvider from '@/components/ComponentLib/ComponentLibProvider';
 
 const Preview: React.FC = (props) => {
-  const config: WidgetTreeNode = JSON.parse(
+  const config: VCD.ComponentInstanceTree = JSON.parse(
     window.localStorage.getItem('preview-json') || '',
   );
+  console.log(config)
   return (
-    <div className={styles['app']}>
-      <WidgetVisualNode
-        node={config}
-        hoverId=""
-        selectedIds={[]}
-        wrapperCom={WidgetPreviewWrapper}
-      />
-    </div>
+    <ComponentLibProvider>
+      <div className={styles['app']}>
+        <Editor
+          tree={config}
+          hoverId=''
+          selectId=''
+          preview={true}
+          domMap={{}}
+        />
+      </div>
+    </ComponentLibProvider>
   );
 };
 

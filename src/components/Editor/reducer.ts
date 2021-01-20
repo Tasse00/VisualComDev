@@ -123,7 +123,7 @@ export function reducer(state: EditorState, action: AvailableActions) {
           childrenMap: { ...state.childrenMap },
         };
       }
-    case 'move-instance':
+    case 'delete-instance':
       {
         const { instanceId } = action.payload;
         if (instanceId === state.rootId) {

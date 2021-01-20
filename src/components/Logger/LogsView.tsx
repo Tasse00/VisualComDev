@@ -13,7 +13,7 @@ const LogsView: React.FC<{
 
     return (
         <div className={styles['logs-view']}>
-            {records.map(rcd => <Record key={rcd.timestamp} {...rcd} />)}
+            {records.map(rcd => <Record key={rcd.guid} {...rcd} />)}
         </div>
     )
 }

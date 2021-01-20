@@ -17,6 +17,7 @@ import { useEditor } from '@/components/Editor/hooks';
 import { convertTree } from '@/components/Editor/utils';
 import { EditorDispatcherContext } from '@/components/Editor/context';
 import InstanceTree from '@/components/InstanceTree';
+import Toolbar from '@/components/Toobar';
 
 export default () => {
   const [state, dispatch] = useEditor();
@@ -42,11 +43,11 @@ export default () => {
                   style={{ display: 'flex', alignItems: 'center' }}
                 >
                   <Panel style={{ padding: 8 }}>
-                    {/* <Toolbar
-                  rootId={state.rootId}
-                  widgets={state.widgets}
-                  childrenMap={state.childrenMap}
-                /> */}
+                    <Toolbar
+                      rootId={state.rootId}
+                      instancesMap={state.instancesMap}
+                      childrenMap={state.childrenMap}
+                    />
                   </Panel>
                 </Fixed>
 

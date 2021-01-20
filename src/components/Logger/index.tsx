@@ -8,6 +8,7 @@ enum LogLevel {
 }
 
 export interface LogRecord {
+    guid: string;
     logger: string; // 来源实例
     timestamp: number;
     level: LogLevel;
@@ -72,6 +73,7 @@ export class Logger {
 
     log(level: LogLevel, ...message: any[]) {
         this.store.append({
+            guid: Math.random().toString(),
             timestamp: new Date().getTime(),
             level,
             message,

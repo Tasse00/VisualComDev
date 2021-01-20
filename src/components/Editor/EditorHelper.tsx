@@ -1,15 +1,16 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useCallback, useContext, useEffect, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import ReactDOM from 'react-dom';
 
 import { ComponentLibContext } from '../ComponentLib/context';
+import { useContextMenuTrigger } from '../ContextMenu';
 import { ComponentDragItem, DragItems, InstanceDragItem } from '../DragAndDrop';
 import { globalLoggerStore } from '../Globals';
 import { EditorDispatcherContext } from './context';
 
 const logger = globalLoggerStore.createLogger('editor.helper');
 
-const InstanceHelper: React.FC<{
+const EditorHelper: React.FC<{
   node: VCD.ComponentInstanceTree;
 }> = (props) => {
   const { node } = props;
@@ -25,8 +26,13 @@ const InstanceHelper: React.FC<{
 
   const { component: Com } = com;
 
+  
   const dispatch = useContext(EditorDispatcherContext);
+  
   const ref = useRef<Element>();
+
+  // 右键删除
+  const [openContextMenu] = useContextMenuTrigger();
 
   useEffect(() => {
     const dom = ReactDOM.findDOMNode(ref.current);
@@ -57,9 +63,36 @@ const InstanceHelper: React.FC<{
     };
     dom.addEventListener('click', onClick);
 
+
+    // 注册 contextMenu 回调
+    const onContextMenu =  (e: MouseEvent)=>{
+      e.stopPropagation();
+      e.preventDefault();
+      openContextMenu({
+        pos: {
+          x: e.clientX,
+          y: e.clientY,
+        },
+        menu: [
+          {
+            text: 'Delete Instance',
+            handler: () => {
+              dispatch({
+                type: 'delete-instance',
+                payload: { instanceId: props.node.guid },
+              });
+            },
+          },
+        ],
+      });
+      // return false;
+    }
+    dom.addEventListener('contextmenu', onContextMenu as (e:Event)=>any);
+
     return () => {
       dom.removeEventListener('mouoseover', onMouseOver);
       dom.removeEventListener('click', onClick);
+      dom.removeEventListener('contextmenu', onContextMenu as (e:Event)=>any);
     };
   }, [node.guid]);
 
@@ -142,7 +175,7 @@ const InstanceHelper: React.FC<{
     <>
       <Com ref={ref} {...comProps}>
         {(node.children || []).map((child) => (
-          <InstanceHelper key={child.guid} node={child} />
+          <EditorHelper key={child.guid} node={child} />
         ))}
       </Com>
       {isOverCurrent && !isDragging && (
@@ -164,4 +197,4 @@ const InstanceHelper: React.FC<{
   );
 };
 
-export default InstanceHelper;
+export default EditorHelper;
