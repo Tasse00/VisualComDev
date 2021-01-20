@@ -21,7 +21,7 @@ const Record: React.FC<{
     
     const timestamp = `${p0(d.getHours())}:${p0(d.getMinutes())}:${p0(d.getSeconds())}.${p0(d.getMilliseconds(), 3)}`;
 
-    const message = props.message.map(msg=>msg.toString()).join(" ");
+    const message = props.message.map(msg=>`${msg}`).join(" ");
 
     return (
         <div className={styles['record']}> 

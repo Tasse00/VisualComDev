@@ -68,13 +68,7 @@ export default () => {
                     }}
                   >
                     {/* 可视编辑 */}
-                    <Stretch
-                      style={{
-                        position: 'relative',
-                        padding: 32,
-                        backgroundColor: 'rgba(200,200,200,0.2)',
-                      }}
-                    >
+                    <Stretch>
                       <Editor
                         tree={tree}
                         hoverId={state.hoverId}

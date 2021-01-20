@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { EditorContext } from './context';
+import { EditorContainerContext } from './context';
 
 const HoverGuide: React.FC<{
   targetId: string;
@@ -11,7 +11,7 @@ const HoverGuide: React.FC<{
 }> = (props) => {
   const { targetId, domMap, border, animation } = props;
 
-  const { left, top } = useContext(EditorContext);
+  const { left, top, scrollLeft, scrollTop } = useContext(EditorContainerContext);
 
   const [_, rerender] = useState(0);
 
@@ -20,8 +20,8 @@ const HoverGuide: React.FC<{
     const dom = domMap[targetId];
     const rect = dom.getBoundingClientRect();
 
-    style.left = rect.left - left;
-    style.top = rect.top - top;
+    style.left = rect.left - left + scrollLeft;
+    style.top = rect.top - top + scrollTop;
 
     style.width = rect.width;
     style.height = rect.height;
