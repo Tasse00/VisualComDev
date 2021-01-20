@@ -1,10 +1,12 @@
-import React, { useCallback, useContext, useEffect, useRef } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import ReactDOM from 'react-dom';
 
 import { ComponentLibContext } from '../ComponentLib/context';
 import { useContextMenuTrigger } from '../ContextMenu';
 import { ComponentDragItem, DragItems, InstanceDragItem } from '../DragAndDrop';
+import { InstanceFeatureRegistryContext } from '../FeatureRegistry/context';
+import { useFeatureRegistry } from '../FeatureRegistry/hooks';
 import { globalLoggerStore } from '../Globals';
 import { EditorDispatcherContext } from './context';
 
@@ -26,9 +28,9 @@ const EditorHelper: React.FC<{
 
   const { component: Com } = com;
   const isContainer = !!componentsMap[node.comId].isContainer;
-  
+
   const dispatch = useContext(EditorDispatcherContext);
-  
+
   const ref = useRef<Element>();
 
   // 右键删除
@@ -65,7 +67,7 @@ const EditorHelper: React.FC<{
 
 
     // 注册 contextMenu 回调
-    const onContextMenu =  (e: MouseEvent)=>{
+    const onContextMenu = (e: MouseEvent) => {
       e.stopPropagation();
       e.preventDefault();
       openContextMenu({
@@ -87,12 +89,12 @@ const EditorHelper: React.FC<{
       });
       // return false;
     }
-    dom.addEventListener('contextmenu', onContextMenu as (e:Event)=>any);
+    dom.addEventListener('contextmenu', onContextMenu as (e: Event) => any);
 
     return () => {
       dom.removeEventListener('mouoseover', onMouseOver);
       dom.removeEventListener('click', onClick);
-      dom.removeEventListener('contextmenu', onContextMenu as (e:Event)=>any);
+      dom.removeEventListener('contextmenu', onContextMenu as (e: Event) => any);
     };
   }, [node.guid]);
 
@@ -170,14 +172,48 @@ const EditorHelper: React.FC<{
   // custom value
   Object.assign(comProps, node.properties);
 
+  const [register, remove, emitter, syncListeners] = useFeatureRegistry();
+  const intanceRegister =useCallback((features: VCD.InstanceFeature[]) => {
+    register(node.guid, features)
+  }, [node.guid]);
+  const instanceRemove = useCallback(()=>remove(node.guid), [node.guid]);
+
+
+  // events emitter
+
+  const eventProps = useMemo(()=>{
+    const eventProps:{[field: string]: VCD.FeatureCallback} = {}
+    const eventConfigs: VCD.EventConfig[] = com.events || [];
+
+    eventConfigs.map(eventCfg=>{
+      eventProps[eventCfg.when] = (...params: any[])=>{
+        // console.log(node.guid, eventCfg.emit, ...params)
+        // emitter(node.guid, eventCfg.emit, ...params);
+        // 编辑模式不发出事件
+      }
+    });
+    return eventProps;
+  }, [node.guid, com.events])
+
+  
+  useEffect(()=>{
+    syncListeners(node.guid, node.listeners);
+    return ()=>{
+      syncListeners(node.guid, []);
+    }
+  }, [syncListeners, node.listeners]);
 
   return (
     <>
-      <Com ref={ref} {...comProps}>
-        {(node.children || []).map((child) => (
-          <EditorHelper key={child.guid} node={child} />
-        ))}
-      </Com>
+      
+      <InstanceFeatureRegistryContext.Provider value={[intanceRegister, instanceRemove]}>
+        <Com ref={ref} {...comProps} {...eventProps}>
+          {(node.children || []).map((child) => (
+            <EditorHelper key={child.guid} node={child} />
+          ))}
+        </Com>
+      </InstanceFeatureRegistryContext.Provider>
+
       {isOverCurrent && !isDragging && isContainer && (
         <div
           style={{

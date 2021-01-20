@@ -26,12 +26,18 @@
 - [x] 组件属性扩展“说明”项
 - [x] localStorage 保存/加载
 
-- [ ] 去除Wrapper层，通过注入props完成
+- [x] 去除Wrapper层，通过注入props完成
   1. 通过ref获取组件instance．
   2. 通过ReactDOM.findDOMNode()获取dom节点．
   3. dom节点注册事件 mouseover＼mouse
 
-- [ ] 悬浮框，采用唯一一个实例，变换位置完成.
+- [x] 悬浮框，采用唯一一个实例，变换位置完成.
+- [ ] 拖动调整顺序
+- [ ] 增强通用布局组件
+- 增加输入组件
+  - [ ] CSS尺寸
+  - [ ] 颜色
+  - [ ] Layout
 - [ ] 事件；全局有一个EventReducer．提供注册／移除监听，发送事件．
 
 - [ ] 图片组件（持久化存储?）

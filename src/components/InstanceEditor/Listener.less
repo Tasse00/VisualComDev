@@ -1,0 +1,43 @@
+.listener {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(200, 200, 200, 0.2);
+  &:hover {
+    background-color: rgba(200,200,200,0.2);
+  }
+
+  margin-bottom: 8px;
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  &>div {
+    margin-bottom: 8px;
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  .listen-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .listen {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .trigger-label{
+
+  }
+  .trigger {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ContainerComponent: React.FC<{
+interface Props {
     backgroundColor?: string;
     flexDirection?: 'column' | 'row';
     justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around';
@@ -8,24 +8,32 @@ const ContainerComponent: React.FC<{
     padding?: string;
     overflow?: string;
     style?: React.CSSProperties;
-}> = React.forwardRef((props, ref) => {
+    onClick: () => any;
+}
+
+const ContainerComponent: React.FC<Props> = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     const {
         flexDirection, justifyContent, alignItems,
-        children,backgroundColor, padding, overflow
+        children, backgroundColor, padding, overflow,
+        onClick
     } = props;
+
+
     return (
         // @ts-ignore
-        <div ref={ref} style={{
+        <div
+            ref={ref}
+            onClick={onClick}
+            style={{
 
-            display: 'flex', boxSizing: 'border-box',
-            flexDirection, justifyContent, alignItems,
-            overflow,
-            // @ts-ignore
-            backgroundColor, padding,
-            
-            
-            ...(props.style||{})
-        }}>
+                display: 'flex', boxSizing: 'border-box',
+                flexDirection, justifyContent, alignItems,
+                overflow,
+                // @ts-ignore
+                backgroundColor, padding,
+
+                ...(props.style || {})
+            }}>
             {children}
         </div>
     )
@@ -103,6 +111,12 @@ const ContainerConfig: VCD.Component = {
             desc: 'CSS层叠样式表．相对其他属性，样式表的属性具有最高优先级．',
         }
     ],
+    events: [
+        { when: 'onClick', emit: 'click' },
+    ],
+    features: [
+
+    ]
 }
 
 export default ContainerConfig;

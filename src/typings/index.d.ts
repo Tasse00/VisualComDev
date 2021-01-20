@@ -14,7 +14,7 @@ declare namespace VCD {
 
   // 组件能够发出的事件定义．对应React组件的cb类型props.
   interface EventConfig {
-    on: string;   // 对应prop name
+    when: string;   // 对应prop name
     emit: string; // 事件名称
   }
 
@@ -56,8 +56,6 @@ declare namespace VCD {
   }
 
 
-
-
   // 组件实例的监听设置
   interface InstanceListener {
     target: string;   // 监听目标ID，默认监听所有实例
@@ -82,4 +80,15 @@ declare namespace VCD {
   interface ComponentInstanceTree extends ComponentInstance{
     children?: ComponentInstanceTree[];
   }
+
+
+
+
+  // EventStore
+  type FeatureCallback = (...params: any[])=>any;
+  interface InstanceFeature {
+    name: string;
+    callback: FeatureCallback;
+  }
+
 }
