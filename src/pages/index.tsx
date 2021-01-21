@@ -8,7 +8,7 @@ import ContextMenu from '@/components/Common/ContextMenu/ContextMenu';
 import Panel from '@/components/Common/Panel';
 import LogsView from '@/components/Common/Logger/LogsView';
 import { globalLoggerStore } from '@/components/Globals';
-import { Collapse } from 'antd';
+import { Collapse, Divider, Tabs } from 'antd';
 import ComponentGallery from '@/components/Editor/ComponentGallery/ComponentGallery';
 import ComponentRegistryProvider from '@/components/Editor/Providers/ComponentRegistry/Provider';
 import EditorProvider from '@/components/Editor/Providers/Editor/Provider';
@@ -23,27 +23,20 @@ import AntdComs from '@/components/Libs/ComponentsLibs/Antd';
 import BaseComs from '@/components/Libs/ComponentsLibs/Base';
 import BaseEditors from '@/components/Libs/FieldEditorLibs/Base';
 import ContextMenuProvider from '@/components/Common/ContextMenu/Provider';
+import InstanceEditor from '@/components/Editor/InstanceEditor/InstanceEditor';
 
-const components = [
-  ...BaseComs,
-  ...AntdComs,
-];
+const components = [...BaseComs, ...AntdComs];
 
-const fieldEditors = [
-  ...BaseEditors
-]
+const fieldEditors = [...BaseEditors];
 
 export default () => {
-
   return (
     <DndProvider backend={HTML5Backend}>
-
       <ComponentRegistryProvider components={components}>
         <FieldEditorRegistryProvider fieldEditors={fieldEditors}>
           <ContextMenuProvider>
             <ListenerRegistryProvider>
               <EditorProvider>
-
                 <div className={styles['app']}>
                   {/* 顶部菜单 */}
                   <Fixed
@@ -73,12 +66,6 @@ export default () => {
                     >
                       {/* 可视编辑 */}
                       <Stretch>
-                        {/* <Editor
-                            tree={tree}
-                            hoverId={state.hoverId}
-                            selectId={state.selectId}
-                            domMap={state.domMap}
-                          /> */}
                         <VisualEditor />
                       </Stretch>
                       {/* 底部信息 */}
@@ -97,26 +84,36 @@ export default () => {
                         alignItems: 'stretch',
                       }}
                     >
-                      <Collapse defaultActiveKey={['property']}>
-                        <Collapse.Panel header="Tree" key="tree" className={styles['side-panel']}>
+                      <Collapse defaultActiveKey={['instance']}>
+                        <Collapse.Panel
+                          header="Tree"
+                          key="tree"
+                          className={styles['side-panel']}
+                        >
                           <InstanceTree style={{ padding: 16 }} />
                         </Collapse.Panel>
-                        <Collapse.Panel header="Property" key="property" className={styles['side-panel']}>
-                          <PropertyEditor />
+                        <Collapse.Panel
+                          header="Instance"
+                          key="instance"
+                          className={styles['side-panel']}
+                        >
+                          <InstanceEditor />
+
+                          <Tabs>
+                            <Tabs.TabPane tab="Property" key="property">
+                              <PropertyEditor />
+                            </Tabs.TabPane>
+                            <Tabs.TabPane tab="Listener" key="listener">
+                              <ListenerEditor />
+                            </Tabs.TabPane>
+                          </Tabs>
                         </Collapse.Panel>
-
-                        <Collapse.Panel header="Listener" key='listener' className={styles['side-panel']}>
-                          <ListenerEditor />
-
-                        </Collapse.Panel>
-
                       </Collapse>
                     </Fixed>
                   </Stretch>
                 </div>
                 {/* 右键菜单 */}
                 <ContextMenu />
-
               </EditorProvider>
             </ListenerRegistryProvider>
           </ContextMenuProvider>
