@@ -1,4 +1,5 @@
-import React from 'react';
+import { useInstanceFeatureRegistry } from '@/components/Editor/Providers/ListenerRegistry/hooks';
+import React, { useMemo, useState } from 'react';
 
 interface Props {
     backgroundColor?: string;
@@ -8,6 +9,11 @@ interface Props {
     padding?: string;
     overflow?: string;
     style?: React.CSSProperties;
+    borderRadius?: string;
+    width?: string;
+    height?: string;
+    transition?: string;
+    cursor?: 'auto' | 'pointer';
     onClick: () => any;
 }
 
@@ -15,8 +21,22 @@ const ContainerComponent: React.FC<Props> = React.forwardRef<HTMLDivElement, Pro
     const {
         flexDirection, justifyContent, alignItems,
         children, backgroundColor, padding, overflow,
+        borderRadius, width, height, transition, cursor,
         onClick
     } = props;
+
+
+    const [opacity, setOpacity] = useState(1);
+
+    const features = useMemo(() => (
+        [
+            { name: 'opacity0', callback: () => { setOpacity(1) } },
+            { name: 'opacity1', callback: () => { setOpacity(1) } },
+            { name: 'switch', callback: () => { setOpacity(opacity === 1 ? 0 : 1) } },
+        ]
+    ), [opacity]);
+
+    useInstanceFeatureRegistry(features);
 
 
     return (
@@ -30,9 +50,13 @@ const ContainerComponent: React.FC<Props> = React.forwardRef<HTMLDivElement, Pro
                 flexDirection, justifyContent, alignItems,
                 overflow,
                 // @ts-ignore
-                backgroundColor, padding,
+                backgroundColor, padding, borderRadius,
+                width, height, transition,
+                cursor,
 
-                ...(props.style || {})
+                ...(props.style || {}),
+
+                opacity,
             }}>
             {children}
         </div>
@@ -88,10 +112,25 @@ const ContainerConfig: VCD.Component = {
             default: 'flex-start'
         },
         {
+            label: '宽度',
+            field: 'width',
+            type: 'string',
+        },
+        {
+            label: '高度',
+            field: 'height',
+            type: 'string',
+        },
+        {
             label: '内边距',
             field: 'padding',
             type: 'string',
             default: '16px',
+        },
+        {
+            label: '圆角',
+            field: 'borderRadius',
+            type: 'string',
         },
         {
             label: '超范围',
@@ -104,18 +143,37 @@ const ContainerConfig: VCD.Component = {
                 { label: '显示', value: 'visible' },
             ]
         },
+
+        {
+            label: '动画',
+            field: 'transition',
+            type: 'string',
+        },
+        {
+            label: '鼠标',
+            field: 'cursor',
+            type: 'select',
+            params: [
+                { label: '点击', value: 'pointer' },
+                { label: '自动', value: 'auto' },
+            ],
+            default: 'auto',
+        },
         {
             label: '样式表',
             field: 'style',
             type: 'style',
             desc: 'CSS层叠样式表．相对其他属性，样式表的属性具有最高优先级．',
-        }
+        },
+
     ],
     events: [
         { when: 'onClick', emit: 'click' },
     ],
     features: [
-
+        { name: 'opacity0', title: '透明' },
+        { name: 'opacity1', title: '不透明' },
+        { name: 'switch', title: '切换透明度' },
     ]
 }
 
