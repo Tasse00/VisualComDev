@@ -5,8 +5,8 @@ import ReactDOM from 'react-dom';
 import { ComponentLibContext } from '../ComponentLib/context';
 import { useContextMenuTrigger } from '../ContextMenu';
 import { ComponentDragItem, DragItems, InstanceDragItem } from '../DragAndDrop';
-import { InstanceFeatureRegistryContext } from '../FeatureRegistry/context';
-import { useFeatureRegistry } from '../FeatureRegistry/hooks';
+import { InstanceFeatureRegistryContext } from '../ListenerRegistry/context';
+import { useFeatureRegistry } from '../ListenerRegistry/hooks';
 import { globalLoggerStore } from '../Globals';
 import { EditorDispatcherContext } from './context';
 

@@ -19,7 +19,7 @@ import { EditorDispatcherContext } from '@/components/Editor/context';
 import InstanceTree from '@/components/InstanceTree';
 import Toolbar from '@/components/Toobar';
 import { Collapse } from 'antd';
-import FeatureRegistryProvider from '@/components/FeatureRegistry/FeatureRegistryProvider';
+import ListenerRegistryProvider from '@/components/ListenerRegistry/ListenerRegistryProvider';
 import PropertyEditor from '@/components/InstanceEditor/PropertyEditor';
 import ListenerEditor from '@/components/InstanceEditor/ListenerEditor';
 
@@ -35,7 +35,7 @@ export default () => {
 
   return (
     <ComponentLibProvider>
-      <FeatureRegistryProvider>
+      <ListenerRegistryProvider>
         <PropertyEditorLibProvider>
           <EditorDispatcherContext.Provider value={dispatch}>
             <DndProvider backend={HTML5Backend}>
@@ -125,7 +125,7 @@ export default () => {
             </DndProvider>
           </EditorDispatcherContext.Provider>
         </PropertyEditorLibProvider>
-      </FeatureRegistryProvider>
+      </ListenerRegistryProvider>
     </ComponentLibProvider>
   );
 };

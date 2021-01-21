@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useReducer } from 'react';
-import { FeatureRegistryContext, InstanceFeatureRegistryContext } from './context';
+import { ListenerRegistryContext, InstanceFeatureRegistryContext } from './context';
 
 type RegisterFunc = (instanceId: string, features: VCD.InstanceFeature[]) => any;
 type RemoveFunc = (instanceId: string) => any;
@@ -8,7 +8,7 @@ type SyncListenersFunc = (instanceId: string, listeners: VCD.InstanceListener[])
 
 export function useFeatureRegistry(): [RegisterFunc, RemoveFunc, EmitFunc, SyncListenersFunc] {
 
-  const { dispatch } = useContext(FeatureRegistryContext);
+  const { dispatch } = useContext(ListenerRegistryContext);
 
   const register = useCallback((instanceId: string, features: VCD.InstanceFeature[]) => {
     dispatch({

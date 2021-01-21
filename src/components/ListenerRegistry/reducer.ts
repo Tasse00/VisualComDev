@@ -66,7 +66,7 @@ export function reducer(state: State, action: AvailableActions): State {
 
               logger.debug("async exec feature", matchedListener.feature, 'with', convertedParams);
               /**
-               * devScripts.js:5836 Warning: Cannot update a component (`ForwardRef`) while rendering a different component (`FeatureRegistryProvider`). 
+               * devScripts.js:5836 Warning: Cannot update a component (`ForwardRef`) while rendering a different component (`ListenerRegistryProvider`). 
                */
               // 执行响应feature
               setTimeout(()=>{

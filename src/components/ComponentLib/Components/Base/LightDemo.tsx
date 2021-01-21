@@ -1,4 +1,4 @@
-import { useInstanceFeatureRegistry } from '@/components/FeatureRegistry/hooks';
+import { useInstanceFeatureRegistry } from '@/components/ListenerRegistry/hooks';
 import React, { useMemo, useState } from 'react';
 
 const LightDemo = React.forwardRef<HTMLDivElement>((props, ref) => {

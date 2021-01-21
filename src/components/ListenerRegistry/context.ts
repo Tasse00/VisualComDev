@@ -2,11 +2,11 @@ import React from 'react';
 import { AvailableActions } from './actions';
 import { State } from './reducer';
 
-export const FeatureRegistryContext = React.createContext<{
+export const ListenerRegistryContext = React.createContext<{
   state: State,
   dispatch: React.Dispatch<AvailableActions>,
 }>({
-  state: { featuresMap: {} },
+  state: { featuresMap: {}, listeners: {} },
   dispatch: () => {},
 });
 

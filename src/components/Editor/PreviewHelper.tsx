@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { ComponentLibContext } from '../ComponentLib/context';
-import { InstanceFeatureRegistryContext } from '../FeatureRegistry/context';
-import { useFeatureRegistry } from '../FeatureRegistry/hooks';
+import { InstanceFeatureRegistryContext } from '../ListenerRegistry/context';
+import { useFeatureRegistry } from '../ListenerRegistry/hooks';
 import { globalLoggerStore } from '../Globals';
 
 const logger = globalLoggerStore.createLogger("preview.helper")

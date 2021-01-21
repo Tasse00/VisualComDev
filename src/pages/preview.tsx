@@ -2,7 +2,7 @@ import Editor from '@/components/Editor/Editor';
 import React, { useEffect } from 'react';
 import styles from './index.less';
 import ComponentLibProvider from '@/components/ComponentLib/ComponentLibProvider';
-import FeatureRegistryProvider from '@/components/FeatureRegistry/FeatureRegistryProvider';
+import ListenerRegistryProvider from '@/components/ListenerRegistry/ListenerRegistryProvider';
 import { globalLoggerStore } from '@/components/Globals';
 import { LogRecord } from '@/components/Logger';
 
@@ -21,7 +21,7 @@ const Preview: React.FC = (props) => {
   })
   return (
     <ComponentLibProvider>
-      <FeatureRegistryProvider>
+      <ListenerRegistryProvider>
         <div className={styles['app']}>
           <Editor
             tree={config}
@@ -32,7 +32,7 @@ const Preview: React.FC = (props) => {
             style={{ padding: 0 }}
           />
         </div>
-      </FeatureRegistryProvider>
+      </ListenerRegistryProvider>
     </ComponentLibProvider>
   );
 };
