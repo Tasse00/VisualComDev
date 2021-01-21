@@ -45,6 +45,7 @@ export function reducer(state: State, action: AvailableActions): State {
         const { triggerId, event, params } = action.payload;
         logger.debug("handle event", event, 'from', triggerId, 'with', JSON.stringify(params));
 
+        const callbacks: Function[] = [];
         for (let [sourceId, listeners] of Object.entries(state.listeners)) {
           // 过滤监听该对象的该事件的监听器．
           listeners.filter(listener => ((listener.target === triggerId || !listener.target) && listener.event === event)).map(
@@ -68,14 +69,11 @@ export function reducer(state: State, action: AvailableActions): State {
               /**
                * devScripts.js:5836 Warning: Cannot update a component (`ForwardRef`) while rendering a different component (`ListenerRegistryProvider`). 
                */
-              // 执行响应feature
-              setTimeout(()=>{
-                featureCallback(...convertedParams);
-              }, 0);
-              
+              callbacks.push(()=>featureCallback(...convertedParams));
             }
           )
         }
+        callbacks.map(cb=>cb())
         return state;
       }
     default:
