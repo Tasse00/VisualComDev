@@ -1,0 +1,44 @@
+.component-lib {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+
+    padding: 16px;
+    &>div {
+        margin-top: 16px;
+    }
+    &>div:first-child {
+        margin-top: 0;
+    }
+}
+
+.component {
+    width: 120px;
+    height: 120px;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(240, 240, 240);
+    box-shadow: 0 0 8px rgba(200, 200, 200 , 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    &:hover {
+        box-shadow: 0 0 8px rgba(180, 180, 180 , 0.8);
+    }
+    &>div:first-child {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+    &>div:last-child {
+        width: 100%;
+        text-align: center;
+        padding-top: 8px;
+        border-top: 1px solid rgba(200,200,200,0.3);
+    }
+}

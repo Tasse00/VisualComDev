@@ -42,7 +42,7 @@ declare namespace VCD {
     update: (newValue:V)=>any;
     params: P;
     editors: {
-      [type: string]: PropertyEditor;
+      [type: string]: FieldEditor;
     };
   }
 
@@ -50,7 +50,7 @@ declare namespace VCD {
 
   // 属性编辑器
   // 不同类型的属性应具备不同的编辑控件，如：文本，文本域，数字，颜色，列表，Options等
-  interface PropertyEditor{
+  interface FieldEditor{
     type: string; // 属性类型
     component: PropertyEditorComponent<any, any>; // 对应的 React Component
   }
