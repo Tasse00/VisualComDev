@@ -73,6 +73,14 @@ interface ActUpdateInstanceListeners {
   }
 }
 
+interface ActRedo {
+  type: 'redo';
+}
+
+interface ActUndo {
+  type: 'undo';
+}
+
 export type AvailableActions =
   | ActCreateInstance
   | ActMoveInstnce
@@ -83,4 +91,6 @@ export type AvailableActions =
   | ActUpdateInstanceName
   | ActLoadTree
   | ActStoreInstanceDom
-  | ActUpdateInstanceListeners;
+  | ActUpdateInstanceListeners
+  | ActRedo
+  | ActUndo ;

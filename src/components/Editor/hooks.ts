@@ -21,5 +21,7 @@ export function useEditor() {
       root: [],
     },
     domMap: {},
+    past: [],
+    future: [],
   });
 }

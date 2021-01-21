@@ -10,6 +10,7 @@ import { convertTree } from '../Editor/utils';
 import ImportExport from './ImportExport';
 import LocalStore from './LocalStore';
 import Preview from './Preview';
+import EditHistory from './EditHistory';
 
 
 const Toolbar: React.FC<{
@@ -29,6 +30,9 @@ const Toolbar: React.FC<{
       <Logo />
 
       <Row gutter={8}>
+        <Col>
+          <EditHistory />
+        </Col>
         <Col>
           <LocalStore tree={tree} />
         </Col>

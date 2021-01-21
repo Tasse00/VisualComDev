@@ -1,10 +1,14 @@
 import { globalLoggerStore } from '../Globals';
+import { State } from '../ListenerRegistry/reducer';
 import { AvailableActions } from './actions';
 import { genInstanceName } from './utils';
 
 const logger = globalLoggerStore.createLogger('editor.reducer');
 
-
+interface HistoryState {
+  instancesMap: EditorState["instancesMap"];
+  childrenMap: EditorState["childrenMap"];
+}
 export interface EditorState {
 
   // 根节点实例
@@ -29,11 +33,16 @@ export interface EditorState {
   // instance的dom节点
   domMap: {
     [id: string]: Element;
-  }
+  },
+
+
+  // history
+  past: HistoryState[];
+  future: HistoryState[];
 }
 
 
-export function reducer(state: EditorState, action: AvailableActions) {
+function rawReducer(state: EditorState, action: AvailableActions): EditorState {
   switch (action.type) {
     case 'create-instance':
       {
@@ -175,7 +184,7 @@ export function reducer(state: EditorState, action: AvailableActions) {
       {
         return {
           ...state,
-          selectId: action.payload.instanceId===state.selectId?'':action.payload.instanceId,
+          selectId: action.payload.instanceId === state.selectId ? '' : action.payload.instanceId,
         };
       }
     case 'hover-instance':
@@ -254,30 +263,114 @@ export function reducer(state: EditorState, action: AvailableActions) {
           hoverId: rootId, selectId: rootId,
         }
       }
-    
+
     case 'store-instance-dom':
       {
         const { instanceId, dom } = action.payload;
         state.domMap[instanceId] = dom;
         return {
           ...state,
-          domMap: {...state.domMap},
+          domMap: { ...state.domMap },
         }
       }
     case 'update-instance-listeners':
       {
-        const {instanceId, listeners} = action.payload;
+        const { instanceId, listeners } = action.payload;
         const instance = state.instancesMap[instanceId];
         if (!instance) {
           logger.warning("Invalid instanceId", instanceId);
           return state;
         }
-        return {...state, instancesMap: {...state.instancesMap, [instanceId]: {...instance, listeners}}}
+        return { ...state, instancesMap: { ...state.instancesMap, [instanceId]: { ...instance, listeners } } }
       }
-      
+
     default:
-      logger.warning("unknow action:", JSON.stringify(action));
       return state;
   }
-  
+}
+
+export function reducer(state: EditorState, action: AvailableActions): EditorState {
+  // Ugly !
+  function immut(obj: HistoryState): HistoryState {
+    const result = JSON.parse(JSON.stringify(obj));
+    if (!result) {
+      throw new Error("immut error");
+    }
+    return result;
+
+  }
+
+  switch (action.type) {
+    case 'undo':
+      // 回退历史
+      // 确认hoverId, selectId
+      {
+        let last = state.past.pop();
+        if (!last) {
+          return state;
+        }
+        last = immut(last);
+        const newFuture: HistoryState = {
+          childrenMap: state.childrenMap,
+          instancesMap: state.instancesMap,
+        }
+        return {
+          ...state,
+
+          childrenMap: last.childrenMap,
+          instancesMap: last.instancesMap,
+          past: [...state.past],
+          future: [...state.future, newFuture],
+        }
+      }
+    case 'redo':
+      {
+        // 重做历史
+        // 确认hoverId, selectId
+
+        let next = state.future.pop();
+        
+        if (!next) {
+          return state;
+        }
+        next = immut(next);
+        const newLast: HistoryState = {
+          childrenMap: state.childrenMap,
+          instancesMap: state.instancesMap,
+        }
+        return {
+          ...state,
+
+          childrenMap: next.childrenMap,
+          instancesMap: next.instancesMap,
+          past: [...state.past, newLast],
+          future: [...state.future],
+        }
+      }
+
+    case 'create-instance':
+    case 'delete-instance':
+    case 'load-tree':
+    case 'move-instance':
+    case 'update-instance-listeners':
+    case 'update-instance-name':
+    case 'update-instance-property':
+      // 增加 past
+      // 清空 future
+      logger.debug("log history on action:", action.type);
+      const newPast = [...state.past, immut({
+        instancesMap: state.instancesMap,
+        childrenMap: state.childrenMap,
+      })];
+      const reducedState = rawReducer(state, action);
+      
+      return {
+        ...reducedState,
+        past: newPast,
+        future: [],
+      };
+    default:
+      return rawReducer(state, action);
+  }
+
 }
