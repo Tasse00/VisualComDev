@@ -256,14 +256,27 @@ export function reducer(state: EditorState, action: AvailableActions) {
       }
     
     case 'store-instance-dom':
-      const { instanceId, dom } = action.payload;
-      state.domMap[instanceId] = dom;
-      return {
-        ...state,
-        domMap: {...state.domMap},
+      {
+        const { instanceId, dom } = action.payload;
+        state.domMap[instanceId] = dom;
+        return {
+          ...state,
+          domMap: {...state.domMap},
+        }
       }
+    case 'update-instance-listeners':
+      {
+        const {instanceId, listeners} = action.payload;
+        const instance = state.instancesMap[instanceId];
+        if (!instance) {
+          logger.warning("Invalid instanceId", instanceId);
+          return state;
+        }
+        return {...state, instancesMap: {...state.instancesMap, [instanceId]: {...instance, listeners}}}
+      }
+      
     default:
-      logger.warning("unknow action:", action.type);
+      logger.warning("unknow action:", JSON.stringify(action));
       return state;
   }
   

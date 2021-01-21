@@ -65,6 +65,14 @@ interface ActStoreInstanceDom {
   }
 }
 
+interface ActUpdateInstanceListeners {
+  type: 'update-instance-listeners';
+  payload: {
+    instanceId: string;
+    listeners: VCD.InstanceListener[];
+  }
+}
+
 export type AvailableActions =
   | ActCreateInstance
   | ActMoveInstnce
@@ -74,4 +82,5 @@ export type AvailableActions =
   | ActUpdateInstanceProperty
   | ActUpdateInstanceName
   | ActLoadTree
-  | ActStoreInstanceDom;
+  | ActStoreInstanceDom
+  | ActUpdateInstanceListeners;

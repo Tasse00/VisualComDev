@@ -86,7 +86,7 @@ export default () => {
                     </Stretch>
 
                     <Fixed
-                      defaultSize={200}
+                      defaultSize={300}
                       position={'left'}
                       style={{
                         display: 'flex',
@@ -112,7 +112,7 @@ export default () => {
                         </Collapse.Panel>
 
                         <Collapse.Panel header="Listener" key='listener' className={styles['side-panel']}>
-                          {state.instancesMap[state.selectId] && <ListenerEditor instance={state.instancesMap[state.selectId]} />}
+                          {state.instancesMap[state.selectId] && <ListenerEditor instance={state.instancesMap[state.selectId]} instancesMap={state.instancesMap} />}
                         </Collapse.Panel>
 
                       </Collapse>

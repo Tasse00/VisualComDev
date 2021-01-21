@@ -10,8 +10,9 @@ const LightDemo = React.forwardRef<HTMLDivElement>((props, ref) => {
     [
       { name: 'on', callback: () => { setStatue('on') } },
       { name: 'off', callback: () => { setStatue('off') } },
+      { name: 'switch', callback: () => { setStatue(status==='on'?'off':'on') } },
     ]
-  ), []);
+  ), [status]);
 
   useInstanceFeatureRegistry(features);
 
@@ -25,7 +26,7 @@ const LightDemo = React.forwardRef<HTMLDivElement>((props, ref) => {
         backgroundColor: status==='on'?'yellow':'grey'
       }}
     >
-      
+
     </div>
   )
 });
@@ -41,6 +42,7 @@ const ContainerConfig: VCD.Component = {
   features: [
     { name: 'off', title: '关闭' },
     { name: 'on', title: '打开' },
+    { name: 'switch', title: '开关'}
   ]
 }
 

@@ -44,26 +44,39 @@ export function reducer(state: State, action: AvailableActions): State {
       {
         const { triggerId, event, params } = action.payload;
         logger.debug("handle event", event, 'from', triggerId, 'with', JSON.stringify(params));
+
         for (let [sourceId, listeners] of Object.entries(state.listeners)) {
           // 过滤监听该对象的该事件的监听器．
-          listeners.filter(listener=>((listener.target===triggerId || !listener.target) && listener.event===event)).map(
-            matchedListener=>{
+          listeners.filter(listener => ((listener.target === triggerId || !listener.target) && listener.event === event)).map(
+            matchedListener => {
+              logger.debug("found matched listener from", sourceId)
               // 获取参数转换韩式
-              const converter = matchedListener.converter || ((...p: any[])=>p);
-              
+              const converter = matchedListener.converter || ((...p: any[]) => p);
+
               // 提取监听者的feature
-              let featureConfig = undefined;
-              try{
-                featureConfig = state.featuresMap[sourceId][matchedListener.feature];
-              }catch(e){
+              let featureCallback:VCD.FeatureCallback = ()=>{};
+              try {
+                featureCallback = state.featuresMap[sourceId][matchedListener.feature].callback;
+              } catch (e) {
                 logger.warning("instanceId", sourceId, 'has no feature named', matchedListener.feature);
-                return;
+                return state;
               }
+              const convertedParams = converter(...params);
+
+
+              logger.debug("async exec feature", matchedListener.feature, 'with', convertedParams);
+              /**
+               * devScripts.js:5836 Warning: Cannot update a component (`ForwardRef`) while rendering a different component (`FeatureRegistryProvider`). 
+               */
               // 执行响应feature
-              featureConfig.callback(...converter(...params));
+              setTimeout(()=>{
+                featureCallback(...convertedParams);
+              }, 0);
+              
             }
           )
         }
+        return state;
       }
     default:
       logger.warning("Unknown action:", JSON.stringify(action));

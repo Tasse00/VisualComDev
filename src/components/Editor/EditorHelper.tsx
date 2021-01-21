@@ -173,39 +173,41 @@ const EditorHelper: React.FC<{
   Object.assign(comProps, node.properties);
 
   const [register, remove, emitter, syncListeners] = useFeatureRegistry();
-  const intanceRegister =useCallback((features: VCD.InstanceFeature[]) => {
+  const intanceRegister = useCallback((features: VCD.InstanceFeature[]) => {
     register(node.guid, features)
   }, [node.guid]);
-  const instanceRemove = useCallback(()=>remove(node.guid), [node.guid]);
+  const instanceRemove = useCallback(() => remove(node.guid), [node.guid]);
 
 
   // events emitter
 
-  const eventProps = useMemo(()=>{
-    const eventProps:{[field: string]: VCD.FeatureCallback} = {}
+  const eventProps = useMemo(() => {
+    const eventProps: { [field: string]: VCD.FeatureCallback } = {}
     const eventConfigs: VCD.EventConfig[] = com.events || [];
-
-    eventConfigs.map(eventCfg=>{
-      eventProps[eventCfg.when] = (...params: any[])=>{
-        // console.log(node.guid, eventCfg.emit, ...params)
+    eventConfigs.map(eventCfg => {
+      eventProps[eventCfg.when] = (...params: any[]) => {
         // emitter(node.guid, eventCfg.emit, ...params);
-        // 编辑模式不发出事件
+        // 编辑模式不发出事件，仅占位
       }
     });
     return eventProps;
   }, [node.guid, com.events])
 
-  
-  useEffect(()=>{
-    syncListeners(node.guid, node.listeners);
-    return ()=>{
-      syncListeners(node.guid, []);
-    }
-  }, [syncListeners, node.listeners]);
+  // listeners sync
+  // // 编辑模式无实际效果，降低开销
+  // useEffect(() => {
+  //   syncListeners(node.guid, node.listeners);
+  // }, [syncListeners, node.listeners]);
+
+  // useEffect(() => {
+  //   return () => {
+  //     syncListeners(node.guid, []);
+  //   }
+  // }, [])
 
   return (
     <>
-      
+
       <InstanceFeatureRegistryContext.Provider value={[intanceRegister, instanceRemove]}>
         <Com ref={ref} {...comProps} {...eventProps}>
           {(node.children || []).map((child) => (

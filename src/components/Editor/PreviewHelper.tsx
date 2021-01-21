@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { ComponentLibContext } from '../ComponentLib/context';
 import { InstanceFeatureRegistryContext } from '../FeatureRegistry/context';
 import { useFeatureRegistry } from '../FeatureRegistry/hooks';
@@ -10,6 +10,21 @@ const PreviewHelper: React.FC<{
     node: VCD.ComponentInstanceTree;
 }> = props => {
     const { node } = props;
+
+    const [register, remove, emitter, syncListeners] = useFeatureRegistry();
+    const intanceRegister = useCallback((features: VCD.InstanceFeature[]) => {
+        register(node.guid, features)
+    }, [node.guid]);
+    const instanceRemove = useCallback(() => remove(node.guid), [node.guid]);
+    // listeners sync
+    useEffect(() => syncListeners(node.guid, node.listeners), [syncListeners, node.listeners]);
+
+    useEffect(() => {
+        return () => {
+            syncListeners(node.guid, []);
+        }
+    }, [])
+
     const {
         state: { componentsMap },
     } = useContext(ComponentLibContext);
@@ -34,12 +49,6 @@ const PreviewHelper: React.FC<{
 
     // events emitter
 
-    const [register, remove, emitter, syncListeners] = useFeatureRegistry();
-    const intanceRegister = useCallback((features: VCD.InstanceFeature[]) => {
-        register(node.guid, features)
-    }, [node.guid]);
-    const instanceRemove = useCallback(() => remove(node.guid), [node.guid]);
-
     const eventProps = useMemo(() => {
         const eventProps: { [field: string]: VCD.FeatureCallback } = {}
         const eventConfigs: VCD.EventConfig[] = com.events || [];
@@ -51,6 +60,8 @@ const PreviewHelper: React.FC<{
         });
         return eventProps;
     }, [node.guid, com.events])
+
+
 
     return (
         <InstanceFeatureRegistryContext.Provider value={[intanceRegister, instanceRemove]}>

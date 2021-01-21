@@ -15,7 +15,7 @@ export interface LogRecord {
     message: any[];
 }
 
-type LogCallback = () => any;
+type LogCallback = (newRcds: LogRecord[]) => any;
 
 export class LogStore {
 
@@ -39,7 +39,7 @@ export class LogStore {
         if (this.records.length > this.maximum) {
             this.records.pop();
         }
-        this.callbacks.map(cb => cb());
+        this.callbacks.map(cb => cb([rcd]));
     }
 
     addCallback(cb: LogCallback) {
