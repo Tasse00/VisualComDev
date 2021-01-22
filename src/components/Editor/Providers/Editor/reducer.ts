@@ -56,7 +56,7 @@ function rawReducer(state: EditorState, action: AvailableActions): EditorState {
   switch (action.type) {
     case 'create-instance':
       {
-        const { parentId, comId } = action.payload;
+        const { parentId, comId, position } = action.payload;
         const parent = state.instancesMap[parentId];
         if (!parent) {
           logger.warning('Invalid parentId', parentId)
@@ -76,7 +76,12 @@ function rawReducer(state: EditorState, action: AvailableActions): EditorState {
           listeners: [],
         };
 
-        state.childrenMap[parentId].push(instance.guid);
+        if (position === undefined) {
+          state.childrenMap[parentId].push(instance.guid);
+        } else {
+          state.childrenMap[parentId].splice(position, 0, instance.guid);
+        }
+
         state.instancesMap[instance.guid] = instance;
         logger.info('added', instance.name, 'in', parent.name);
         return {
@@ -87,7 +92,7 @@ function rawReducer(state: EditorState, action: AvailableActions): EditorState {
       }
     case 'move-instance':
       {
-        const { parentId, instanceId } = action.payload;
+        const { parentId, instanceId, position } = action.payload;
         const parent = state.instancesMap[parentId];
         if (!parent) {
           logger.warning('Invalid containerId', parentId);
@@ -133,10 +138,13 @@ function rawReducer(state: EditorState, action: AvailableActions): EditorState {
         }
 
         // 在新父亲中加入自己
-        state.childrenMap[parentId].push(instance.guid);
+        if (position === undefined) {
+          state.childrenMap[parentId].push(instance.guid);
+        } else {
+          state.childrenMap[parentId].splice(position, 0, instance.guid);
+        }
 
-        logger.info("moved", instance.name, 'from', state.instancesMap[originParentIdx].name, 'to', parent.name);
-
+        logger.info("moved", instance.name, 'from', state.instancesMap[originParentIdx].name, 'to', parent.name, 'in', position, 'position');
         return {
           ...state,
           childrenMap: { ...state.childrenMap },
@@ -294,7 +302,7 @@ function rawReducer(state: EditorState, action: AvailableActions): EditorState {
       }
     case 'update-container-attribs':
       {
-        const {payload} = action;
+        const { payload } = action;
         return {
           ...state,
           container: payload
@@ -345,7 +353,7 @@ export function reducer(state: EditorState, action: AvailableActions): EditorSta
         // 确认hoverId, selectId
 
         let next = state.future.pop();
-        
+
         if (!next) {
           return state;
         }

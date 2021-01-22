@@ -4,17 +4,21 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useEditorHoveredInstance, useEditorInstances, useEditorSelectedInstance } from '../Providers/Editor/hooks';
 import TreeItem from './TreeItem';
 
-function recursiveRebuildTree(childArr: DataNode[], n: VCD.ComponentInstanceTree) {
-  const selfChildArr: DataNode[] = [];
-  const self: DataNode = {
+type CustomDataNode = DataNode & {position?:number; parentId?:string;};
+
+function recursiveRebuildTree(childArr: CustomDataNode[], n: VCD.ComponentInstanceTree, position?: number, parentId?: string) {
+  const selfChildArr: CustomDataNode[] = [];
+  const self: CustomDataNode = {
     key: n.guid,
     title: n.name || n.guid,
     ...n,
+    position,
+    parentId,
     children: selfChildArr,
   }
 
   if (n.children) {
-    n.children.map(child => recursiveRebuildTree(selfChildArr, child));
+    n.children.map((child, idx) => recursiveRebuildTree(selfChildArr, child, idx, n.guid));
   }
 
   childArr.push(self);
@@ -59,7 +63,7 @@ const InstanceTree: React.FC<{
 
 
   const treeData = useMemo(() => {
-    const nodes: DataNode[] = [];
+    const nodes: CustomDataNode[] = [];
     if (tree) {
       recursiveRebuildTree(nodes, tree);
     }
@@ -83,6 +87,10 @@ const InstanceTree: React.FC<{
         return (
           <TreeItem
             key={node.key}
+            // @ts-ignore
+            position={node.position}
+            // @ts-ignore
+            parentId={node.parentId}
             // @ts-ignore
             comId={node.comId}
             nodeId={node.key.toString()}

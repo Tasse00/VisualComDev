@@ -4,6 +4,7 @@ interface ActCreateInstance {
   payload: {
     parentId: string;
     comId: string;
+    position?: number; // 插入位置
   }
 }
 
@@ -12,6 +13,7 @@ interface ActMoveInstnce {
   payload: {
     parentId: string;
     instanceId: string;
+    position?: number; // 插入位置
   };
 }
 interface ActDelInstance {

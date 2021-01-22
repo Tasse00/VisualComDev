@@ -13,5 +13,8 @@ export interface ComponentDragItem {
 // drag 实例
 export interface InstanceDragItem {
   type: DragItems.Instance,
-  data: VCD.ComponentInstance,
+  data: {
+    node: VCD.ComponentInstanceTree; // 被拖拽节点
+    position: number; // 被拖拽节点在父亲中位置
+  },
 };
