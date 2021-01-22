@@ -29,14 +29,18 @@ const VisualEditor: React.FC<{
       const onScroll = () => {
         if (!ref.current) return;
         const rect = ref.current.getBoundingClientRect();
+        const res = ref.current.style.transform.match(/scale\((.*)\)/)
+        const scale = res ? parseFloat(res[1]) : 1;
         dispatch({
           type: 'update-container-attribs',
           payload: {
             left: rect.left, top: rect.top, height: rect.height, width: rect.width,
             scrollLeft: ref.current.scrollLeft,
-            scrollTop: ref.current.scrollTop,
+            scrollTop: ref.current.scrollTop, scale,
           }
         })
+        
+        
       }
       onScroll();
       ref.current.addEventListener("scroll", onScroll);
@@ -48,9 +52,13 @@ const VisualEditor: React.FC<{
 
   const Helper = preview ? PreviewHelper : EditorHelper;
 
+  // 缩放
+  // 思路1 监听container的scale属性
+
   return (
 
     <EditorContainerContext.Provider value={editorRect}>
+      <div style={{width: 500, marginLeft: 100, height: 400, top:50}}>
       <div
         ref={ref}
         onMouseLeave={() => {
@@ -62,6 +70,7 @@ const VisualEditor: React.FC<{
           backgroundColor: 'rgba(200,200,200,0.2)',
           height: '100%',
           overflow: 'auto',
+          transform: 'scale(0.8)',
           ...style
         }}>
         
@@ -77,6 +86,7 @@ const VisualEditor: React.FC<{
         )}
 
 
+      </div>
       </div>
     </EditorContainerContext.Provider>
   )

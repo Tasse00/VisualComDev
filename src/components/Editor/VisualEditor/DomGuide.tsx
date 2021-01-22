@@ -8,7 +8,7 @@ const HoverGuide: React.FC<{
 }> = (props) => {
   const { dom, border, animation } = props;
 
-  const { left, top, scrollLeft, scrollTop } = useEditorContainerAttribs();
+  const { left, top, scrollLeft, scrollTop, scale } = useEditorContainerAttribs();
 
   const [_, rerender] = useState(0);
 
@@ -22,6 +22,10 @@ const HoverGuide: React.FC<{
   style.width = rect.width;
   style.height = rect.height;
 
+  style.left /= scale;
+  style.top /= scale;
+  style.width /= scale;
+  style.height /= scale;
 
   useEffect(() => {
 

@@ -92,6 +92,7 @@ interface ActUpdateContainerAttribs {
     height: number;
     scrollTop: number;
     scrollLeft: number;
+    scale: number;
   }
 }
 

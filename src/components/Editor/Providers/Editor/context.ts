@@ -6,16 +6,9 @@ import { EditorState } from './reducer';
 export const EditorDispatcherContext = React.createContext<React.Dispatch<AvailableActions>>(() => { });
 
 // 提供 Editor 的 Container 数据
-export const EditorContainerContext = React.createContext<{
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-  scrollTop: number;
-  scrollLeft: number;
-}>({
+export const EditorContainerContext = React.createContext<EditorState['container']>({
   left: 0, top: 0, width: 0, height: 0,
-  scrollLeft: 0, scrollTop: 0,
+  scrollLeft: 0, scrollTop: 0, scale: 1,
 });
 
 

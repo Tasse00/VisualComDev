@@ -28,6 +28,7 @@ const EditorProvider: React.FC<{
       height: 0,
       scrollTop: 0,
       scrollLeft: 0,
+      scale: 1,
     }
   });
 
