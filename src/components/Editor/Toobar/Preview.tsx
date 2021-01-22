@@ -1,7 +1,7 @@
 import { Button } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import React, { useCallback } from 'react';
-import { useEditorInstances } from '../Providers/Editor/hooks';
+import { useEditorInstances, useRootInstance } from '../Providers/Editor/hooks';
 
 const Preview: React.FC<{
 }> = props => {
@@ -13,10 +13,12 @@ const Preview: React.FC<{
     window.open(`${location.protocol}//${location.host}/preview`);
   }, [tree]);
 
+  const rootInstance = useRootInstance();
   return (
     <Button
       icon={<EyeOutlined />}
       onClick={onClick}
+      disabled={!rootInstance}
     >
       预览
     </Button>

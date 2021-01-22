@@ -278,6 +278,9 @@ function rawReducer(state: EditorState, action: AvailableActions): EditorState {
           ...state,
           instancesMap, childrenMap, rootId,
           hoverId: rootId, selectId: rootId,
+
+          past: [],
+          future: [],
         }
       }
 
@@ -306,6 +309,32 @@ function rawReducer(state: EditorState, action: AvailableActions): EditorState {
         return {
           ...state,
           container: payload
+        }
+      }
+    case 'init-editor':
+      {
+        const { payload: {comId, name} } = action;
+        const rootId = 'ROOT';
+        return {
+          ...state,
+          rootId,
+          childrenMap: {
+            [rootId]: [],
+          },
+          instancesMap: {
+            [rootId]: {
+              guid: rootId,
+              comId, name,
+              properties: [], 
+              listeners: [],
+            }
+          },
+
+          past: [],
+          future: [],
+
+          selectId: rootId,
+          hoverId: '',
         }
       }
     default:
@@ -374,7 +403,6 @@ export function reducer(state: EditorState, action: AvailableActions): EditorSta
 
     case 'create-instance':
     case 'delete-instance':
-    case 'load-tree':
     case 'move-instance':
     case 'update-instance-listeners':
     case 'update-instance-name':

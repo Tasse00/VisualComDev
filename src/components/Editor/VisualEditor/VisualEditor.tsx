@@ -1,12 +1,13 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { EditorContainerContext, EditorDispatcherContext } from '../Providers/Editor/context';
+import React, { useEffect, useRef } from 'react';
+import { EditorContainerContext } from '../Providers/Editor/context';
 import EditorHelper from './EditorHelper';
 import PreviewHelper from './PreviewHelper';
-import { useEditor, useEditorContainerAttribs } from '../Providers/Editor/hooks';
+import { useEditor, useEditorContainerAttribs, useEditorInstances } from '../Providers/Editor/hooks';
 import NodeTree from './NodeTree';
 import { useComponentRegistryState } from '../Providers/ComponentRegistry/hooks';
 import HoverGuide from './HoverGuide';
 import SelectGuide from './SelectGuide';
+import Creator from './Creator';
 
 const VisualEditor: React.FC<{
   preview?: boolean;
@@ -20,7 +21,6 @@ const VisualEditor: React.FC<{
   const dispatch = useEditor();
 
   const editorRect = useEditorContainerAttribs();
-
 
   const { components } = useComponentRegistryState();
 
@@ -44,6 +44,8 @@ const VisualEditor: React.FC<{
     }
   }, []);
 
+  const {instancesMap} = useEditorInstances();
+
   const Helper = preview ? PreviewHelper : EditorHelper;
 
   return (
@@ -62,6 +64,8 @@ const VisualEditor: React.FC<{
           overflow: 'auto',
           ...style
         }}>
+        
+        {Object.keys(instancesMap).length===0 && <Creator />}
 
         {components.length ? <NodeTree helperCom={Helper} /> : null}
 

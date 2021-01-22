@@ -3,7 +3,7 @@ import { ImportOutlined } from '@ant-design/icons';
 import { Button, Input, Popconfirm } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import { globalLoggerStore } from '@/components/Globals';
-import { useEditor } from '@/components/Editor/Providers/Editor/hooks';
+import { useEditor, useRootInstance } from '@/components/Editor/Providers/Editor/hooks';
 
 // textarea 高度
 // button disable
@@ -16,6 +16,7 @@ const Import: React.FC<{
   const [visible, setVisible] = useState(false);
   const [treeJson, setTreeJson] = useState("");
 
+  const rootInstance = useRootInstance();
 
 
   const dispatch = useEditor();
@@ -42,7 +43,7 @@ const Import: React.FC<{
   return (
     <>
 
-      <Button icon={<ImportOutlined />} onClick={onOpen}>导入</Button>
+      <Button icon={<ImportOutlined />} onClick={onOpen} disabled={!rootInstance}>导入</Button>
 
       <Modal
         visible={visible}

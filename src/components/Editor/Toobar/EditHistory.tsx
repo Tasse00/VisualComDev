@@ -24,9 +24,10 @@ const EditHistory: React.FC<{
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key.toLowerCase() === 'z' && e.ctrlKey) {
+      const key = e.key ? e.key.toLowerCase() : '';
+      if (key === 'z' && e.ctrlKey) {
         undo();
-      } else if (e.key.toLowerCase() === 'y' && e.ctrlKey) {
+      } else if (key === 'y' && e.ctrlKey) {
         redo();
       }
     }

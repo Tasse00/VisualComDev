@@ -39,3 +39,7 @@ export const EditorInstancesContext = React.createContext<{
   tree: VCD.ComponentInstanceTree | undefined;
   domMap: EditorState['domMap'];
 }>({ instancesMap: {}, childrenMap: {}, tree: undefined, domMap: {} });
+
+
+// 提供根节点Instance
+export const EditorRootInstanceContext = React.createContext<VCD.ComponentInstance | undefined>(undefined);

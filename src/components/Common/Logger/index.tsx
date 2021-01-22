@@ -39,7 +39,9 @@ export class LogStore {
         if (this.records.length > this.maximum) {
             this.records.pop();
         }
-        this.callbacks.map(cb => cb([rcd]));
+        setTimeout(()=>{
+            this.callbacks.map(cb => cb([rcd]));
+        })
     }
 
     addCallback(cb: LogCallback) {

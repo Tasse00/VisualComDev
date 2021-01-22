@@ -95,6 +95,14 @@ interface ActUpdateContainerAttribs {
   }
 }
 
+interface ActInitEditor {
+  type: 'init-editor';
+  payload: {
+    comId: string; //根节点容器
+    name: string; // 根节点名称
+  }
+}
+
 export type AvailableActions =
   | ActCreateInstance
   | ActMoveInstnce
@@ -108,4 +116,5 @@ export type AvailableActions =
   | ActUpdateInstanceListeners
   | ActRedo
   | ActUndo
-  | ActUpdateContainerAttribs;
+  | ActUpdateContainerAttribs
+  |　ActInitEditor;

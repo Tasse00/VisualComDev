@@ -37,9 +37,9 @@ declare namespace VCD {
 
 
   // 属性编辑器组件Props名称
-  interface PropertyEditorProps<V=any, P=any> {
+  interface PropertyEditorProps<V = any, P = any> {
     value: V;
-    update: (newValue:V)=>any;
+    update: (newValue: V) => any;
     params: P;
     editors: {
       [type: string]: FieldEditor;
@@ -50,7 +50,7 @@ declare namespace VCD {
 
   // 属性编辑器
   // 不同类型的属性应具备不同的编辑控件，如：文本，文本域，数字，颜色，列表，Options等
-  interface FieldEditor{
+  interface FieldEditor {
     type: string; // 属性类型
     component: PropertyEditorComponent<any, any>; // 对应的 React Component
   }
@@ -77,7 +77,7 @@ declare namespace VCD {
   }
 
   // 树节点
-  interface ComponentInstanceTree extends ComponentInstance{
+  interface ComponentInstanceTree extends ComponentInstance {
     children?: ComponentInstanceTree[];
   }
 
@@ -85,10 +85,20 @@ declare namespace VCD {
 
 
   // EventStore
-  type FeatureCallback = (...params: any[])=>any;
+  type FeatureCallback = (...params: any[]) => any;
   interface InstanceFeature {
     name: string;
     callback: FeatureCallback;
+  }
+
+
+
+  // Page Store Info
+  interface PageStore {
+    guid: string; // page guid
+    name: string; // page name (root instnace name)
+    tree: VCD.ComponentInstanceTree;
+    timestamp: number; // store timestamp
   }
 
 }
