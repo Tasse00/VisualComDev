@@ -3,14 +3,13 @@ import React from 'react';
 import Export from './Export';
 import Import from './Import';
 
-const ImportExport: React.FC<{
-}> = props => {
+const ImportExport: React.FC<{}> = (props) => {
   return (
     <Button.Group>
       <Import />
       <Export />
     </Button.Group>
-  )
-}
+  );
+};
 
 export default ImportExport;

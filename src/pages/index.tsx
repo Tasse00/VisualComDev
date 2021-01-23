@@ -14,7 +14,7 @@ import ComponentRegistryProvider from '@/components/Editor/Providers/ComponentRe
 import EditorProvider from '@/components/Editor/Providers/Editor/Provider';
 import VisualEditor from '@/components/Editor/VisualEditor/VisualEditor';
 import InstanceTree from '@/components/Editor/InstanceTree';
-import Toolbar from '@/components/Editor/Toobar';
+import Toolbar from '@/components/Editor/Toolbar';
 import ListenerRegistryProvider from '@/components/Editor/Providers/ListenerRegistry/Provider';
 import PropertyEditor from '@/components/Editor/PropertyEditor/PropertyEditor';
 import FieldEditorRegistryProvider from '@/components/Editor/Providers/FieldEditorRegistry/Provider';

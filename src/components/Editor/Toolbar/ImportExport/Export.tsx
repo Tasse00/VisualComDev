@@ -4,9 +4,7 @@ import { ExportOutlined } from '@ant-design/icons';
 import ExportModalContent from './ExportModalContent';
 import { useRootInstance } from '../../Providers/Editor/hooks';
 
-const Export: React.FC<{
-}> = props => {
-
+const Export: React.FC<{}> = (props) => {
   const [visible, setVisible] = useState(false);
   const rootInstance = useRootInstance();
   return (
@@ -17,7 +15,9 @@ const Export: React.FC<{
           setVisible(true);
         }}
         disabled={!rootInstance}
-      >导出</Button>
+      >
+        导出
+      </Button>
       <Modal
         visible={visible}
         maskClosable
@@ -29,7 +29,7 @@ const Export: React.FC<{
         <ExportModalContent />
       </Modal>
     </>
-  )
-}
+  );
+};
 
 export default Export;

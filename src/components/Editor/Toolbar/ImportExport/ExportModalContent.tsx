@@ -4,12 +4,9 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import ReactJsonView from 'react-json-view';
 import { useEditorInstances } from '@/components/Editor/Providers/Editor/hooks';
 import { Button } from 'antd';
-const ExportModalContent: React.FC<{
-
-}> = props => {
-
+const ExportModalContent: React.FC<{}> = (props) => {
   const { tree } = useEditorInstances();
-  const treeStr = useMemo(() => JSON.stringify(tree, undefined, 2), [tree])
+  const treeStr = useMemo(() => JSON.stringify(tree, undefined, 2), [tree]);
 
   const [copied, setCopied] = useState(false);
   return (
@@ -26,7 +23,7 @@ const ExportModalContent: React.FC<{
       </CopyToClipboard>
       <ReactJsonView src={tree || {}} />
     </>
-  )
-}
+  );
+};
 
 export default ExportModalContent;

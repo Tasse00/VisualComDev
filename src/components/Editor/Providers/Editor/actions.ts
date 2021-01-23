@@ -1,11 +1,10 @@
-
 interface ActCreateInstance {
   type: 'create-instance';
   payload: {
     parentId: string;
     comId: string;
     position?: number; // 插入位置
-  }
+  };
 }
 
 interface ActMoveInstnce {
@@ -55,7 +54,7 @@ interface ActUpdateInstanceName {
 interface ActLoadTree {
   type: 'load-tree';
   payload: {
-    tree: VCD.ComponentInstanceTree
+    tree: VCD.ComponentInstanceTree;
   };
 }
 
@@ -64,7 +63,7 @@ interface ActStoreInstanceDom {
   payload: {
     instanceId: string;
     dom: Element;
-  }
+  };
 }
 
 interface ActUpdateInstanceListeners {
@@ -72,7 +71,7 @@ interface ActUpdateInstanceListeners {
   payload: {
     instanceId: string;
     listeners: VCD.InstanceListener[];
-  }
+  };
 }
 
 interface ActRedo {
@@ -92,7 +91,7 @@ interface ActUpdateContainerAttribs {
     height: number;
     scrollTop: number;
     scrollLeft: number;
-  }
+  };
 }
 
 interface ActInitEditor {
@@ -100,7 +99,16 @@ interface ActInitEditor {
   payload: {
     comId: string; //根节点容器
     name: string; // 根节点名称
-  }
+  };
+}
+
+interface ActInsertInstanceTree {
+  type: 'insert-instance-tree';
+  payload: {
+    tree: VCD.ComponentInstanceTree;
+    parentId: string;
+    position?: number;
+  };
 }
 
 export type AvailableActions =
@@ -117,4 +125,5 @@ export type AvailableActions =
   | ActRedo
   | ActUndo
   | ActUpdateContainerAttribs
-  |　ActInitEditor;
+  | ActInitEditor
+  | ActInsertInstanceTree;
