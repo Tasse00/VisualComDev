@@ -24,6 +24,7 @@ import BaseComs from '@/components/Libs/ComponentsLibs/Base';
 import BaseEditors from '@/components/Libs/FieldEditorLibs/Base';
 import ContextMenuProvider from '@/components/Common/ContextMenu/Provider';
 import InstanceEditor from '@/components/Editor/InstanceEditor/InstanceEditor';
+import NotifierView from '@/components/Common/Logger/NotifierView';
 
 const components = [...BaseComs, ...AntdComs];
 
@@ -71,6 +72,7 @@ export default () => {
                       {/* 底部信息 */}
                       <Fixed defaultSize={200} position={'top'}>
                         <LogsView store={globalLoggerStore} />
+                        <NotifierView store={globalLoggerStore} />
                       </Fixed>
                     </Stretch>
 

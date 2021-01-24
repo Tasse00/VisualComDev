@@ -82,7 +82,7 @@ function rawReducer(state: EditorState, action: AvailableActions): EditorState {
       }
 
       state.instancesMap[instance.guid] = instance;
-      logger.info('added', instance.name, 'in', parent.name);
+      logger.debug('added', instance.name, 'in', parent.name);
       return {
         ...state,
         childrenMap: { ...state.childrenMap },
@@ -147,7 +147,7 @@ function rawReducer(state: EditorState, action: AvailableActions): EditorState {
         state.childrenMap[parentId].splice(position, 0, instance.guid);
       }
 
-      logger.info(
+      logger.debug(
         'moved',
         instance.name,
         'from',
@@ -203,7 +203,7 @@ function rawReducer(state: EditorState, action: AvailableActions): EditorState {
       }
 
       const currentWidgetIds = Object.keys(state.instancesMap);
-      logger.info('deleted', instance.name);
+      logger.debug('deleted', instance.name);
       return {
         ...state,
         hoverId: currentWidgetIds.includes(state.hoverId) ? state.hoverId : '',
@@ -265,7 +265,7 @@ function rawReducer(state: EditorState, action: AvailableActions): EditorState {
       const { tree, size } = action.payload;
       const rootId = tree.guid;
       const [instancesMap, childrenMap] = convertMaps(tree);
-      logger.info('load tree', Object.keys(instancesMap).length, 'instances');
+      logger.debug('load tree', Object.keys(instancesMap).length, 'instances');
       return {
         ...state,
         instancesMap,
@@ -397,7 +397,8 @@ export function reducer(
   }
 
   switch (action.type) {
-    case 'undo': { // 确认hoverId, selectId // 回退历史
+    case 'undo': {
+      // 确认hoverId, selectId // 回退历史
       let last = state.past.pop();
       if (!last) {
         return state;

@@ -77,7 +77,7 @@ export default () => {
           tree,
         },
       });
-      logger.info(`已黏贴${Object.keys(guidMap).length}个实例`);
+      logger.debug(`已黏贴${Object.keys(guidMap).length}个实例`);
     };
     const onCopy = (e: ClipboardEvent) => {
       if (!e.clipboardData || !instance) return;
@@ -97,7 +97,7 @@ export default () => {
       updateSubTreeListeners(subTree, guidMap);
 
       e.clipboardData.setData('text/plain', JSON.stringify(subTree));
-      logger.info(`已复制${Object.keys(guidMap).length}个实例`);
+      logger.debug(`已复制${Object.keys(guidMap).length}个实例`);
       e.preventDefault();
     };
 
