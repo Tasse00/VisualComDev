@@ -8,6 +8,7 @@ interface HistoryState {
   instancesMap: EditorState['instancesMap'];
   childrenMap: EditorState['childrenMap'];
 }
+
 export interface EditorState {
   // 根节点实例
   rootId: string;
@@ -46,6 +47,9 @@ export interface EditorState {
     scrollTop: number;
     scrollLeft: number;
   };
+
+  // 编辑器尺寸
+  size: VCD.EditorSize;
 }
 
 function rawReducer(state: EditorState, action: AvailableActions): EditorState {
@@ -258,7 +262,7 @@ function rawReducer(state: EditorState, action: AvailableActions): EditorState {
       };
     }
     case 'load-tree': {
-      const { tree } = action.payload;
+      const { tree, size } = action.payload;
       const rootId = tree.guid;
       const [instancesMap, childrenMap] = convertMaps(tree);
       logger.info('load tree', Object.keys(instancesMap).length, 'instances');
@@ -269,7 +273,7 @@ function rawReducer(state: EditorState, action: AvailableActions): EditorState {
         rootId,
         hoverId: rootId,
         selectId: rootId,
-
+        size: size || state.size,
         past: [],
         future: [],
       };
@@ -363,6 +367,17 @@ function rawReducer(state: EditorState, action: AvailableActions): EditorState {
         childrenMap: { ...state.childrenMap, ...childrenMaps },
       };
     }
+    case 'set-size-mode': {
+      const { width, height, allowOverHeight } = action.payload;
+      return {
+        ...state,
+        size: {
+          width,
+          height,
+          allowOverHeight,
+        },
+      };
+    }
     default:
       return state;
   }
@@ -382,9 +397,7 @@ export function reducer(
   }
 
   switch (action.type) {
-    case 'undo': // 回退历史
-    // 确认hoverId, selectId
-    {
+    case 'undo': { // 确认hoverId, selectId // 回退历史
       let last = state.past.pop();
       if (!last) {
         return state;

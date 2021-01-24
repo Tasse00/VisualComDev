@@ -55,6 +55,7 @@ interface ActLoadTree {
   type: 'load-tree';
   payload: {
     tree: VCD.ComponentInstanceTree;
+    size?: VCD.EditorSize;
   };
 }
 
@@ -111,6 +112,15 @@ interface ActInsertInstanceTree {
   };
 }
 
+interface ActSetSizeMode {
+  type: 'set-size-mode';
+  payload: {
+    width: string;
+    height: string;
+    allowOverHeight: boolean;
+  };
+}
+
 export type AvailableActions =
   | ActCreateInstance
   | ActMoveInstnce
@@ -126,4 +136,5 @@ export type AvailableActions =
   | ActUndo
   | ActUpdateContainerAttribs
   | ActInitEditor
-  | ActInsertInstanceTree;
+  | ActInsertInstanceTree
+  | ActSetSizeMode;

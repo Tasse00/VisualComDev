@@ -1,16 +1,30 @@
 import { Button } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import React, { useCallback } from 'react';
-import { useEditorInstances, useRootInstance } from '../Providers/Editor/hooks';
+import {
+  useEditorInstances,
+  useEditorSize,
+  useRootInstance,
+} from '../Providers/Editor/hooks';
 
 const Preview: React.FC<{}> = (props) => {
   const { tree } = useEditorInstances();
-
+  const size = useEditorSize();
   const onClick = useCallback(() => {
-    const treeStr = JSON.stringify(tree, undefined, 2);
-    window.localStorage.setItem('preview-json', treeStr);
+    if (!tree) return;
+    const store: VCD.PageStore = {
+      tree: tree,
+      size: size,
+      timestamp: new Date().getTime(),
+      guid: 'preview',
+      name: tree.name,
+    };
+    window.localStorage.setItem(
+      'preview-store',
+      JSON.stringify(store, undefined, 2),
+    );
     window.open(`${location.protocol}//${location.host}/preview`);
-  }, [tree]);
+  }, [tree, size]);
 
   const rootInstance = useRootInstance();
   return (

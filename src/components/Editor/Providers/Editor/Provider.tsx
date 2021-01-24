@@ -2,22 +2,25 @@ import React, { useEffect, useMemo, useReducer } from 'react';
 // import Antd from '../ComponentLib/Components/Antd';
 // import Base from '../..ComponentLib/Components/Base';
 import { reducer } from './reducer';
-import { EditorContainerContext, EditorSelectedInstanceContext, EditorDispatcherContext, EditorHoveredInstanceContext, EditorInstancesContext, EditorHistoryContext, EditorRootInstanceContext } from './context';
+import {
+  EditorContainerContext,
+  EditorSelectedInstanceContext,
+  EditorDispatcherContext,
+  EditorHoveredInstanceContext,
+  EditorInstancesContext,
+  EditorHistoryContext,
+  EditorRootInstanceContext,
+  EditorSizeContext,
+} from './context';
 import { convertTree } from './utils';
 
-const EditorProvider: React.FC<{
-
-}> = props => {
-
+const EditorProvider: React.FC<{}> = (props) => {
   const [state, dispatch] = useReducer(reducer, {
     rootId: '',
     hoverId: '',
     selectId: 'root',
-    instancesMap: {
-
-    },
-    childrenMap: {
-    },
+    instancesMap: {},
+    childrenMap: {},
     domMap: {},
     past: [],
     future: [],
@@ -28,14 +31,23 @@ const EditorProvider: React.FC<{
       height: 0,
       scrollTop: 0,
       scrollLeft: 0,
-    }
+    },
+    size: {
+      width: '100%',
+      height: '100%',
+      allowOverHeight: true,
+    },
   });
 
   const {
-    instancesMap, childrenMap, rootId,
-    selectId, hoverId,
+    instancesMap,
+    childrenMap,
+    rootId,
+    selectId,
+    hoverId,
     container,
-    past, future,
+    past,
+    future,
     domMap,
   } = state;
 
@@ -43,29 +55,39 @@ const EditorProvider: React.FC<{
     return {
       childrenMap,
       instancesMap,
-      tree: rootId ? convertTree({ instancesMap, childrenMap, rootId }) : undefined,
+      tree: rootId
+        ? convertTree({ instancesMap, childrenMap, rootId })
+        : undefined,
       domMap,
-    }
-  }, [childrenMap, instancesMap, rootId, domMap])
+    };
+  }, [childrenMap, instancesMap, rootId, domMap]);
 
   const childInstance = state.instancesMap[state.rootId];
   return (
     <EditorDispatcherContext.Provider value={dispatch}>
       <EditorRootInstanceContext.Provider value={childInstance}>
-        <EditorSelectedInstanceContext.Provider value={instancesMap[selectId]}>
-          <EditorHoveredInstanceContext.Provider value={instancesMap[hoverId]}>
-            <EditorContainerContext.Provider value={container}>
-              <EditorHistoryContext.Provider value={{ pastCount: past.length, futureCount: future.length }}>
-                <EditorInstancesContext.Provider value={instancesValue}>
-                  {props.children}
-                </EditorInstancesContext.Provider>
-              </EditorHistoryContext.Provider>
-            </EditorContainerContext.Provider>
-          </EditorHoveredInstanceContext.Provider>
-        </EditorSelectedInstanceContext.Provider>
+        <EditorSizeContext.Provider value={state.size}>
+          <EditorSelectedInstanceContext.Provider
+            value={instancesMap[selectId]}
+          >
+            <EditorHoveredInstanceContext.Provider
+              value={instancesMap[hoverId]}
+            >
+              <EditorContainerContext.Provider value={container}>
+                <EditorHistoryContext.Provider
+                  value={{ pastCount: past.length, futureCount: future.length }}
+                >
+                  <EditorInstancesContext.Provider value={instancesValue}>
+                    {props.children}
+                  </EditorInstancesContext.Provider>
+                </EditorHistoryContext.Provider>
+              </EditorContainerContext.Provider>
+            </EditorHoveredInstanceContext.Provider>
+          </EditorSelectedInstanceContext.Provider>
+        </EditorSizeContext.Provider>
       </EditorRootInstanceContext.Provider>
     </EditorDispatcherContext.Provider>
-  )
-}
+  );
+};
 
 export default EditorProvider;

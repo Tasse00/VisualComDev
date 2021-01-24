@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import {
   useEditor,
   useEditorInstances,
+  useEditorSize,
   useStoredPages,
 } from '../../Providers/Editor/hooks';
 import { globalLoggerStore } from '../../../Globals';
@@ -25,7 +26,7 @@ const ModalContent: React.FC<{
 }> = (props) => {
   const { onFinish } = props;
   const { tree } = useEditorInstances();
-
+  const size = useEditorSize();
   const { stores, add, remove, update } = useStoredPages();
 
   const dispatch = useEditor();
@@ -45,6 +46,7 @@ const ModalContent: React.FC<{
                   guid: Math.random().toString(),
                   name: tree.name,
                   tree,
+                  size,
                   timestamp: new Date().getTime(),
                 });
               }}
@@ -86,7 +88,7 @@ const ModalContent: React.FC<{
                     if (store.tree) {
                       dispatch({
                         type: 'load-tree',
-                        payload: { tree: store.tree },
+                        payload: { tree: store.tree, size: store.size },
                       });
                       onFinish();
                     } else {
@@ -106,7 +108,7 @@ const ModalContent: React.FC<{
                     if (store.tree) {
                       dispatch({
                         type: 'load-tree',
-                        payload: { tree: store.tree },
+                        payload: { tree: store.tree, size: store.size },
                       });
                       onFinish();
                     } else {

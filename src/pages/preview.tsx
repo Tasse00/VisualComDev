@@ -9,54 +9,49 @@ import VisualEditor from '@/components/Editor/VisualEditor/VisualEditor';
 import { useEditor } from '@/components/Editor/Providers/Editor/hooks';
 import ListenerRegistryProvider from '@/components/Editor/Providers/ListenerRegistry/Provider';
 
-
 import AntdComs from '@/components/Libs/ComponentsLibs/Antd';
 import BaseComs from '@/components/Libs/ComponentsLibs/Base';
 
-const components = [
-  ...BaseComs,
-  ...AntdComs,
-];
-
+const components = [...BaseComs, ...AntdComs];
 
 const PreviewContent: React.FC<{
-  tree: VCD.ComponentInstanceTree;
-}> = ({ tree }) => {
+  store: VCD.PageStore;
+}> = ({ store }) => {
   const dispatch = useEditor();
 
   useEffect(() => {
     dispatch({
       type: 'load-tree',
       payload: {
-        tree,
-      }
+        tree: store.tree,
+        size: store.size,
+      },
     });
-  }, [tree]);
+  }, [store]);
 
-  return <VisualEditor preview style={{ padding: 0 }} />
-}
-
+  return <VisualEditor preview style={{ padding: 0 }} />;
+};
 
 const Preview: React.FC = (props) => {
-  const tree: VCD.ComponentInstanceTree = JSON.parse(
-    window.localStorage.getItem('preview-json') || '',
+  const store: VCD.PageStore = JSON.parse(
+    window.localStorage.getItem('preview-store') || '',
   );
 
   useEffect(() => {
     const logCb = (rcds: LogRecord[]) => {
-      rcds.map(rcd => console.log(rcd.level, rcd.logger, rcd.message));
-    }
+      rcds.map((rcd) => console.log(rcd.level, rcd.logger, rcd.message));
+    };
     globalLoggerStore.addCallback(logCb);
     return () => {
       globalLoggerStore.removeCallback(logCb);
-    }
-  }, [])
+    };
+  }, []);
   return (
     <ComponentRegistryProvider components={components}>
       <ListenerRegistryProvider>
         <EditorProvider>
           <div className={styles['app']}>
-            <PreviewContent tree={tree} />
+            <PreviewContent store={store} />
           </div>
         </EditorProvider>
       </ListenerRegistryProvider>

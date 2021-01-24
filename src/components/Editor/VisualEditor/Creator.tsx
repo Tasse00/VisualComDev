@@ -77,9 +77,11 @@ const Creator: React.FC<{}> = (props) => {
           </Form.Item>
         </Form>
       </Card>
-      <Card style={{ marginTop: 16 }}>
+      <Card
+        style={{ marginTop: 16 }}
+        title={<Typography.Title level={5}>本地存储</Typography.Title>}
+      >
         {/* 2. 显示本地存储，从本地复制 */}
-        <Typography.Title level={4}>本地存储</Typography.Title>
 
         <List
           style={{ marginTop: 8 }}
@@ -94,7 +96,7 @@ const Creator: React.FC<{}> = (props) => {
                   onClick={() => {
                     dispatch({
                       type: 'load-tree',
-                      payload: { tree: store.tree },
+                      payload: { tree: store.tree, size: store.size },
                     });
                   }}
                 >

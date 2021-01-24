@@ -6,7 +6,8 @@ import {
   EditorHoveredInstanceContext,
   EditorInstancesContext,
   EditorHistoryContext,
-  EditorRootInstanceContext
+  EditorRootInstanceContext,
+  EditorSizeContext,
 } from './context';
 
 /****** UTILS */
@@ -42,15 +43,14 @@ export function useEditorHistory() {
   return useContext(EditorHistoryContext);
 }
 
-
 function storeLocal(stores: VCD.PageStore[]) {
   window.localStorage.setItem('page-stores', JSON.stringify(stores));
 }
 function retrieveLocal(): VCD.PageStore[] {
   try {
-    return JSON.parse(window.localStorage.getItem('page-stores') || '')
+    return JSON.parse(window.localStorage.getItem('page-stores') || '');
   } catch (e) {
-    console.warn("pagestores in localstorage is invalid")
+    console.warn('pagestores in localstorage is invalid');
     return [];
   }
 }
@@ -68,46 +68,61 @@ export function useStoredPages(): {
     setStores(retrieveLocal());
   }, []);
 
-  const remove = useCallback((id: string) => {
-    const idx = stores.findIndex(s => s.guid === id);
-    if (idx > -1) {
-      stores.splice(idx, 1);
+  const remove = useCallback(
+    (id: string) => {
+      const idx = stores.findIndex((s) => s.guid === id);
+      if (idx > -1) {
+        stores.splice(idx, 1);
+        const newStore = [...stores];
+        setStores(newStore);
+        storeLocal(newStore);
+      }
+    },
+    [stores, setStores],
+  );
+
+  const add = useCallback(
+    (store: VCD.PageStore) => {
+      const idx = stores.findIndex((s) => s.guid === store.guid);
+      if (idx > -1) {
+        return 'PageStore Existed';
+      }
+      const newStore = [store, ...stores];
+      setStores(newStore);
+      storeLocal(newStore);
+      return '';
+    },
+    [stores, setStores],
+  );
+
+  const update = useCallback(
+    (id: string, store: VCD.PageStore) => {
+      const idx = stores.findIndex((s) => s.guid === id);
+      if (idx === -1) {
+        return 'PageStore Not Existed';
+      }
+      stores[idx] = { ...stores[idx], ...store };
       const newStore = [...stores];
       setStores(newStore);
-      storeLocal(newStore)
-    }
-  }, [stores, setStores]);
+      storeLocal(newStore);
 
-  const add = useCallback((store: VCD.PageStore) => {
-    const idx = stores.findIndex(s => s.guid === store.guid);
-    if (idx > -1) {
-      return 'PageStore Existed';
-    }
-    const newStore = [store, ...stores];
-    setStores(newStore);
-    storeLocal(newStore)
-    return '';
-  }, [stores, setStores]);
-
-  const update = useCallback((id: string, store: VCD.PageStore) => {
-    const idx = stores.findIndex(s => s.guid === id);
-    if (idx===-1) {
-      return 'PageStore Not Existed';
-    }
-    stores[idx] = { ...stores[idx], ...store };
-    const newStore = [...stores];
-    setStores(newStore);
-    storeLocal(newStore)
-
-    return '';
-  }, [stores, setStores]);
+      return '';
+    },
+    [stores, setStores],
+  );
 
   return {
     stores,
-    remove, add, update
-  }
+    remove,
+    add,
+    update,
+  };
 }
 
 export function useRootInstance() {
   return useContext(EditorRootInstanceContext);
+}
+
+export function useEditorSize() {
+  return useContext(EditorSizeContext);
 }
