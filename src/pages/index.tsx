@@ -38,6 +38,7 @@ export default () => {
           <ContextMenuProvider>
             <ListenerRegistryProvider>
               <EditorProvider>
+                <NotifierView store={globalLoggerStore} />
                 <div className={styles['app']}>
                   {/* 顶部菜单 */}
                   <Fixed
@@ -69,11 +70,6 @@ export default () => {
                       <Stretch>
                         <VisualEditor />
                       </Stretch>
-                      {/* 底部信息 */}
-                      <Fixed defaultSize={200} position={'top'}>
-                        <LogsView store={globalLoggerStore} />
-                        <NotifierView store={globalLoggerStore} />
-                      </Fixed>
                     </Stretch>
 
                     <Fixed
