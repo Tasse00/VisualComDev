@@ -22,6 +22,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.3.0",
     "@ant-design/pro-layout": "^6.5.0",
+    "@jiaminghi/data-view-react": "^1.2.5",
     "@types/react-copy-to-clipboard": "^5.0.0",
     "@types/react-grid-layout": "^1.1.1",
     "@umijs/preset-react": "1.x",

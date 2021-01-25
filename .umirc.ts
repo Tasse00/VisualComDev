@@ -7,5 +7,6 @@ export default defineConfig({
   routes: [
     { path: '/', component: '@/pages/index', exact: true },
     { path: '/preview', component: '@/pages/preview', exact: true },
+    { path: '/test', component: '@/pages/test', exact: true },
   ],
 });

@@ -1,9 +1,22 @@
 import React, { useCallback, useState } from 'react';
-import { Input, InputNumber, Select, Switch, Table, Tooltip, Modal } from "antd";
+import {
+  Input,
+  InputNumber,
+  Select,
+  Switch,
+  Table,
+  Tooltip,
+  Modal,
+} from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
+import AlignmentInput from './Alignment/Alignment';
+import BoxSize from './BoxSize/BoxSize';
 
-
-const StringInput: VCD.PropertyEditorComponent<string | undefined, {}> = ({ value, update, params }) => (
+const StringInput: VCD.PropertyEditorComponent<string | undefined, {}> = ({
+  value,
+  update,
+  params,
+}) => (
   <Input
     placeholder="default"
     value={value}
@@ -11,8 +24,10 @@ const StringInput: VCD.PropertyEditorComponent<string | undefined, {}> = ({ valu
   />
 );
 
-
-const NumberInput: VCD.PropertyEditorComponent<string | number | undefined, {}> = ({ value, update, params }) => (
+const NumberInput: VCD.PropertyEditorComponent<
+  string | number | undefined,
+  {}
+> = ({ value, update, params }) => (
   <InputNumber
     placeholder="default"
     min={0}
@@ -28,7 +43,10 @@ const SwitchInput: VCD.PropertyEditorComponent<boolean | undefined, {}> = ({
   params,
 }) => <Switch checked={value} onChange={(v) => update(v)} />;
 
-const SelectInput: VCD.PropertyEditorComponent<string | undefined, { label: string, value: string }[]> = ({ value, update, params }) => (
+const SelectInput: VCD.PropertyEditorComponent<
+  string | undefined,
+  { label: string; value: string }[]
+> = ({ value, update, params }) => (
   <Select
     options={params}
     value={value}
@@ -44,69 +62,67 @@ const StyleItems: {
   label?: string;
   type?: string;
 }[] = [
-    { key: 'alignItems' },
-    { key: 'alignSelf' },
-    { key: 'backfaceVisibility' },
-    { key: 'backgroundColor' },
-    { key: 'borderBottomColor' },
-    { key: 'borderBottomLeftRadius' },
-    { key: 'borderBottomRightRadius' },
-    { key: 'borderBottomWidth' },
-    { key: 'borderColor' },
-    { key: 'borderLeftColor' },
-    { key: 'borderLeftWidth' },
-    { key: 'borderRadius' },
-    { key: 'borderRightColor' },
-    { key: 'borderRightWidth' },
-    { key: 'borderStyle' },
-    { key: 'borderTopColor' },
-    { key: 'borderTopLeftRadius' },
-    { key: 'borderTopRightRadius' },
-    { key: 'borderTopWidth' },
-    { key: 'borderWidth' },
-    { key: 'bottom' },
-    { key: 'color' },
-    { key: 'display' },
-    { key: 'flex' },
-    { key: 'flexDirection' },
-    { key: 'flexWrap' },
-    { key: 'fontFamily' },
-    { key: 'fontSize' },
-    { key: 'fontStyle' },
-    { key: 'fontWeight' },
-    { key: 'height' },
-    { key: 'justifyContent' },
-    { key: 'left' },
-    { key: 'letterSpacing' },
-    { key: 'lineHeight' },
-    { key: 'margin' },
-    { key: 'marginBottom' },
-    { key: 'marginLeft' },
-    { key: 'marginRight' },
-    { key: 'marginTop' },
-    { key: 'opacity' },
-    { key: 'overflow' },
-    { key: 'padding' },
-    { key: 'paddingBottom' },
-    { key: 'paddingLeft' },
-    { key: 'paddingRight' },
-    { key: 'paddingTop' },
-    { key: 'position' },
-    { key: 'right' },
-    { key: 'textAlign' },
-    { key: 'textDecorationColor' },
-    { key: 'textDecorationLine' },
-    { key: 'textDecorationStyle' },
-    { key: 'top' },
-    { key: 'transform' },
-    { key: 'width' },
-  ];
-const StyleInput: VCD.PropertyEditorComponent<React.CSSProperties | undefined, {}> = ({
-  value,
-  update,
-  params,
-  editors,
-}) => {
+  { key: 'alignItems' },
+  { key: 'alignSelf' },
+  { key: 'backfaceVisibility' },
+  { key: 'backgroundColor' },
+  { key: 'borderBottomColor' },
+  { key: 'borderBottomLeftRadius' },
+  { key: 'borderBottomRightRadius' },
+  { key: 'borderBottomWidth' },
+  { key: 'borderColor' },
+  { key: 'borderLeftColor' },
+  { key: 'borderLeftWidth' },
+  { key: 'borderRadius' },
+  { key: 'borderRightColor' },
+  { key: 'borderRightWidth' },
+  { key: 'borderStyle' },
+  { key: 'borderTopColor' },
+  { key: 'borderTopLeftRadius' },
+  { key: 'borderTopRightRadius' },
+  { key: 'borderTopWidth' },
+  { key: 'borderWidth' },
+  { key: 'bottom' },
+  { key: 'color' },
+  { key: 'display' },
+  { key: 'flex' },
+  { key: 'flexDirection' },
+  { key: 'flexWrap' },
+  { key: 'fontFamily' },
+  { key: 'fontSize' },
+  { key: 'fontStyle' },
+  { key: 'fontWeight' },
+  { key: 'height' },
+  { key: 'justifyContent' },
+  { key: 'left' },
+  { key: 'letterSpacing' },
+  { key: 'lineHeight' },
+  { key: 'margin' },
+  { key: 'marginBottom' },
+  { key: 'marginLeft' },
+  { key: 'marginRight' },
+  { key: 'marginTop' },
+  { key: 'opacity' },
+  { key: 'overflow' },
+  { key: 'padding' },
+  { key: 'paddingBottom' },
+  { key: 'paddingLeft' },
+  { key: 'paddingRight' },
+  { key: 'paddingTop' },
+  { key: 'position' },
+  { key: 'right' },
+  { key: 'textAlign' },
+  { key: 'textDecorationColor' },
+  { key: 'textDecorationLine' },
+  { key: 'textDecorationStyle' },
+  { key: 'top' },
+  { key: 'transform' },
+  { key: 'width' },
+];
+const StyleInput: VCD.PropertyEditorComponent<
+  React.CSSProperties | undefined,
+  {}
+> = ({ value, update, params, editors }) => {
   value = value || {};
   const [visible, setVisible] = useState(false);
   const onClose = useCallback(() => setVisible(false), []);
@@ -188,12 +204,14 @@ const StyleInput: VCD.PropertyEditorComponent<React.CSSProperties | undefined, {
 };
 
 const editors: VCD.FieldEditor[] = [
-  { type: "string", component: StringInput },
-  { type: "number", component: NumberInput },
-  { type: "switch", component: SwitchInput },
-  { type: "select", component: SelectInput },
-  { type: "style", component: StyleInput },
+  { type: 'string', component: StringInput },
+  { type: 'color', component: StringInput },
+  { type: 'number', component: NumberInput },
+  { type: 'switch', component: SwitchInput },
+  { type: 'select', component: SelectInput },
+  { type: 'style', component: StyleInput },
+  { type: 'alignment', component: AlignmentInput },
+  { type: 'boxsize', component: BoxSize },
 ];
 
-export default editors
-
+export default editors;

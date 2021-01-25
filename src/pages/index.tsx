@@ -21,12 +21,13 @@ import FieldEditorRegistryProvider from '@/components/Editor/Providers/FieldEdit
 import ListenerEditor from '@/components/Editor/ListenerEditor/ListenerEditor';
 import AntdComs from '@/components/Libs/ComponentsLibs/Antd';
 import BaseComs from '@/components/Libs/ComponentsLibs/Base';
+import DataVComs from '@/components/Libs/ComponentsLibs/DataV';
 import BaseEditors from '@/components/Libs/FieldEditorLibs/Base';
 import ContextMenuProvider from '@/components/Common/ContextMenu/Provider';
 import InstanceEditor from '@/components/Editor/InstanceEditor/InstanceEditor';
 import NotifierView from '@/components/Common/Logger/NotifierView';
 
-const components = [...BaseComs, ...AntdComs];
+const components = [...BaseComs, ...AntdComs, ...DataVComs];
 
 const fieldEditors = [...BaseEditors];
 

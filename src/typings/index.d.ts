@@ -101,4 +101,33 @@ declare namespace VCD {
     timestamp: number; // store timestamp
     size: EditorSize;
   }
+
+
+  namespace FieldEditors {
+    interface AlignmentAttrs {
+      flexDirection?: 'column' | 'row';
+      justifyContent?:
+      | 'flex-start'
+      | 'flex-end'
+      | 'center'
+      | 'space-between'
+      | 'space-around';
+      alignItems?: 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch';
+      flex?: number;
+    }
+
+    interface BoxSizeAttrs {
+      width?: string;
+      height?: string;
+      marginTop?: string;
+      marginBottom?: string;
+      marginLeft?: string;
+      marginRight?: string;
+      paddingTop?: string;
+      paddingBottom?: string;
+      paddingLeft?: string;
+      paddingRight?: string;
+    }
+  }
+
 }
