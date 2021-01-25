@@ -11,6 +11,7 @@ import {
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import AlignmentInput from './Alignment/Alignment';
 import BoxSize from './BoxSize/BoxSize';
+import Json from './Json/Json';
 
 const StringInput: VCD.PropertyEditorComponent<string | undefined, {}> = ({
   value,
@@ -212,6 +213,7 @@ const editors: VCD.FieldEditor[] = [
   { type: 'style', component: StyleInput },
   { type: 'alignment', component: AlignmentInput },
   { type: 'boxsize', component: BoxSize },
+  { type: 'json', component: Json },
 ];
 
 export default editors;

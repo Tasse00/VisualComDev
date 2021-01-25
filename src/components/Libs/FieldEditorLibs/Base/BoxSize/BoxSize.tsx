@@ -4,7 +4,10 @@ import React from 'react';
 
 const BoxSize: VCD.PropertyEditorComponent<
   VCD.FieldEditors.BoxSizeAttrs,
-  {}
+  {
+    noPadding?: boolean;
+    noMargin?: boolean;
+  }
 > = (props) => {
 
   const {
@@ -22,7 +25,9 @@ const BoxSize: VCD.PropertyEditorComponent<
     paddingLeft,
     paddingRight,
   } = value || {};
-
+  const {
+    noPadding, noMargin
+  } = params || {};
   const updateField = (f: string, v: any) => {
     update({
       ...value,
@@ -41,34 +46,50 @@ const BoxSize: VCD.PropertyEditorComponent<
 
       <Col span={24}>
 
-        <Row justify='center' style={{ width: '100%' }}>
-          <Col><Input value={marginTop} style={{ width: inputSize }} onChange={(v) => updateField('marginTop', v.target.value)} placeholder='外边距' /></Col></Row>
-        <Row justify='center' style={{ width: '100%' }}>
-          <Col><Input value={paddingTop} style={{ width: inputSize }} onChange={(v) => updateField('paddingTop', v.target.value)} placeholder='内边距' /></Col>
-        </Row>
+        {!noMargin && (
+          <Row justify='center' style={{ width: '100%' }}>
+            <Col><Input value={marginTop} style={{ width: inputSize }} onChange={(v) => updateField('marginTop', v.target.value)} placeholder='外边距' /></Col>
+          </Row>
+        )}
+
+        {!noPadding && (
+          <Row justify='center' style={{ width: '100%' }}>
+            <Col><Input value={paddingTop} style={{ width: inputSize }} onChange={(v) => updateField('paddingTop', v.target.value)} placeholder='内边距' /></Col>
+          </Row>
+        )}
+
 
         <Row justify='space-between' style={{ width: '100%' }} wrap={false}>
           <Col>
             <Row wrap={false}>
-              <Col><Input style={{ width: inputSize }} value={marginLeft} onChange={(v) => updateField('marginLeft', v.target.value)} placeholder='外边距' /></Col>
-              <Col><Input style={{ width: inputSize }} value={paddingLeft} onChange={(v) => updateField('paddingLeft', v.target.value)} placeholder='内边距' /></Col>
+              {!noMargin && <Col><Input style={{ width: inputSize }} value={marginLeft} onChange={(v) => updateField('marginLeft', v.target.value)} placeholder='外边距' /></Col>}
+              {!noPadding && <Col><Input style={{ width: inputSize }} value={paddingLeft} onChange={(v) => updateField('paddingLeft', v.target.value)} placeholder='内边距' /></Col>}
             </Row>
           </Col>
 
           <Col>
             <Row wrap={false}>
-              <Col><Input style={{ width: inputSize }} value={paddingRight} onChange={(v) => updateField('paddingRight', v.target.value)} placeholder='内边距' /></Col>
-              <Col><Input style={{ width: inputSize }} value={marginRight} onChange={(v) => updateField('marginRight', v.target.value)} placeholder='外边距' /></Col>
+              {!noMargin && <Col><Input style={{ width: inputSize }} value={paddingRight} onChange={(v) => updateField('paddingRight', v.target.value)} placeholder='内边距' /></Col>}
+              {!noPadding && <Col><Input style={{ width: inputSize }} value={marginRight} onChange={(v) => updateField('marginRight', v.target.value)} placeholder='外边距' /></Col>}
             </Row>
           </Col>
         </Row>
 
-        <Row justify='center' style={{ width: '100%' }}>
-          <Col><Input style={{ width: inputSize }} value={paddingBottom} onChange={(v) => updateField('paddingBottom', v.target.value)} placeholder='内边距' /></Col>
-        </Row>
-        <Row justify='center' style={{ width: '100%' }}>
-          <Col><Input style={{ width: inputSize }} value={marginBottom} onChange={(v) => updateField('marginBottom', v.target.value)} placeholder='外边距' /></Col>
-        </Row>
+        {
+          !noPadding && (
+            <Row justify='center' style={{ width: '100%' }}>
+              <Col><Input style={{ width: inputSize }} value={paddingBottom} onChange={(v) => updateField('paddingBottom', v.target.value)} placeholder='内边距' /></Col>
+            </Row>
+          )
+        }
+        {
+          !noMargin && (
+            <Row justify='center' style={{ width: '100%' }}>
+              <Col><Input style={{ width: inputSize }} value={marginBottom} onChange={(v) => updateField('marginBottom', v.target.value)} placeholder='外边距' /></Col>
+            </Row>
+          )
+        }
+
 
       </Col>
     </Row>

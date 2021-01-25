@@ -84,8 +84,8 @@ function wrap(name: string, BorderBox: React.FC, additionalProps: VCD.Component[
         type: 'boxsize',
         label: '尺寸',
         default: {
-          width: '300px',
-          height: '300px',
+          width: '60px',
+          height: '60px',
         }
       },
       {
@@ -159,8 +159,5 @@ const Borders = ([
 ] as [string, VCD.Component['properties']][]).map(
   ([name, props]) => wrap(name, datav[name], props),
 )
-
-
-// TODO 加上颜色支持
 
 export default Borders;

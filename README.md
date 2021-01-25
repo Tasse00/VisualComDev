@@ -21,6 +21,10 @@
 - [ ] 一个较为完善的基础库
 - [ ] DataV-React的包装
 
+  - Charts图按照官方示例进行封装成一个个独立组件．并保留元素charts组建用于自定义
+  - 包装DataV剩余组建（除FullScreen外）
+
+- [ ] 组件库分组
 ## TODO
 - [x] 实例名称修改
 - [x] 修复LoggerView不更新问题
