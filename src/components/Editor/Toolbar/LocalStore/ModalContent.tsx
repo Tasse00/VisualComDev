@@ -71,6 +71,7 @@ const ModalContent: React.FC<{
                         update(store.guid, {
                           guid: store.guid,
                           name: tree.name,
+                          size: size,
                           tree,
                           timestamp: new Date().getTime(),
                         })

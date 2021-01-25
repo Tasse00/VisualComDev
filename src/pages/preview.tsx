@@ -11,8 +11,9 @@ import ListenerRegistryProvider from '@/components/Editor/Providers/ListenerRegi
 
 import AntdComs from '@/components/Libs/ComponentsLibs/Antd';
 import BaseComs from '@/components/Libs/ComponentsLibs/Base';
+import DataVComs from '@/components/Libs/ComponentsLibs/DataV';
 
-const components = [...BaseComs, ...AntdComs];
+const components = [...BaseComs, ...AntdComs, ...DataVComs];
 
 const PreviewContent: React.FC<{
   store: VCD.PageStore;
@@ -46,6 +47,7 @@ const Preview: React.FC = (props) => {
       globalLoggerStore.removeCallback(logCb);
     };
   }, []);
+  console.log(store);
   return (
     <ComponentRegistryProvider components={components}>
       <ListenerRegistryProvider>
