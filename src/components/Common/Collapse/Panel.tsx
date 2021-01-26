@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useCollapse } from '.';
 import styles from './Panel.less';
 
@@ -12,6 +12,16 @@ const Panel: React.FC<{
   const opened = isOpened(id);
 
   const realHeight = ref.current ? ref.current.scrollHeight : 0;
+
+  const [_, rerender] = useState(0);
+
+  useEffect(() => {
+    const cb = () => rerender(Math.random());
+    const handler = setInterval(cb, 200);
+    return () => {
+      clearInterval(handler);
+    }
+  }, []);
 
   return (
     <div className={styles['panel']}>

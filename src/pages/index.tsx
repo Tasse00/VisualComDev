@@ -6,9 +6,10 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import ContextMenu from '@/components/Common/ContextMenu/ContextMenu';
 import Panel from '@/components/Common/Panel';
-import LogsView from '@/components/Common/Logger/LogsView';
 import { globalLoggerStore } from '@/components/Globals';
-import { Collapse, Divider, Tabs } from 'antd';
+import { Tabs } from 'antd';
+import Collapse from '@/components/Common/Collapse/Collapse';
+import CollapsePanel from '@/components/Common/Collapse/Panel';
 import ComponentGallery from '@/components/Editor/ComponentGallery/ComponentGallery';
 import ComponentRegistryProvider from '@/components/Editor/Providers/ComponentRegistry/Provider';
 import EditorProvider from '@/components/Editor/Providers/Editor/Provider';
@@ -92,24 +93,19 @@ export default () => {
                       defaultSize={300}
                       position={'left'}
                       style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'stretch',
-                        alignItems: 'stretch',
+                        
                       }}
                     >
-                      <Collapse defaultActiveKey={['instance']}>
-                        <Collapse.Panel
-                          header="Tree"
-                          key="tree"
-                          className={styles['side-panel']}
+                      <Collapse>
+                        <CollapsePanel
+                          title="Tree"
+                          id="tree"
                         >
                           <InstanceTree style={{ padding: 16 }} />
-                        </Collapse.Panel>
-                        <Collapse.Panel
-                          header="Instance"
-                          key="instance"
-                          className={styles['side-panel']}
+                        </CollapsePanel>
+                        <CollapsePanel
+                          title="Instance"
+                          id="instance"
                         >
                           <InstanceEditor />
 
@@ -121,7 +117,7 @@ export default () => {
                               <ListenerEditor />
                             </Tabs.TabPane>
                           </Tabs>
-                        </Collapse.Panel>
+                        </CollapsePanel>
                       </Collapse>
                     </Fixed>
                   </Stretch>

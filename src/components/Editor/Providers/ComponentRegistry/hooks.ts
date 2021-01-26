@@ -28,7 +28,6 @@ export function useComponentRegistryState(): {
   const groupedComponents:{
     [libId: string]: VCD.Component[];
   } = {};
-  console.log(componentLibs)
   componentLibs.map(lib=>{
     groupedComponents[lib.guid] = [];
   });
