@@ -49,8 +49,8 @@ const config: VCD.Component = {
       field: 'boxsize',
       type: 'boxsize',
       default: {
-        width: '60px',
-        height: '60px',
+        width: '300px',
+        height: '300px',
       },
       params: {
         noPadding: true,
@@ -91,6 +91,9 @@ const config: VCD.Component = {
   ],
   events: [],
   features: [],
+  previewProperties: {
+    boxsize: { width: '60px', height: '60px'}
+  }
 }
 
 export default config;

@@ -31,6 +31,7 @@ const Component: React.FC<{
             properties[prop.field] = prop.default;
         }
     }
+    Object.assign(properties, props.component.previewProperties);
 
     return (
         <div ref={drag} className={styles['component']} style={style}>

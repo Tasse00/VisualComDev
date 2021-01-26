@@ -32,6 +32,9 @@ declare namespace VCD {
     properties?: PropertyConfig[];
     events?: EventConfig[];
     features?: FeatureConfig[];
+    previewProperties?: { // 用于组件预览的参数
+      [field: string]: any;
+    }
   }
 
   // 组件库

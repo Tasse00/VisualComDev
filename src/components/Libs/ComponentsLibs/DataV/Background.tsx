@@ -26,6 +26,10 @@ updatePropertyDefault<VCD.FieldEditors.AlignmentAttrs>('alignment', {
 updatePropertyDefault<VCD.FieldEditors.BoxSizeAttrs>("boxsize", {
   width: '100%',
   height: '100%',
+  paddingTop: "16px",
+  paddingBottom: "16px",
+  paddingLeft: "16px",
+  paddingRight: "16px",
 })
 
 

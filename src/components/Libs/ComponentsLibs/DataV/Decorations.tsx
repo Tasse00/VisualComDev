@@ -71,13 +71,13 @@ function wrap(name: string, RawCom: React.FC, additionalProps: VCD.Component['pr
         field: 'width',
         label: '宽度',
         type: 'string',
-        default: '60px',
+        default: '120px',
       },
       {
         field: 'height',
         label: '高度',
         type: 'string',
-        default: '60px',
+        default: '36px',
       },
       {
         field: 'color1',
@@ -98,6 +98,9 @@ function wrap(name: string, RawCom: React.FC, additionalProps: VCD.Component['pr
     ],
     events: [],
     features: [],
+    previewProperties: {
+      width: '60px',height: '30px',
+    }
   };
 
   return Config;

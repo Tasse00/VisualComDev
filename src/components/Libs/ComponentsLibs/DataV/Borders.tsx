@@ -84,8 +84,8 @@ function wrap(name: string, BorderBox: React.FC, additionalProps: VCD.Component[
         type: 'boxsize',
         label: '尺寸',
         default: {
-          width: '60px',
-          height: '60px',
+          width: '300px',
+          height: '300px',
         }
       },
       {
@@ -107,6 +107,9 @@ function wrap(name: string, BorderBox: React.FC, additionalProps: VCD.Component[
     ],
     events: [],
     features: [],
+    previewProperties: {
+      boxsize: { width: '60px', height: '60px'}
+    },
   };
 
   return Config;
