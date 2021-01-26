@@ -16,7 +16,7 @@ const AlignmentInput: VCD.PropertyEditorComponent<
   VCD.FieldEditors.AlignmentAttrs,
   {}
 > = ({ value, update, params }) => {
-  const { flexDirection, flex, alignItems, justifyContent } = value || {};
+  const { flexDirection, flex, alignItems, justifyContent, flexWrap } = value || {};
 
   const updateField = (field: string, newVal: any) => {
     update({
@@ -37,6 +37,16 @@ const AlignmentInput: VCD.PropertyEditorComponent<
           <Radio.Button value="column">
             <ColumnHeightOutlined />
           </Radio.Button>
+        </Radio.Group>
+      </Col>
+
+      <Col>
+        <Radio.Group
+          value={flexWrap}
+          onChange={(e) => updateField('flexWrap', e.target.value)}
+        >
+          <Radio.Button value='wrap'>换行</Radio.Button>
+          <Radio.Button value='nowrap'>不换</Radio.Button>
         </Radio.Group>
       </Col>
 

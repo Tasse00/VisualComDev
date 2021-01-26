@@ -19,8 +19,9 @@
   修改为了info以上级别走notification
 
 - [ ] 一个较为完善的基础库
+  - 段落
+  - 图片
 - [ ] DataV-React的包装
-
   - Charts图按照官方示例进行封装成一个个独立组件．并保留元素charts组建用于自定义
   - 包装DataV剩余组建（除FullScreen外）
 
@@ -31,6 +32,8 @@
 - [x] 组件区分Gallery默认属性与Editor默认属性，使得展示效果更好
 - [ ] 修复根组件无法设置宽高，及在不限高度模式下，显示异常．
 - [x] DataV背景组件
+- [x] Color Editor
+- [ ] 事件系统 Params Convertor
 
 ## Thinks
 

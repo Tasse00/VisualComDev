@@ -122,6 +122,7 @@ declare namespace VCD {
       | 'space-between'
       | 'space-around';
       alignItems?: 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch';
+      flexWrap?: boolean;
       flex?: number;
     }
 

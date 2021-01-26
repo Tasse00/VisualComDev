@@ -72,6 +72,10 @@ const ContainerConfig: VCD.Component = {
             field: 'alignment',
             type: 'alignment',
             label: '布局',
+            default: {
+                justifyContent: 'flex-start',
+                alignItems: 'flex-start',
+            }
         },
         {
             field: 'boxsize',
@@ -82,12 +86,14 @@ const ContainerConfig: VCD.Component = {
                 height: '100%',
                 paddingTop: "16px",
                 paddingBottom: "16px",
+                paddingLeft: "16px",
+                paddingRight: "16px",
             }
         },
         {
             label: '背景',
             field: 'backgroundColor',
-            type: 'string',
+            type: 'color',
             default: 'white',
         },
         {

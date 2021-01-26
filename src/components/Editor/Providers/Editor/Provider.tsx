@@ -35,7 +35,7 @@ const EditorProvider: React.FC<{}> = (props) => {
     size: {
       width: '100%',
       height: '100%',
-      allowOverHeight: true,
+      allowOverHeight: false,
     },
   });
 

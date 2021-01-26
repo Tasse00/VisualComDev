@@ -96,7 +96,7 @@ export default () => {
                         
                       }}
                     >
-                      <Collapse>
+                      <Collapse defaultOpened={['instance']}>
                         <CollapsePanel
                           title="Tree"
                           id="tree"

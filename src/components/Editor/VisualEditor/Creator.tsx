@@ -15,12 +15,23 @@ import { useComponentRegistryState } from '../Providers/ComponentRegistry/hooks'
 const Creator: React.FC<{}> = (props) => {
   const { stores, remove } = useStoredPages();
 
-  const { components } = useComponentRegistryState();
+  const { libGroupComponents, libs } = useComponentRegistryState();
   const dispatch = useEditor();
 
   const [form] = Form.useForm();
+  
+  const options:{label: string; value: string;}[]=[];
+  libs.map(lib=>{  
+    libGroupComponents[lib.guid].map(com=>{
+      if(com.isContainer){
+        options.push({
+          label: `[${lib.title}] ${com.title||com.guid}`,
+          value: com.guid
+        })
+      }
+    });
+  })
 
-  const containerComponents = components.filter((com) => com.isContainer);
   return (
     <>
       <Card
@@ -36,7 +47,7 @@ const Creator: React.FC<{}> = (props) => {
                     payload: { name, comId },
                   });
                 })
-                .catch((e) => {});
+                .catch((e) => { });
             }}
             type="primary"
           >
@@ -67,11 +78,15 @@ const Creator: React.FC<{}> = (props) => {
             rules={[{ required: true, message: '请选择页面容器' }]}
           >
             <Select
+              showSearch
+              filterOption={(input, option) => {
+                if (option) {
+                  // @ts-ignore
+                  return (option.label || '').toLowerCase().indexOf(input.toLowerCase()) >= 0 || (option.value || '').toLowerCase().indexOf(input.toLowerCase()) >= 0
+                } return false;
+              }}
               style={{ minWidth: 120 }}
-              options={containerComponents.map((com) => ({
-                label: com.title,
-                value: com.guid,
-              }))}
+              options={options}
               placeholder="页面容器..."
             />
           </Form.Item>
