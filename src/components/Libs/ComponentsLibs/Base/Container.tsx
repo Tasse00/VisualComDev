@@ -2,16 +2,14 @@ import { useInstanceFeatureRegistry } from '@/components/Editor/Providers/Listen
 import React, { useMemo, useState } from 'react';
 
 interface Props {
+
+    alignment?: VCD.FieldEditors.AlignmentAttrs;
+    boxsize?: VCD.FieldEditors.BoxSizeAttrs;
+
     backgroundColor?: string;
-    flexDirection?: 'column' | 'row';
-    justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around';
-    alignItems?: 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch';
-    padding?: string;
     overflow?: string;
     style?: React.CSSProperties;
     borderRadius?: string;
-    width?: string;
-    height?: string;
     transition?: string;
     cursor?: 'auto' | 'pointer';
     onClick: () => any;
@@ -19,9 +17,9 @@ interface Props {
 
 const ContainerComponent: React.FC<Props> = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     const {
-        flexDirection, justifyContent, alignItems,
-        children, backgroundColor, padding, overflow,
-        borderRadius, width, height, transition, cursor,
+        alignment, boxsize,
+        children, backgroundColor, overflow,
+        borderRadius, transition, cursor,
         onClick
     } = props;
 
@@ -37,7 +35,7 @@ const ContainerComponent: React.FC<Props> = React.forwardRef<HTMLDivElement, Pro
     ), [opacity]);
 
     useInstanceFeatureRegistry(features);
-
+    console.log(boxsize)
 
     return (
         // @ts-ignore
@@ -47,14 +45,14 @@ const ContainerComponent: React.FC<Props> = React.forwardRef<HTMLDivElement, Pro
             style={{
 
                 display: 'flex', boxSizing: 'border-box',
-                flexDirection, justifyContent, alignItems,
+                ...alignment, ...boxsize,
                 overflow,
                 // @ts-ignore
-                backgroundColor, padding, borderRadius,
-                width, height, transition,
+                backgroundColor, borderRadius,
+                transition,
                 cursor,
 
-                ...(props.style || {}),
+                ...props.style,
 
                 opacity,
             }}>
@@ -69,63 +67,28 @@ const ContainerConfig: VCD.Component = {
     isContainer: true,
     component: ContainerComponent,
     properties: [
+
+        {
+            field: 'alignment',
+            type: 'alignment',
+            label: '布局',
+        },
+        {
+            field: 'boxsize',
+            type: 'boxsize',
+            label: '尺寸',
+            default: {
+                width: '100%',
+                height: '100%',
+                paddingTop: "16px",
+                paddingBottom: "16px",
+            }
+        },
         {
             label: '背景',
             field: 'backgroundColor',
             type: 'string',
             default: 'white',
-        },
-        {
-            label: '方向',
-            field: 'flexDirection',
-            type: 'select',
-            params: [
-                { label: '水平', value: 'row' },
-                { label: '垂直', value: 'column' },
-            ],
-            default: 'row'
-        },
-        {
-            label: '主方向',
-            field: 'justifyContent',
-            type: 'select',
-            params: [
-                { label: '头部对齐', value: 'flex-start' },
-                { label: '中间对齐', value: 'center' },
-                { label: '尾端对齐', value: 'flex-end' },
-                { label: '两端对齐', value: 'space-between' },
-                { label: '均匀分布', value: 'space-around' },
-            ],
-            default: 'flex-start'
-        },
-        {
-            label: '次方向',
-            field: 'alignItems',
-            type: 'select',
-            params: [
-                { label: '头部对齐', value: 'flex-start' },
-                { label: '中间对齐', value: 'center' },
-                { label: '尾端对齐', value: 'flex-end' },
-                { label: '字底对齐', value: 'baseline' },
-                { label: '拉伸对齐', value: 'stretch' },
-            ],
-            default: 'flex-start'
-        },
-        {
-            label: '宽度',
-            field: 'width',
-            type: 'string',
-        },
-        {
-            label: '高度',
-            field: 'height',
-            type: 'string',
-        },
-        {
-            label: '内边距',
-            field: 'padding',
-            type: 'string',
-            default: '16px',
         },
         {
             label: '圆角',
@@ -143,7 +106,6 @@ const ContainerConfig: VCD.Component = {
                 { label: '显示', value: 'visible' },
             ]
         },
-
         {
             label: '动画',
             field: 'transition',
