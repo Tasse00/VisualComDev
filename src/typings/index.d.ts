@@ -34,6 +34,12 @@ declare namespace VCD {
     features?: FeatureConfig[];
   }
 
+  // 组件库
+  interface ComponentLib {
+    guid: string;
+    title: string;
+  }
+
   // 画布尺寸
   interface EditorSize {
     width: string; // 宽度, css尺寸描述

@@ -3,34 +3,42 @@ import { globalLoggerStore } from '../../../Globals';
 const logger = globalLoggerStore.createLogger('comlib.reducer');
 
 interface ActAddComponents {
-  type: 'add-components';
+  type: 'register-component-libs';
   payload: {
-    components: VCD.Component[];
+    libs: {
+      lib: VCD.ComponentLib;
+      components: VCD.Component[];
+    }[]
   };
 }
 
 export type AvailableAction = ActAddComponents;
 
+type ComponentWithLibId<P=any> = VCD.Component<P> & {libId: string};
+
 export interface State {
   componentsMap: {
-    [comId: string]: VCD.Component;
+    [comId: string]: ComponentWithLibId;
   };
+  componentLibs: VCD.ComponentLib[];
+
 }
 
 export function reducer(state: State, action: AvailableAction): State {
   switch (action.type) {
-    case 'add-components': {
-      const { components } = action.payload;
-      components.map((com) => {
-        state.componentsMap[com.guid] = com;
+    case 'register-component-libs': {
+      const { libs } = action.payload;
+      let comsCount = 0;
+      libs.map(({lib, components}) => {
+        state.componentLibs.push(lib);
+        comsCount += components.length;
+        components.map(com=>{
+          state.componentsMap[com.guid] = {...com, libId: lib.guid};
+        })
+        
       });
-      logger.debug(
-        'added',
-        components.length,
-        'components:',
-        components.map((c) => c.guid).join(' , '),
-      );
-      return { ...state, componentsMap: { ...state.componentsMap } };
+      logger.debug( `registered ${libs.length} com libs with ${comsCount} coms`);
+      return { ...state, componentsMap: { ...state.componentsMap }, componentLibs: [...state.componentLibs] };
     }
     default:
       logger.warning('unknow action:', action.type);

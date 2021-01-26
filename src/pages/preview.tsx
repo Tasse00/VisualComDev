@@ -13,7 +13,23 @@ import AntdComs from '@/components/Libs/ComponentsLibs/Antd';
 import BaseComs from '@/components/Libs/ComponentsLibs/Base';
 import DataVComs from '@/components/Libs/ComponentsLibs/DataV';
 
-const components = [...BaseComs, ...AntdComs, ...DataVComs];
+const componentLibs: {
+  lib: VCD.ComponentLib;
+  components: VCD.Component[];
+}[] = [
+    {
+      lib: {title: 'Base',guid: 'base',},
+      components: BaseComs,
+    },
+    {
+      lib: {title: 'Antd', guid: 'antd'},
+      components: AntdComs,
+    },
+    {
+      lib: {title: 'DataV', guid: 'datav'},
+      components: DataVComs,
+    }
+  ];
 
 const PreviewContent: React.FC<{
   store: VCD.PageStore;
@@ -49,7 +65,7 @@ const Preview: React.FC = (props) => {
   }, []);
 
   return (
-    <ComponentRegistryProvider components={components}>
+    <ComponentRegistryProvider libs={componentLibs}>
       <ListenerRegistryProvider>
         <EditorProvider>
           <div className={styles['app']}>

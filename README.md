@@ -24,7 +24,8 @@
   - Charts图按照官方示例进行封装成一个个独立组件．并保留元素charts组建用于自定义
   - 包装DataV剩余组建（除FullScreen外）
 
-- [ ] 组件库分组
+- [x] 组件库分组
+- [ ] 组件区分Gallery默认属性与Editor默认属性，使得展示效果更好
 ## TODO
 - [x] 实例名称修改
 - [x] 修复LoggerView不更新问题

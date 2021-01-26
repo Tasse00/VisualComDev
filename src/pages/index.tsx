@@ -26,15 +26,30 @@ import BaseEditors from '@/components/Libs/FieldEditorLibs/Base';
 import ContextMenuProvider from '@/components/Common/ContextMenu/Provider';
 import InstanceEditor from '@/components/Editor/InstanceEditor/InstanceEditor';
 import NotifierView from '@/components/Common/Logger/NotifierView';
-
-const components = [...BaseComs, ...AntdComs, ...DataVComs];
+const componentLibs: {
+  lib: VCD.ComponentLib;
+  components: VCD.Component[];
+}[] = [
+    {
+      lib: { title: 'Base', guid: 'base', },
+      components: BaseComs,
+    },
+    {
+      lib: { title: 'Antd', guid: 'antd' },
+      components: AntdComs,
+    },
+    {
+      lib: { title: 'DataV', guid: 'datav' },
+      components: DataVComs,
+    }
+  ];
 
 const fieldEditors = [...BaseEditors];
 
 export default () => {
   return (
     <DndProvider backend={HTML5Backend}>
-      <ComponentRegistryProvider components={components}>
+      <ComponentRegistryProvider libs={componentLibs}>
         <FieldEditorRegistryProvider fieldEditors={fieldEditors}>
           <ContextMenuProvider>
             <ListenerRegistryProvider>

@@ -3,21 +3,27 @@ import { reducer } from './reducer';
 import { DispatchContext, StateContext } from './context';
 
 const ComponentRegistryProvider: React.FC<{
-  components: VCD.Component[];
+  libs: {
+    lib: VCD.ComponentLib;
+    components: VCD.Component[];
+  }[]
 }> = props => {
 
-  const { components } = props;
+  const { libs } = props;
 
   const [state, dispatch] = useReducer(reducer, {
     componentsMap: {},
+    componentLibs: [],
   });
 
   useEffect(() => {
     dispatch({
-      type: 'add-components',
-      payload: { components },
+      type: 'register-component-libs',
+      payload: { 
+        libs: libs
+      },
     })
-  }, [components])
+  }, [libs])
 
   return (
     <DispatchContext.Provider value={dispatch}>

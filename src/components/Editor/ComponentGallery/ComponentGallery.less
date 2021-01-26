@@ -1,18 +1,16 @@
 .component-lib {
     display: flex;
-    justify-content: space-around;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: stretch;
     flex-wrap: wrap;
-
-    padding: 16px;
-    &>div {
-        margin-top: 16px;
-    }
-    &>div:first-child {
-        margin-top: 0;
-    }
 }
 
+.search{
+    padding: 8px;
+    background-color: #fafafa;
+}
+
+  
 .component {
     width: 120px;
     height: 120px;
@@ -25,6 +23,7 @@
     background-color: rgb(240, 240, 240);
     box-shadow: 0 0 8px rgba(200, 200, 200 , 0.2);
     border-radius: 8px;
+    margin-top: 8px;
     cursor: pointer;
     &:hover {
         box-shadow: 0 0 8px rgba(180, 180, 180 , 0.8);
@@ -41,4 +40,15 @@
         padding-top: 8px;
         border-top: 1px solid rgba(200,200,200,0.3);
     }
+}
+
+.component:first-of-type {
+    margin-top: 0;
+}
+
+.panel-coms {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    justify-content: flex-start;
 }

@@ -1,0 +1,31 @@
+.panel {
+  overflow: hidden;
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    cursor: pointer;
+
+    svg {
+      transition: all 0.2s;
+    }
+
+    padding: 4px;
+    
+    background-color: #FAFAFA;
+    border-top: 1px solid #d9d9d9;
+    box-shadow: 0 0 2px #d1d1d1;
+  }
+  .body {
+    overflow: hidden;
+    transition: all 0.3s;
+    >div {
+      padding: 8px;
+    }
+  }
+}
+
+.panel:last-of-type {
+  border-bottom: 1px solid #d9d9d9;
+}

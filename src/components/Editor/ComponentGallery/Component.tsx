@@ -17,7 +17,9 @@ const Component: React.FC<{
         }),
     });
 
-    const style: React.CSSProperties = {};
+    const style: React.CSSProperties = {
+        overflow: 'hidden',
+    };
 
     if (isDragging) {
         style.border = '1px dashed rgba(200,200,200,0.4)';
