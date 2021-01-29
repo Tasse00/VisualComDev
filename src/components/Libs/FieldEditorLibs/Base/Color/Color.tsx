@@ -39,7 +39,7 @@ const Color: VCD.PropertyEditorComponent<string, any> = props => {
   let alpha = 100;
   let color = "#FFFFFF";
 
-  if (value.match(/^#[0-9|a-z|A-Z]{8}$/)) {
+  if ((value||'').match(/^#[0-9|a-z|A-Z]{8}$/)) {
     alpha = hex2int(value.slice(7, 9)) / 255 * 100;
     color = value.slice(0, 7)
   } else {
@@ -52,7 +52,7 @@ const Color: VCD.PropertyEditorComponent<string, any> = props => {
     update(colorWithAlpha);
   }, 200);
   return (
-    <ColorPicker color={value} alpha={alpha} onChange={onUpdate} />
+    <ColorPicker color={color} alpha={alpha} onChange={onUpdate} />
   )
 }
 

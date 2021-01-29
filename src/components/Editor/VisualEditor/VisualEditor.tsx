@@ -85,7 +85,7 @@ const VisualEditor: React.FC<{
             style={{
               position: 'relative',
               backgroundColor: 'rgba(200,200,200,0.2)',
-              boxShadow: '16px rgba(200,200,200,0.8)',
+              boxShadow: '0 0 16px rgba(200,200,200,0.8)',
               height: allowOverHeight ? undefined : height,
               minHeight: height,
               width: width,
