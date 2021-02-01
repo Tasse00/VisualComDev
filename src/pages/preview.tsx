@@ -3,15 +3,12 @@ import React, { useEffect } from 'react';
 // import styles from './index.less';
 import { globalLoggerStore } from '@/components/Globals';
 import { LogRecord } from '@/components/Common/Logger';
-import ComponentRegistryProvider from '@/components/Editor/Providers/ComponentRegistry/Provider';
-import EditorProvider from '@/components/Editor/Providers/Editor/Provider';
-import VisualEditor from '@/components/Editor/VisualEditor/VisualEditor';
-import { useEditor } from '@/components/Editor/Providers/Editor/hooks';
-import ListenerRegistryProvider from '@/components/Editor/Providers/ListenerRegistry/Provider';
 
 import AntdComs from '@/components/Libs/ComponentsLibs/Antd';
 import BaseComs from '@/components/Libs/ComponentsLibs/Base';
 import DataVComs from '@/components/Libs/ComponentsLibs/DataV';
+import DemoLib from '@/components/Libs/ComponentsLibs/Demo';
+
 import PreviewModeProvider from '@/components/default/PreviewModeProvider';
 import PreviewModeUI from '@/components/default/PreviewModeUI';
 
@@ -30,7 +27,8 @@ const componentLibs: {
     {
       lib: { title: 'DataV', guid: 'datav' },
       components: DataVComs,
-    }
+    },
+    DemoLib
   ];
 
 const Preview: React.FC = (props) => {

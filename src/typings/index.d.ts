@@ -43,6 +43,11 @@ declare namespace VCD {
     title: string;
   }
 
+  interface ComponentLibBundle {
+    lib: ComponentLib;
+    components: Component[];
+  }
+
   // 画布尺寸
   interface EditorSize {
     width: string; // 宽度, css尺寸描述

@@ -35,7 +35,6 @@ const ContainerComponent: React.FC<Props> = React.forwardRef<HTMLDivElement, Pro
     ), [opacity]);
 
     useInstanceFeatureRegistry(features);
-    console.log(boxsize)
 
     return (
         // @ts-ignore
@@ -94,7 +93,7 @@ const ContainerConfig: VCD.Component = {
             label: '背景',
             field: 'backgroundColor',
             type: 'color',
-            default: 'white',
+            default: '#ffffff',
         },
         {
             label: '圆角',

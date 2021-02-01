@@ -8,9 +8,11 @@ import EditorModeUI from '@/components/default/EditorModeUI';
 import BaseComs from '@/components/Libs/ComponentsLibs/Base';
 import AntdComs from '@/components/Libs/ComponentsLibs/Antd';
 import DataVComs from '@/components/Libs/ComponentsLibs/DataV';
+import DemoLib from '@/components/Libs/ComponentsLibs/Demo';
 
 // 字段编辑器
 import BaseEditors from '@/components/Libs/FieldEditorLibs/Base';
+
 
 
 const componentLibs: {
@@ -28,7 +30,8 @@ const componentLibs: {
     {
       lib: { title: 'DataV', guid: 'datav' },
       components: DataVComs,
-    }
+    },
+    DemoLib,
   ];
 
 const fieldEditors = [...BaseEditors];
