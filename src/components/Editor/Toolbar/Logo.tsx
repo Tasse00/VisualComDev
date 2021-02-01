@@ -12,8 +12,7 @@ const Logo: React.FC<Props> = (props) => {
   return (
     <>
       <div className={styles['logo']} onClick={open}>
-        {/* 天下无敌卡卡姚 */}
-        WebGME表单测试
+        VCD
       </div>
       <Modal
         visible={visible}
