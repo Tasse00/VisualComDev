@@ -134,7 +134,9 @@ export function reducer(state: State, action: AvailableAction): State {
             callbacks.push(() => featureCallback(...convertedParams));
           });
       }
-      callbacks.map((cb) => cb());
+      setTimeout(()=>{
+        callbacks.map((cb) => cb());
+      });
       return state;
     }
     default:
