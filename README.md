@@ -39,6 +39,42 @@
 - 可扩展的组件机制
 - 基于事件(event)及功能(feature)的交互机制
 
+
+## 组件功能
+
+VCD中的`组件`特指在可视化编辑中的基础类型．Demo组件库中的Lamp与Switch模拟了灯泡与开关来演示如何使用组件机制中的"属性(property)","功能(feature)"．
+
+见项目`src/components/Libs/Demo`目录内文件．
+
+> Tip1: 组件必须通过React.forwardRef暴露出ref，用于设置编辑状态的交互行为．
+
+
+## 字段编辑器功能
+
+VCD中组件可以配置哪些属性可以在可视化面板中编辑，同时可以通过`type`来指定编辑器类型. 
+
+通过实现`PropertyEditorComponent`接口，并注册进Provider来扩展可用的PropertyEditor.
+
+
+当前默认提供的Editor:
+
+类型|说明|简要示例
+---|---|---
+string|字符串输入| 'this is a string'
+color|颜色选择|#FFFF00FF
+number|数字输入| 100
+switch|切换选择| "value"
+select|下拉选择| "value"
+style| CSS属性编辑　| {width, ... }
+alignment| 对齐方式 | {flexDirectin, justifyContent, ...}
+boxsize| 盒模型 | {width, height, paddingLeft, marginLeft, ...}
+json| Json内容编辑 | {...}
+
+### 编辑器详细配置
+
+- string
+- color
+
 ## BUG
 - [ ] 修复根组件无法设置宽高，及在不限高度模式下，显示异常．
 - [ ] 实例的复制粘帖功能阻碍了编辑组件属性时正常的复制粘帖能力．
