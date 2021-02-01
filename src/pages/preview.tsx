@@ -1,6 +1,6 @@
 // import Editor from '@/components/Editor/Editor';
 import React, { useEffect } from 'react';
-import styles from './index.less';
+// import styles from './index.less';
 import { globalLoggerStore } from '@/components/Globals';
 import { LogRecord } from '@/components/Common/Logger';
 import ComponentRegistryProvider from '@/components/Editor/Providers/ComponentRegistry/Provider';
@@ -12,48 +12,34 @@ import ListenerRegistryProvider from '@/components/Editor/Providers/ListenerRegi
 import AntdComs from '@/components/Libs/ComponentsLibs/Antd';
 import BaseComs from '@/components/Libs/ComponentsLibs/Base';
 import DataVComs from '@/components/Libs/ComponentsLibs/DataV';
+import PreviewModeProvider from '@/components/default/PreviewModeProvider';
+import PreviewModeUI from '@/components/default/PreviewModeUI';
 
 const componentLibs: {
   lib: VCD.ComponentLib;
   components: VCD.Component[];
 }[] = [
     {
-      lib: {title: 'Base',guid: 'base',},
+      lib: { title: 'Base', guid: 'base', },
       components: BaseComs,
     },
     {
-      lib: {title: 'Antd', guid: 'antd'},
+      lib: { title: 'Antd', guid: 'antd' },
       components: AntdComs,
     },
     {
-      lib: {title: 'DataV', guid: 'datav'},
+      lib: { title: 'DataV', guid: 'datav' },
       components: DataVComs,
     }
   ];
 
-const PreviewContent: React.FC<{
-  store: VCD.PageStore;
-}> = ({ store }) => {
-  const dispatch = useEditor();
-
-  useEffect(() => {
-    dispatch({
-      type: 'load-tree',
-      payload: {
-        tree: store.tree,
-        size: store.size,
-      },
-    });
-  }, [store]);
-
-  return <VisualEditor preview style={{ padding: 0 }} />;
-};
-
 const Preview: React.FC = (props) => {
+  // 从本地localStorage中获取页面数据
   const store: VCD.PageStore = JSON.parse(
     window.localStorage.getItem('preview-store') || '',
   );
 
+  // 将所有日志打印到控制台
   useEffect(() => {
     const logCb = (rcds: LogRecord[]) => {
       rcds.map((rcd) => console.log(rcd.level, rcd.logger, rcd.message));
@@ -65,15 +51,9 @@ const Preview: React.FC = (props) => {
   }, []);
 
   return (
-    <ComponentRegistryProvider libs={componentLibs}>
-      <ListenerRegistryProvider>
-        <EditorProvider>
-          <div className={styles['app']}>
-            <PreviewContent store={store} />
-          </div>
-        </EditorProvider>
-      </ListenerRegistryProvider>
-    </ComponentRegistryProvider>
+    <PreviewModeProvider componentLibs={componentLibs}>
+      <PreviewModeUI store={store} />
+    </PreviewModeProvider>
   );
 };
 

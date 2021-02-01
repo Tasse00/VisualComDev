@@ -27,12 +27,12 @@ const Logo: React.FC<Props> = (props) => {
           </Col>
           <Col flex={1}>
             <Typography.Text>
-              ”拖拖拽拽网页工作台“ 致亲爱的卡卡！
+              Visual Component Development
             </Typography.Text>
           </Col>
           <Col>
             <Typography.Text type="secondary">
-              by 天下无敌小小张
+              - Tasse00
             </Typography.Text>
           </Col>
         </Row>
