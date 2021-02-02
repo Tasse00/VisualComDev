@@ -1,37 +1,21 @@
-// import Editor from '@/components/Editor/Editor';
 import React, { useEffect } from 'react';
-// import styles from './index.less';
 import { globalLoggerStore } from '@/components/Globals';
 import { LogRecord } from '@/components/Common/Logger';
-
-import AntdComs from '@/components/Libs/ComponentsLibs/Antd';
-import BaseComs from '@/components/Libs/ComponentsLibs/Base';
-import DataVComs from '@/components/Libs/ComponentsLibs/DataV';
-import DemoLib from '@/components/Libs/ComponentsLibs/Demo';
 
 import PreviewModeProvider from '@/components/default/PreviewModeProvider';
 import PreviewModeUI from '@/components/default/PreviewModeUI';
 
-const componentLibs: {
-  lib: VCD.ComponentLib;
-  components: VCD.Component[];
-}[] = [
-    {
-      lib: { title: 'Base', guid: 'base', },
-      components: BaseComs,
-    },
-    {
-      lib: { title: 'Antd', guid: 'antd' },
-      components: AntdComs,
-    },
-    {
-      lib: { title: 'DataV', guid: 'datav' },
-      components: DataVComs,
-    },
-    DemoLib
-  ];
+// 组件库
+import BaseLib from '@/components/Libs/ComponentsLibs/Base';
+import AntdLib from '@/components/Libs/ComponentsLibs/Antd';
+import DataVLib from '@/components/Libs/ComponentsLibs/DataV';
+import DemoLib from '@/components/Libs/ComponentsLibs/Demo';
+
+
+const componentLibs = [BaseLib, AntdLib, DataVLib, DemoLib,]
 
 const Preview: React.FC = (props) => {
+
   // 从本地localStorage中获取页面数据
   const store: VCD.PageStore = JSON.parse(
     window.localStorage.getItem('preview-store') || '',

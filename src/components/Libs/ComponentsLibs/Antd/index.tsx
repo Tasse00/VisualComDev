@@ -28,7 +28,13 @@ const AntdCardCfg: VCD.Component = {
     ],
 };
 
-export default [
-    StatisticCfg,
-    AntdCardCfg,
-]
+export default {
+    lib: {
+        guid: 'antd',
+        title: 'Antd'
+    },
+    components: [
+        StatisticCfg,
+        AntdCardCfg,
+    ]
+} as VCD.ComponentLibBundle

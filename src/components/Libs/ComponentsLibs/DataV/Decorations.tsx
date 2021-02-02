@@ -38,7 +38,7 @@ function wrap(name: string, RawCom: React.FC, additionalProps: VCD.Component['pr
     // ref(divRef)
     const color = (color1 && color2) ? [color1, color2] : undefined;
     return (
-      <div ref={ref} style={{overflow: 'hidden'}}>
+      <div ref={ref} style={{ overflow: 'hidden' }}>
         {/* @ts-ignore */}
         <RawCom style={{ width, height }} color={color} {...restProps}>
           {
@@ -99,7 +99,7 @@ function wrap(name: string, RawCom: React.FC, additionalProps: VCD.Component['pr
     events: [],
     features: [],
     previewProperties: {
-      width: '60px',height: '30px',
+      width: '60px', height: '30px',
     }
   };
 
