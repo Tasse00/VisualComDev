@@ -1,6 +1,7 @@
 import React from 'react';
 // @ts-ignore
 import ColorPicker from 'rc-color-picker';
+import 'rc-color-picker/assets/index.css';
 
 function hex2int(hex: string) {
   let len = hex.length, a = new Array(len), code;
