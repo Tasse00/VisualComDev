@@ -33,7 +33,7 @@ const Creator: React.FC<{}> = (props) => {
   })
 
   return (
-    <>
+    <div style={{width: '100%', height: '100%'}}>
       <Card
         title={<Typography.Title level={5}>新建页面</Typography.Title>}
         extra={
@@ -136,7 +136,7 @@ const Creator: React.FC<{}> = (props) => {
           )}
         />
       </Card>
-    </>
+    </div>
   );
 };
 

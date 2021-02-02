@@ -86,6 +86,10 @@ function wrap(name: string, BorderBox: React.FC, additionalProps: VCD.Component[
         default: {
           width: '300px',
           height: '300px',
+          paddingTop: '16px',
+          paddingLeft: '16px',
+          paddingBottom: '16px',
+          paddingRight: '16px',
         }
       },
       {

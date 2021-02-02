@@ -72,6 +72,10 @@ const VisualEditor: React.FC<{
           overflow: 'auto',
           padding: preview ? 0 : 32,
           backgroundColor: 'rgba(200,200,200,0.2)',
+          // 编辑区域居中
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
         }}
       >
         {rootInstance ? (
