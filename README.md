@@ -1,6 +1,8 @@
 # VCD
 
 > Visual Component Development
+
+![示例](./doc/eg.png)
 ## 使用情景
 
 - `开发人员` 页面开发辅助工具
